@@ -1,5 +1,6 @@
 /bootstrap/compiled.php
 .idea/
+/node_modules
 /vendor
 composer.phar
 composer.lock
