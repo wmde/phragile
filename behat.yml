@@ -1,0 +1,11 @@
+default:
+  autoload:
+    '': %paths.base%/app/tests/acceptance/bootstrap
+  suites:
+    default:
+      paths:
+        - %paths.base%/app/tests/acceptance/
+  extensions:
+    Behat\MinkExtension:
+      goutte: ~
+      base_url: http://phragile.dev:8000
