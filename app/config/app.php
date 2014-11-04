@@ -122,6 +122,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Phragile\Providers\PhabricatorAPIServiceProvider',
+		'Laracasts\Flash\FlashServiceProvider',
 	),
 
 	/*
@@ -188,7 +189,7 @@ return array(
 		'URL'               => 'Illuminate\Support\Facades\URL',
 		'Validator'         => 'Illuminate\Support\Facades\Validator',
 		'View'              => 'Illuminate\Support\Facades\View',
-
+		'Flash'             => 'Laracasts\Flash\Flash',
 	),
 
 );

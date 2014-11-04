@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
-		"laravel/framework": "4.2.*"
+		"laravel/framework": "4.2.*",
+		"laracasts/flash": "~1.0"
 	},
 	"require-dev": {
 		"behat/behat": "~3.0",

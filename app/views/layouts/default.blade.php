@@ -7,6 +7,7 @@
 </head>
 <body>
 
+@include('flash::message')
 @include('layouts.partials.header')
 
 <div class="container">

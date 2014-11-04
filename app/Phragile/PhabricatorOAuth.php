@@ -2,6 +2,7 @@
 namespace Phragile;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 class PhabricatorOAuth {
 
@@ -9,7 +10,13 @@ class PhabricatorOAuth {
 	//       client application and not just respond with a JSON object.
 	public function requestAccessToken($authCode)
 	{
-		return with(new Client)->get($this->accessTokenURL($authCode))->json();
+		try
+		{
+			return with(new Client)->get($this->accessTokenURL($authCode))->json();
+		} catch (ClientException $e)
+		{
+			return null;
+		}
 	}
 
 	private function accessTokenURL($authCode)
