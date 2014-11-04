@@ -1,0 +1,2 @@
+# pass
+<?php try {} catch (C $x) {} finally {}

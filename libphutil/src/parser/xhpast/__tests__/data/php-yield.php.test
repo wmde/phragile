@@ -1,0 +1,11 @@
+# pass
+<?php
+
+function g() {
+  yield;
+  yield $x;
+  yield $y => $z;
+
+  $data = (yield $a);
+  $data = (yield $b => $c);
+}

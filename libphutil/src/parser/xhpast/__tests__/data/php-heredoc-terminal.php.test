@@ -1,0 +1,4 @@
+# fail-parse, rtrim
+<?php
+<<<HEREDOC
+HEREDOC;

@@ -15,3 +15,8 @@ Route::get('/', function()
 {
 	return View::make('index');
 });
+
+Route::get('/login', [
+	'as' => 'login_path',
+	'uses' => 'SessionsController@login'
+]);
