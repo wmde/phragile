@@ -6,18 +6,18 @@
 			@if(Auth::check())
 				<p class="navbar-text">
 					Logged in as {{ Auth::user()->username }}
+					({{ link_to_route('logout_path', 'Logout') }})
 				</p>
 			@else
-				<li>
-					{{ link_to(
-						$_ENV['PHABRICATOR_URL'] . 'oauthserver/auth/?' . http_build_query([
-							 'response_type' => 'code',
-							 'client_id' => $_ENV['OAUTH_CLIENT_ID'],
-							 'redirect_uri' => route('login_path'),
-						]),
-						'Log in using Phabricator'
-					) }}
-				</li>
+				{{ link_to(
+					$_ENV['PHABRICATOR_URL'] . 'oauthserver/auth/?' . http_build_query([
+						 'response_type' => 'code',
+						 'client_id' => $_ENV['OAUTH_CLIENT_ID'],
+						 'redirect_uri' => route('login_path'),
+					]),
+					'Log in using Phabricator',
+					['class' => 'btn btn-default navbar-btn btn-sm']
+				) }}
 			@endif
 		</ul>
 	</div>

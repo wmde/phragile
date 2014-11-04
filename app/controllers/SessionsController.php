@@ -15,6 +15,13 @@ class SessionsController extends BaseController {
 		return $this->authenticate($accessToken);
 	}
 
+	public function logout()
+	{
+		Auth::logout();
+		Flash::message('You are now logged out.');
+		return Redirect::to('/');
+	}
+
 	private function loginFailed()
 	{
 		Flash::error('Login failed. Please try again.');

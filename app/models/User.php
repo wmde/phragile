@@ -10,4 +10,8 @@ class User extends Eloquent implements UserInterface{
 	use UserTrait;
 
 	protected $fillable = ['phid', 'username'];
+
+	public function setRememberToken($token) {
+		// Workaround: Auth::logout breaks with the default behavior since we're using OAuth.
+	}
 }
