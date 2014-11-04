@@ -32,10 +32,20 @@ class SessionsController extends BaseController {
 		$user = App::make('phabricator')->authenticate($accessToken);
 		if ($user)
 		{
-			Flash::success("Hello ${user['realName']}, you are now logged in!");
-			return Redirect::to('/');
+			return $this->loginAndRedirect($user);
 		}
 
 		return $this->loginFailed();
+	}
+
+	private function loginAndRedirect($user)
+	{
+		Auth::login(User::firstOrCreate([
+			'username' => $user['userName'],
+			'phid' => $user['phid'],
+		]));
+		Flash::success("Hello ${user['userName']}, you are now logged in!");
+
+		return Redirect::to('/');
 	}
 }
