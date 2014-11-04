@@ -4,6 +4,9 @@ namespace Phragile;
 use GuzzleHttp\Client;
 
 class PhabricatorOAuth {
+
+	// TODO: This might fail in the future as Phabricator's OAuth implementation is supposed to redirect back to the
+	//       client application and not just respond with a JSON object.
 	public function requestAccessToken($authCode)
 	{
 		return with(new Client)->get($this->accessTokenURL($authCode))->json();
