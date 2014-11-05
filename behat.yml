@@ -8,4 +8,5 @@ default:
   extensions:
     Behat\MinkExtension:
       goutte: ~
-      base_url: http://phragile.dev:8000
+imports:
+  - behat_custom.yml
