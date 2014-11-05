@@ -51,22 +51,22 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->phabricatorLogin();
 	}
 
-    /**
-     * @Then I should not be logged in
-     */
-    public function iShouldNotBeLoggedIn()
-    {
+	/**
+	 * @Then I should not be logged in
+	 */
+	public function iShouldNotBeLoggedIn()
+	{
 		$this->assertPageContainsText('Log in using Phabricator');
-    }
+	}
 
-    /**
-     * @Given I am logged in
-     */
-    public function iAmLoggedIn()
-    {
-        $this->clickLink('Log in');
+	/**
+	 * @Given I am logged in
+	 */
+	public function iAmLoggedIn()
+	{
+		$this->clickLink('Log in');
 		$this->phabricatorLogin();
-    }
+	}
 
 	private function phabricatorLogin()
 	{
