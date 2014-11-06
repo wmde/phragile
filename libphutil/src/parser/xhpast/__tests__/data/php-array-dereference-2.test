@@ -1,6 +1,0 @@
-# pass
-<?php
-
-if ($j->getStatus()['running']) {
-  // do something
-}

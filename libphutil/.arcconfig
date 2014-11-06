@@ -1,5 +1,0 @@
-{
-  "project.name" : "libphutil",
-  "phabricator.uri" : "https://secure.phabricator.com/",
-  "unit.engine" : "PhutilUnitTestEngine"
-}

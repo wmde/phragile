@@ -4,9 +4,29 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"type": "project",
+	"repositories": [
+		{
+			"packagist": false,
+			"type": "package",
+			"package": {
+				"name": "libphutil",
+				"dist": {
+					"url": "https://github.com/jakobw/libphutil/archive/master.zip",
+					"type": "zip"
+				},
+				"source": {
+					"url": "https://github.com/jakobw/libphutil.git",
+					"type": "git",
+					"reference": "master"
+				},
+				"version": "1.0"
+			}
+		}
+	],
 	"require": {
 		"laravel/framework": "4.2.*",
-		"laracasts/flash": "~1.0"
+		"laracasts/flash": "~1.0",
+		"libphutil": "1.0"
 	},
 	"require-dev": {
 		"behat/behat": "~3.0",

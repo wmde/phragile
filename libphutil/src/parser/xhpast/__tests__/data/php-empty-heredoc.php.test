@@ -1,5 +1,0 @@
-# pass
-<?php
-
-$a = <<<EODOC
-EODOC;

@@ -1,6 +1,0 @@
-# pass, comment="Omits ASP tags since parser support is off as built."
-<?php 1; ?>
-<? 1; ?>
-<?= 1; ?>
-<a />
-<b ?>
