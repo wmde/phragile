@@ -8,6 +8,7 @@ Feature: OAuth Login
     When I follow "Log in using Phabricator"
     And Phabricator authorizes me
     Then I should see "you are now logged in"
+    And I should be logged in
 
   Scenario: Log in with invalid access token
     Given I am not logged in
@@ -20,3 +21,8 @@ Feature: OAuth Login
     When I follow "Logout"
     Then I should see "You are now logged out."
     And I should not be logged in
+
+  Scenario: Stay logged in after reload
+    Given I am logged in
+    When I reload the page
+    Then I should still be logged in

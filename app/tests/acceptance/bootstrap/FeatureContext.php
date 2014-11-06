@@ -75,4 +75,12 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->pressButton('Login');
 		$this->clickLink('Continue');
 	}
+
+    /**
+     * @Then /^I should (?:|still )be logged in$/
+     */
+    public function iShouldBeLoggedIn()
+    {
+        $this->assertPageContainsText('Logged in as ' . $this->params['phabricator_username']);
+    }
 }
