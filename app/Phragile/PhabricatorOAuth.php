@@ -12,7 +12,7 @@ class PhabricatorOAuth {
 	{
 		try
 		{
-			return with(new Client)->get($this->accessTokenURL($authCode))->json();
+			return (new Client)->get($this->accessTokenURL($authCode))->json();
 		} catch (ClientException $e)
 		{
 			return null;
