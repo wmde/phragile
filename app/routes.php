@@ -15,3 +15,13 @@ Route::get('/', function()
 {
 	return View::make('index');
 });
+
+Route::get('/login', [
+	'as' => 'login_path',
+	'uses' => 'SessionsController@login'
+]);
+
+Route::get('/logout', [
+	'as' => 'logout_path',
+	'uses' => 'SessionsController@logout'
+]);

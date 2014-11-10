@@ -1,0 +1,14 @@
+# Please fill out `base_url`, `phabricator_username` and `phabricator_password`
+
+default:
+  extensions:
+    Behat\MinkExtension:
+      base_url: ''
+
+  suites:
+    default:
+      contexts:
+        - FeatureContext:
+            params:
+              phabricator_username: ''
+              phabricator_password: ''

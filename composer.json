@@ -4,15 +4,36 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"type": "project",
+	"repositories": [
+		{
+			"packagist": false,
+			"type": "package",
+			"package": {
+				"name": "libphutil",
+				"dist": {
+					"url": "https://github.com/jakobw/libphutil/archive/master.zip",
+					"type": "zip"
+				},
+				"source": {
+					"url": "https://github.com/jakobw/libphutil.git",
+					"type": "git",
+					"reference": "master"
+				},
+				"version": "1.0"
+			}
+		}
+	],
 	"require": {
-		"laravel/framework": "4.2.*"
+		"laravel/framework": "4.2.*",
+		"laracasts/flash": "~1.0",
+		"libphutil": "1.0"
 	},
-    "require-dev": {
-        "behat/behat": "~3.0",
-        "behat/mink": "~1.6",
-        "behat/mink-extension": "~2.0",
-        "behat/mink-goutte-driver": "~1.1"
-    },
+	"require-dev": {
+		"behat/behat": "~3.0",
+		"behat/mink": "~1.6",
+		"behat/mink-extension": "~2.0",
+		"behat/mink-goutte-driver": "~1.1"
+	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
@@ -21,7 +42,10 @@
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php"
-		]
+		],
+		"psr-4": {
+			"Phragile\\": "app/Phragile"
+		}
 	},
 	"scripts": {
 		"post-install-cmd": [

@@ -9,3 +9,4 @@ composer.lock
 .env.php
 .DS_Store
 Thumbs.db
+behat_custom.yml
