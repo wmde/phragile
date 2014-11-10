@@ -12,13 +12,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 {
 	private $params;
 
-	/**
-	 * Initializes context.
-	 *
-	 * Every scenario gets its own context instance.
-	 * You can also pass arbitrary arguments to the
-	 * context constructor through behat.yml.
-	 */
 	public function __construct($params)
 	{
 		$this->params = $params;
