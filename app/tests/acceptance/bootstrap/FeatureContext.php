@@ -12,7 +12,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 {
 	private $params;
 
-	public function __construct($params)
+	public function __construct(array $params)
 	{
 		$this->params = $params;
 	}
