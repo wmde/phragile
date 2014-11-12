@@ -99,4 +99,12 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->fillField('conduit_certificate', $certificate);
 		$this->pressButton('Submit');
 	}
+
+	/**
+	 * @When /^(?:|I )click "(?P<link>(?:[^"]|\\")*)"$/
+	 */
+	public function iClick($link)
+	{
+		$this->clickLink($link);
+	}
 }
