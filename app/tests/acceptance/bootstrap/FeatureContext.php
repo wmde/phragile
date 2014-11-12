@@ -70,11 +70,33 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->clickLink('Continue');
 	}
 
-    /**
-     * @Then /^I should (?:|still )be logged in$/
-     */
-    public function iShouldBeLoggedIn()
-    {
-        $this->assertPageContainsText('Logged in as ' . $this->params['phabricator_username']);
-    }
+	/**
+	 * @Then /^I should (?:|still )be logged in$/
+	 */
+	public function iShouldBeLoggedIn()
+	{
+		$this->assertPageContainsText('Logged in as ' . $this->params['phabricator_username']);
+	}
+
+	/**
+	 * @When I submit a valid Conduit certificate
+	 */
+	public function iSubmitAValidConduitCertificate()
+	{
+		$this->submitConduitCertificate($this->params['conduit_certificate']);
+	}
+
+	/**
+	 * @When I submit an invalid Conduit certificate
+	 */
+	public function iSubmitAnInvalidConduitCertificate()
+	{
+		$this->submitConduitCertificate('INVALID_CERTIFICATE');
+	}
+
+	private function submitConduitCertificate($certificate)
+	{
+		$this->fillField('conduit_certificate', $certificate);
+		$this->pressButton('Submit');
+	}
 }
