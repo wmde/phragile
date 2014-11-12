@@ -57,6 +57,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iAmLoggedIn()
 	{
+		$this->visit('/');
 		$this->clickLink('Log in');
 		$this->phabricatorLogin();
 	}
