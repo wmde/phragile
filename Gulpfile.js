@@ -19,8 +19,16 @@ gulp.task('bower', function () {
     return bower();
 });
 
+gulp.task('js', function () {
+    return gulp.src([
+            config.componentsDir + '/jquery/dist/jquery.min.js',
+            config.componentsDir + '/bootstrap/dist/js/bootstrap.min.js'
+        ])
+        .pipe(gulp.dest('public/js'));
+});
+
 gulp.task('watch', function () {
     gulp.watch(config.lessFiles, ['less']);
 });
 
-gulp.task('default', ['bower', 'less']);
+gulp.task('default', ['bower', 'less', 'js']);

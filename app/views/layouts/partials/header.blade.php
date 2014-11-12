@@ -1,13 +1,18 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 		{{ link_to(URL::to('/'), 'Phragile', ['class' => 'navbar-brand']) }}
 
 		<ul class="nav navbar-nav navbar-right">
 			@if(Auth::check())
-				<p class="navbar-text">
-					Logged in as {{ Auth::user()->username }}
-					({{ link_to_route('logout_path', 'Logout') }})
-				</p>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+						Logged in as {{ Auth::user()->username }}
+						<span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu" role="menu">
+						<li>{{ link_to_route('logout_path', 'Logout') }}</li>
+					</ul>
+				</li>
 			@else
 				{{ link_to(
 					$_ENV['PHABRICATOR_URL'] . 'oauthserver/auth/?' . http_build_query([
