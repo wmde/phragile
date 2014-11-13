@@ -25,3 +25,9 @@ Route::get('/logout', [
 	'as' => 'logout_path',
 	'uses' => 'SessionsController@logout'
 ]);
+
+Route::put('/conduit_certificate', [
+	'before' => 'auth',
+	'as' => 'conduit_certificate_path',
+	'uses' => 'UsersController@updateCertificate'
+]);

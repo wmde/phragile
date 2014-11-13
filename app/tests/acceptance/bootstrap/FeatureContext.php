@@ -57,6 +57,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iAmLoggedIn()
 	{
+		$this->visit('/');
 		$this->clickLink('Log in');
 		$this->phabricatorLogin();
 	}
@@ -69,11 +70,58 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->clickLink('Continue');
 	}
 
+	/**
+	 * @Then /^I should (?:|still )be logged in$/
+	 */
+	public function iShouldBeLoggedIn()
+	{
+		$this->assertPageContainsText('Logged in as ' . $this->params['phabricator_username']);
+	}
+
+	/**
+	 * @When I submit a valid Conduit certificate
+	 */
+	public function iSubmitAValidConduitCertificate()
+	{
+		$this->submitConduitCertificate($this->params['conduit_certificate']);
+	}
+
+	/**
+	 * @When I submit an invalid Conduit certificate
+	 */
+	public function iSubmitAnInvalidConduitCertificate()
+	{
+		$this->submitConduitCertificate('INVALID_CERTIFICATE');
+	}
+
+	private function submitConduitCertificate($certificate)
+	{
+		$this->fillField('conduit_certificate', $certificate);
+		$this->pressButton('Submit');
+	}
+
+	/**
+	 * @When /^(?:|I )click "(?P<link>(?:[^"]|\\")*)"$/
+	 */
+	public function iClick($link)
+	{
+		$this->clickLink($link);
+	}
+
     /**
-     * @Then /^I should (?:|still )be logged in$/
+     * @Given I have not added my Conduit certificate
      */
-    public function iShouldBeLoggedIn()
+    public function iHaveNotAddedMyConduitCertificate()
     {
-        $this->assertPageContainsText('Logged in as ' . $this->params['phabricator_username']);
+        User::where(['username' => $this->params['phabricator_username']])
+			->update(['conduit_certificate' => '']);
+    }
+
+    /**
+     * @Then I should see my Conduit certificate in a text area
+     */
+    public function iShouldSeeMyConduitCertificateInATextArea()
+    {
+		$this->assertElementContainsText('#conduit-modal textarea', $this->params['conduit_certificate']);
     }
 }

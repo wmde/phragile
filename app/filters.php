@@ -43,7 +43,8 @@ Route::filter('auth', function()
 		}
 		else
 		{
-			return Redirect::guest('login');
+			Flash::warning('You need to log in to perform this action.');
+			return Redirect::to('/');
 		}
 	}
 });
