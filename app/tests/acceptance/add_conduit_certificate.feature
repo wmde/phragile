@@ -14,3 +14,9 @@ Feature: Add Conduit certificate
     When I click "Conduit certificate"
     And I submit an invalid Conduit certificate
     Then I should see "The submitted Conduit certificate was invalid."
+
+  Scenario: Save Conduit certificate
+    Given I am logged in
+    And I have not added my Conduit certificate
+    When I submit a valid Conduit certificate
+    Then I should see my Conduit certificate in a text area

@@ -107,4 +107,21 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		$this->clickLink($link);
 	}
+
+    /**
+     * @Given I have not added my Conduit certificate
+     */
+    public function iHaveNotAddedMyConduitCertificate()
+    {
+        User::where(['username' => $this->params['phabricator_username']])
+			->update(['conduit_certificate' => '']);
+    }
+
+    /**
+     * @Then I should see my Conduit certificate in a text area
+     */
+    public function iShouldSeeMyConduitCertificateInATextArea()
+    {
+		$this->assertElementContainsText('#conduit-modal textarea', $this->params['conduit_certificate']);
+    }
 }
