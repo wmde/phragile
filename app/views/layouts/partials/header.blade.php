@@ -48,7 +48,7 @@
 											null,
 											[
 												'class' => 'form-control',
-												'rows' => 3,
+												'rows' => 4,
 												'placeholder' => 'Conduit Certificate',
 											]
 										) }}
