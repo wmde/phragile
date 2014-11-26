@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Phragile</title>
 {{ HTML::style('/css/style.css') }}
+@yield('optional_styles')
 </head>
 <body>
 
@@ -16,6 +17,7 @@
 
 {{ HTML::script('js/jquery.min.js') }}
 {{ HTML::script('js/bootstrap.min.js') }}
+@yield('optional_scripts')
 
 </body>
 </html>
