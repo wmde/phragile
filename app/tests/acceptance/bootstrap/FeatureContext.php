@@ -148,4 +148,15 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
     {
         throw new PendingException();
     }
+
+    /**
+     * @Given the :title project exists
+     */
+    public function theProjectExists($title)
+    {
+        Project::create([
+			'title' => $title,
+			'slug' => Str::slug($title)
+		]);
+    }
 }
