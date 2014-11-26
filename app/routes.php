@@ -31,3 +31,8 @@ Route::put('/conduit_certificate', [
 	'as' => 'conduit_certificate_path',
 	'uses' => 'UsersController@updateCertificate'
 ]);
+
+Route::get('/projects/{slug}', [
+	'as' => 'project_path',
+	'uses' => 'ProjectsController@show'
+]);
