@@ -36,3 +36,8 @@ Route::get('/projects/{slug}', [
 	'as' => 'project_path',
 	'uses' => 'ProjectsController@show'
 ]);
+
+Route::get('/projects/{project}/sprints/create', [
+	'as' => 'create_sprint_path',
+	'uses' => 'SprintsController@create'
+]);

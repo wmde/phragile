@@ -21,10 +21,13 @@
 								]
 							) }}
 						</li>
+						@if(Route::currentRouteName() === 'project_path')
+							<li>{{ link_to_route('create_sprint_path', 'New sprint', $project->slug) }}</li>
+						@endif
 						<li>{{ link_to_route('logout_path', 'Logout') }}</li>
 					</ul>
 				</li>
-				
+
 				@include('layouts.partials.conduit_certificate_form')
 			@else
 				{{ link_to(
