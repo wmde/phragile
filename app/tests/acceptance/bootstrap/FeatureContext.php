@@ -124,4 +124,28 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
     {
 		$this->assertElementContainsText('#conduit-modal textarea', $this->params['conduit_certificate']);
     }
+
+    /**
+     * @Then I should see a confirmation page for that sprint
+     */
+    public function iShouldSeeAConfirmationPageForThatSprint()
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see :title in the Phabricator project list
+     */
+    public function iShouldSeeInThePhabricatorProjectList($title)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see :text on :page
+     */
+    public function iShouldSeeOn($text, $page)
+    {
+        throw new PendingException();
+    }
 }
