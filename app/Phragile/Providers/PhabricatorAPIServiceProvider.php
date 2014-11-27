@@ -2,6 +2,7 @@
 namespace Phragile\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Phragile\PhabricatorAPI;
 
 class PhabricatorAPIServiceProvider extends ServiceProvider {
 	public function register()
