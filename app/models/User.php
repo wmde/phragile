@@ -2,7 +2,7 @@
 
 use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
-use Phragile\Providers\PhabricatorAPI;
+use Phragile\PhabricatorAPI;
 
 class User extends Eloquent implements UserInterface {
 

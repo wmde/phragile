@@ -1,5 +1,5 @@
 <?php
-namespace Phragile\Providers;
+namespace Phragile;
 
 class PhabricatorAPI {
 	public function __construct(\ConduitClient $client)
@@ -28,5 +28,15 @@ class PhabricatorAPI {
 		);
 
 		return isset($response['phid']) ? $response : null;
+	}
+
+	public function createProject($title)
+	{
+		$response = $this->client->callMethodSynchronous(
+			'project.create',
+			$title
+		);
+
+		return $response;
 	}
 }
