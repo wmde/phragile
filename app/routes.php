@@ -11,7 +11,7 @@
 |
 */
 
-Route::bind('project', function($slug, $route)
+Route::bind('project', function($slug)
 {
 	return Project::where('slug', $slug)->first();
 });
