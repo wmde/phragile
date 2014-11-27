@@ -1,5 +1,7 @@
 <?php
 
+use Phragile\PhabricatorAPI;
+
 class SprintsController extends BaseController {
 
 	public function create(Project $project)
@@ -20,6 +22,39 @@ class SprintsController extends BaseController {
 			['project_id' => $project->id]
 		));
 
-		return Redirect::route('project_path', $project->slug);
+		if (!$sprint)
+		{
+			Flash::error('A problem occurred saving the sprint record in Phragile.');
+			return Redirect::back();
+		}
+
+		return $this->createPhabricatorProject($sprint);
+	}
+
+	public function confirmation(Sprint $sprint)
+	{
+		return View::make('sprint.confirmation', compact('sprint'));
+	}
+
+	private function createPhabricatorProject(Sprint $sprint)
+	{
+		$phabricator = new PhabricatorAPI(new ConduitClient($_ENV['PHABRICATOR_URL']));
+		$user = Auth::user();
+		try
+		{
+			$phabricator->connect($user->username, $user->conduit_certificate);
+			$response = $phabricator->createProject($sprint->title);
+		} catch (ConduitClientException $e)
+		{
+			$sprint->delete();
+
+			Flash::error('Failed to create a Phabricator for the sprint: ' . $e->getMessage());
+			return Redirect::back();
+		}
+
+		$sprint->phid = $response['id'];
+		$sprint->save();
+
+		return Redirect::to('sprint_confirmation_path', [$sprint->phid]);
 	}
 }
