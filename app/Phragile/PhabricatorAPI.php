@@ -34,7 +34,10 @@ class PhabricatorAPI {
 	{
 		$response = $this->client->callMethodSynchronous(
 			'project.create',
-			$title
+			[
+				'name' => $title,
+				'members' => []
+			]
 		);
 
 		return $response;
