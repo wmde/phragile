@@ -2,9 +2,8 @@
 
 class ProjectsController extends BaseController {
 
-	public function show($slug)
+	public function show(Project $project)
 	{
-		$project = Project::where('slug', $slug)->first();
 		return View::make('project.view', compact('project'));
 	}
 }

@@ -2,9 +2,8 @@
 
 class SprintsController extends BaseController {
 
-	public function create($projectSlug)
+	public function create(Project $project)
 	{
-		$project = Project::where('slug', $projectSlug)->first();
 		return View::make('sprint.create', compact('project'));
 	}
 }

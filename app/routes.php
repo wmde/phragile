@@ -11,6 +11,11 @@
 |
 */
 
+Route::bind('project', function($slug, $route)
+{
+	return Project::where('slug', $slug)->first();
+});
+
 Route::get('/', function()
 {
 	return View::make('index');
@@ -32,7 +37,7 @@ Route::put('/conduit_certificate', [
 	'uses' => 'UsersController@updateCertificate'
 ]);
 
-Route::get('/projects/{slug}', [
+Route::get('/projects/{project}', [
 	'as' => 'project_path',
 	'uses' => 'ProjectsController@show'
 ]);
