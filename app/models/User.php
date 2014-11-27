@@ -16,12 +16,12 @@ class User extends Eloquent implements UserInterface {
 		// Workaround: Auth::logout breaks with the default behavior since we're using OAuth.
 	}
 
-	public function certificateValid($certificate)
+	public function certificateValid($certificate = null)
 	{
 		try
 		{
 			$phabricator = new PhabricatorAPI(new ConduitClient($_ENV['PHABRICATOR_URL']));
-			$phabricator->connect($this->username, $certificate);
+			$phabricator->connect($this->username, $certificate ?: $this->conduit_certificate);
 		} catch (ConduitClientException $e)
 		{
 			return false;
