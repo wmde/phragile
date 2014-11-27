@@ -3,7 +3,7 @@
 @section('content')
 	<h1>Create sprint for {{ $project->title }}</h1>
 
-	{{ Form::open(['method' => 'POST', 'route' => ['store_sprint_path', $project->id]]) }}
+	{{ Form::open(['method' => 'POST', 'route' => ['store_sprint_path', $project->slug]]) }}
 		<div class="form-group">
 			{{ Form::label('title', 'Title:') }}
 			{{ Form::text('title', '', ['class' => 'form-control']) }}
