@@ -15,8 +15,6 @@ define('LARAVEL_START', microtime(true));
 */
 
 require __DIR__.'/../vendor/autoload.php';
-// Load libphutil for Phabricator Conduit calls
-require dirname(__DIR__) . '/vendor/libphutil/src/__phutil_library_init__.php';
 
 /*
 |--------------------------------------------------------------------------
