@@ -42,4 +42,14 @@ class PhabricatorAPI {
 
 		return $response;
 	}
+
+	public function queryProjectByTitle($title)
+	{
+		return head($this->client->callMethodSynchronous(
+			'project.query',
+			[
+				'names' => [$title]
+			]
+		)['data']);
+	}
 }
