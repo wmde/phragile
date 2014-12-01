@@ -130,7 +130,10 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
      */
     public function iShouldSeeInThePhabricatorProjectList($title)
     {
-        throw new PendingException();
+		if (!App::make('phabricator')->queryProjectByTitle($title))
+		{
+			throw new Exception("Project '$title' does not exist.");
+		}
     }
 
     /**
@@ -138,7 +141,8 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
      */
     public function iShouldSeeOn($text, $page)
     {
-        throw new PendingException();
+		$this->visit($page);
+		$this->assertPageContainsText($text);
     }
 
     /**
@@ -150,5 +154,22 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 			'title' => $title,
 			'slug' => Str::slug($title)
 		]);
+    }
+
+    /**
+     * @Given the sprint :title does not exist
+     */
+    public function theSprintDoesNotExist($title)
+    {
+        Sprint::where('title', $title)->delete();
+
+		$project = App::make('phabricator')->queryProjectByTitle($title);
+		if ($project && isset($project['phid']))
+		{
+			exec($this->params['phabricator_path']
+			     . '/bin/remove destroy '
+			     . $project['phid']
+				 . ' --force');
+		}
     }
 }

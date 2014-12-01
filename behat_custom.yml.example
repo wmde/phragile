@@ -1,4 +1,4 @@
-# Please fill out `base_url`, `phabricator_username` and `phabricator_password`
+# Please fill out `base_url`, `conduit_certificate`, `phabricator_path`, phabricator_username` and `phabricator_password`
 
 default:
   extensions:
@@ -10,5 +10,7 @@ default:
       contexts:
         - FeatureContext:
             params:
+              phabricator_path: ''
               phabricator_username: ''
               phabricator_password: ''
+              conduit_certificate: ''
