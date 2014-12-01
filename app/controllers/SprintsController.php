@@ -17,12 +17,19 @@ class SprintsController extends BaseController {
 
 	public function store(Project $project)
 	{
-		$sprint = Sprint::create(array_merge(
-			Input::all(),
+		$sprint = new Sprint(array_merge(
+			array_map('trim', Input::all()),
 			['project_id' => $project->id]
 		));
 
-		if (!$sprint)
+		$validation = $sprint->validate();
+		if ($validation->fails())
+		{
+			Flash::error(HTML::ul($validation->messages()->all()));
+			return Redirect::back();
+		}
+
+		if (!$sprint->save())
 		{
 			Flash::error('A problem occurred saving the sprint record in Phragile.');
 			return Redirect::back();
