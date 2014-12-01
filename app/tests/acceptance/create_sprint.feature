@@ -12,6 +12,6 @@ Feature: Create Sprint
     And I fill in "sprint_start" with "2014-12-01"
     And I fill in "sprint_end" with "2014-12-14"
     And I press "Create new sprint"
-    Then I should see "Successfully created"
+    Then I should see "Successfully created \"Wikidata Sprint 42\""
     And I should see "Wikidata Sprint 42" in the Phabricator project list
     And I should see "Wikidata Sprint 42" on "/projects/wikidata"
