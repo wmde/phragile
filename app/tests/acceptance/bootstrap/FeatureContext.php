@@ -126,14 +126,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
     }
 
     /**
-     * @Then I should see a confirmation page for that sprint
-     */
-    public function iShouldSeeAConfirmationPageForThatSprint()
-    {
-        throw new PendingException();
-    }
-
-    /**
      * @Then I should see :title in the Phabricator project list
      */
     public function iShouldSeeInThePhabricatorProjectList($title)
