@@ -6,6 +6,6 @@ class Project extends Eloquent {
 
 	public function sprints()
 	{
-		return $this->hasMany('Sprint');
+		return $this->hasMany('Sprint')->orderBy('sprint_start', 'desc');
 	}
 }
