@@ -21,4 +21,12 @@ class Sprint extends Eloquent {
 			$this->rules
 		);
 	}
+
+	public static function current($projectID)
+	{
+		return self::where('sprint_start', '<=', date('Y-m-d'))
+		        ->where('project_id', $projectID)
+		        ->orderBy('sprint_start', 'desc')
+		        ->first();
+	}
 }

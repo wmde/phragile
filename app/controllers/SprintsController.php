@@ -1,8 +1,17 @@
 <?php
 
 use Phragile\PhabricatorAPI;
+use Phragile\TaskList;
 
 class SprintsController extends BaseController {
+
+	public function show(Sprint $sprint)
+	{
+		$currentSprint = Sprint::current($sprint->project->id);
+		$taskList = new TaskList(App::make('phabricator'), $sprint->phid);
+
+		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList'));
+	}
 
 	public function create(Project $project)
 	{
