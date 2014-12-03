@@ -2,7 +2,7 @@
 
 class Sprint extends Eloquent {
 
-	protected $fillable = ['phid', 'project_id', 'title', 'sprint_start', 'sprint_end'];
+	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end'];
 	private $rules = [
 		'title' => 'required',
 		'sprint_start' => 'required|date_format:"Y-m-d"',

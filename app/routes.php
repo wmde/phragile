@@ -16,9 +16,9 @@ Route::bind('project', function($slug)
 	return Project::where('slug', $slug)->first();
 });
 
-Route::bind('sprint', function($phid)
+Route::bind('sprint', function($phabricatorID)
 {
-	return Sprint::where('phid', $phid)->first();
+	return Sprint::where('phabricator_id', $phabricatorID)->first();
 });
 
 Route::get('/', function()
