@@ -13,4 +13,6 @@
 			@endforeach
 		</select>
 	</h1>
+
+	{{ HTML::ul($taskList->getTasks()) }}
 @stop
