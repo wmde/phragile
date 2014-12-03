@@ -10,3 +10,4 @@ composer.lock
 .DS_Store
 Thumbs.db
 behat_custom.yml
+_ide_helper.php
