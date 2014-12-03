@@ -59,6 +59,9 @@ $framework = $app['path.base'].
 
 require $framework.'/Illuminate/Foundation/start.php';
 
+// Load libphutil for Phabricator Conduit calls
+require dirname(__DIR__) . '/vendor/libphutil/src/__phutil_library_init__.php';
+
 /*
 |--------------------------------------------------------------------------
 | Return The Application

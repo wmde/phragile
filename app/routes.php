@@ -11,6 +11,16 @@
 |
 */
 
+Route::bind('project', function($slug)
+{
+	return Project::where('slug', $slug)->first();
+});
+
+Route::bind('sprint', function($phid)
+{
+	return Sprint::where('phid', $phid)->first();
+});
+
 Route::get('/', function()
 {
 	return View::make('index');
@@ -30,4 +40,25 @@ Route::put('/conduit_certificate', [
 	'before' => 'auth',
 	'as' => 'conduit_certificate_path',
 	'uses' => 'UsersController@updateCertificate'
+]);
+
+Route::get('/projects/{project}', [
+	'as' => 'project_path',
+	'uses' => 'ProjectsController@show'
+]);
+
+Route::get('/projects/{project}/sprints/create', [
+	'as' => 'create_sprint_path',
+	'uses' => 'SprintsController@create'
+]);
+
+Route::post('projects/{project}/sprints/store', [
+	'before' => 'auth',
+	'as' => 'store_sprint_path',
+	'uses' => 'SprintsController@store'
+]);
+
+Route::get('/confirmation/{sprint}', [
+	'as' => 'sprint_confirmation_path',
+	'uses' => 'SprintsController@confirmation'
 ]);
