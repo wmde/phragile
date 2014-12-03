@@ -63,6 +63,6 @@ class SprintsController extends BaseController {
 		$sprint->phabricator_id = $response['id'];
 		$sprint->save();
 
-		return Redirect::route('sprint_confirmation_path', ['sprint' => $sprint->phabricator_id]);
+		return Redirect::route('sprint_confirmation_path', ['sprint' => $sprint->phid]);
 	}
 }
