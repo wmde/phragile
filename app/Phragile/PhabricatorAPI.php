@@ -52,4 +52,14 @@ class PhabricatorAPI {
 			]
 		)['data']);
 	}
+
+	public function queryTasksByProject($projectPHID)
+	{
+		return $this->client->callMethodSynchronous(
+			'maniphest.query',
+			[
+				'projectPHIDs' => [$projectPHID]
+			]
+		);
+	}
 }
