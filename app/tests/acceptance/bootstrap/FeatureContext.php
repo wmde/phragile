@@ -172,4 +172,52 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 				 . ' --force');
 		}
 	}
+
+	/**
+	 * @Given a sprint :sprint exists for the :project project
+	 */
+	public function aSprintExistsForTheProject($sprintTitle, $projectTitle)
+	{
+		Auth::login(User::where('username', $this->params['phabricator_username'])->first()); // this is a bit ugly.
+
+		$project = Project::firstOrCreate(['title' => $projectTitle]);
+		$existingSprint = Sprint::where('title', $sprintTitle)->first();
+
+		if (!$existingSprint)
+		{
+			$newSprint = new Sprint([
+				'title' => $sprintTitle,
+				'project_id' => $project->id,
+				'sprint_start' => '2014-12-01',
+				'sprint_end' => '2014-12-14'
+			]);
+
+			if (!$newSprint->save())
+			{
+				throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
+			}
+		}
+	}
+
+	/**
+	 * @Given it has the following tasks for the :sprint Sprint:
+	 */
+	public function itHasTheFollowingTasks($sprint, \Behat\Gherkin\Node\TableNode $table)
+	{
+		$sprintPHID = Sprint::where('title', $sprint)->first()->phid;
+		$phabricator = App::make('phabricator');
+
+		foreach ($table->getHash() as $task)
+		{
+			$phabricator->createTask($sprintPHID, $task);
+		}
+	}
+
+	/**
+	 * @When I go to the :sprint sprint overview
+	 */
+	public function iGoToTheSprintOverview($sprint)
+	{
+		$this->visit('/sprints/' . Sprint::where('title', $sprint)->first()->phid);
+	}
 }
