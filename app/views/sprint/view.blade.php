@@ -24,5 +24,21 @@
 		</span>
 	</h1>
 
-	{{ HTML::ul($taskList->getTasks()) }}
+	<table class="table table-striped">
+		<tr>
+			<th>Title</th>
+			<th>Priority</th>
+			<th>Story Points</th>
+			<th>Status</th>
+		</tr>
+
+		@foreach($taskList->getTasks() as $task)
+			<tr>
+				<td>{{ $task['title'] }}</td>
+				<td>{{ $task['priority'] }}</td>
+				<td>{{ $task['story_points'] }}</td>
+				<td>{{ $task['status'] }}</td>
+			</tr>
+		@endforeach
+	</table>
 @stop
