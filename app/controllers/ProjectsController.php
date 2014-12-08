@@ -6,4 +6,9 @@ class ProjectsController extends BaseController {
 	{
 		return App::make('SprintsController')->show($project->currentSprint());
 	}
+
+	public function index()
+	{
+		return View::make('project.index')->with('projects', Project::all());
+	}
 }
