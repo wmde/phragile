@@ -150,7 +150,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function theProjectExists($title)
 	{
-		Project::create([
+		Project::firstOrCreate([
 			'title' => $title,
 			'slug' => Str::slug($title)
 		]);
