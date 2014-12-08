@@ -21,8 +21,8 @@
 								]
 							) }}
 						</li>
-						@if(Route::currentRouteName() === 'project_path')
-							<li>{{ link_to_route('create_sprint_path', 'New sprint', $sprint->project->slug) }}</li>
+						@if(in_array(Route::currentRouteName(), ['project_path', 'sprint_path']))
+							<li>{{ link_to_route('create_sprint_path', 'New sprint', isset($project) ? $project->slug : $sprint->project->slug) }}</li>
 						@endif
 						<li>{{ link_to_route('logout_path', 'Logout') }}</li>
 					</ul>
