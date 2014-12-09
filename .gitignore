@@ -4,7 +4,6 @@
 /app/assets/bower_components
 /vendor
 composer.phar
-composer.lock
 .env.*.php
 .env.php
 .DS_Store

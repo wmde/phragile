@@ -26,6 +26,7 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"laracasts/flash": "~1.0",
+		"guzzlehttp/guzzle": "~4.2",
 		"libphutil": "1.0"
 	},
 	"require-dev": {
