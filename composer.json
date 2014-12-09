@@ -28,6 +28,7 @@
 		"laracasts/flash": "~1.0",
 		"guzzlehttp/guzzle": "~4.2",
 		"doctrine/dbal": "~2.4",
+		"guzzlehttp/guzzle": "~4.2",
 		"libphutil": "1.0"
 	},
 	"require-dev": {
