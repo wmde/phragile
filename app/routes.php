@@ -21,10 +21,10 @@ Route::bind('sprint', function($phabricatorID)
 	return Sprint::where('phabricator_id', $phabricatorID)->first();
 });
 
-Route::get('/', function()
-{
-	return View::make('index');
-});
+Route::get('/', [
+	'as' => 'home_path',
+	'uses' => 'ProjectsController@index'
+]);
 
 Route::get('/login', [
 	'as' => 'login_path',
