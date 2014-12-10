@@ -5,11 +5,7 @@ use Phragile\PhabricatorAPI;
 class Sprint extends Eloquent {
 
 	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end'];
-	private $rules = [
-		'title' => 'required',
-		'sprint_start' => 'required|date_format:"Y-m-d"',
-		'sprint_end' => 'required|date_format:"Y-m-d"'
-	];
+
 	private $phabricatorError = null;
 
 	public function project()
@@ -19,9 +15,15 @@ class Sprint extends Eloquent {
 
 	public function validate()
 	{
+		$rules = [
+			'title' => 'required',
+			'sprint_start' => 'required|date_format:"Y-m-d"',
+			'sprint_end' => 'required|date_format:"Y-m-d"|after:' . ($this->sprint_start ?: '0-0-0')
+		];
+
 		return Validator::make(
 			$this->getAttributes(),
-			$this->rules
+			$rules
 		);
 	}
 
