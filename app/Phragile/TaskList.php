@@ -20,7 +20,7 @@ class TaskList {
 				'title' => $task['title'],
 				'priority' => $task['priority'],
 				'status' => $task['status'],
-				'story_points' => $task['auxiliary']['std:maniphest:' . $_ENV['MANIPHEST_STORY_POINTS_FIELD']],
+				'story_points' => $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
 			];
 		}, array_values($this->phabricator->queryTasksByProject($phid)));
 	}

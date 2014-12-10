@@ -72,7 +72,7 @@ class PhabricatorAPI {
 				'projectPHIDs' => [$projectPHID],
 				'priority' => $_ENV['MANIPHEST_PRIORITY_MAPPING.' . $task['priority']],
 				'auxiliary' => [
-					'std:maniphest:' . $_ENV['MANIPHEST_STORY_POINTS_FIELD'] => $task['points']
+					$_ENV['MANIPHEST_STORY_POINTS_FIELD'] => $task['points']
 				]
 			]
 		);
