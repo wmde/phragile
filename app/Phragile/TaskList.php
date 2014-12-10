@@ -19,7 +19,7 @@ class TaskList {
 			return [
 				'title' => $task['title'],
 				'priority' => $task['priority'],
-				'status' => $task['status'],
+				'status' => $this->taskStatus($task),
 				'story_points' => $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
 			];
 		}, array_values($this->phabricator->queryTasksByProject($phid)));
@@ -28,5 +28,12 @@ class TaskList {
 	public function getTasks()
 	{
 		return $this->tasks;
+	}
+
+	private function taskStatus(array $task)
+	{
+		return !$task['isClosed'] && in_array($_ENV['REVIEW_TAG_PHID'], $task['projectPHIDs'])
+			? 'patch to review'
+			: $task['status'];
 	}
 }
