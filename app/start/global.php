@@ -31,7 +31,8 @@ ClassLoader::addDirectories(array(
 |
 */
 
-Log::useFiles(storage_path().'/logs/laravel.log');
+$monolog = Log::getMonolog();
+$monolog->pushHandler(new Monolog\Handler\ErrorLogHandler());
 
 /*
 |--------------------------------------------------------------------------
