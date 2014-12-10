@@ -16,9 +16,9 @@ Route::bind('project', function($slug)
 	return Project::where('slug', $slug)->first();
 });
 
-Route::bind('sprint', function($phid)
+Route::bind('sprint', function($phabricatorID)
 {
-	return Sprint::where('phid', $phid)->first();
+	return Sprint::where('phabricator_id', $phabricatorID)->first();
 });
 
 Route::get('/', function()
@@ -56,6 +56,11 @@ Route::post('projects/{project}/sprints/store', [
 	'before' => 'auth',
 	'as' => 'store_sprint_path',
 	'uses' => 'SprintsController@store'
+]);
+
+Route::get('/sprints/{sprint}', [
+	'as' => 'sprint_path',
+	'uses' => 'SprintsController@show'
 ]);
 
 Route::get('/confirmation/{sprint}', [

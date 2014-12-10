@@ -25,3 +25,12 @@ Feature: Create Sprint
     Then I should see "The title field is required."
     Then I should see "The sprint start field is required."
     Then I should see "The sprint end does not match the format Y-m-d."
+
+  Scenario: Sprint with start date after end date
+    Given I am logged in
+    And I am on "/projects/wikidata"
+    When I click "New sprint"
+    And I fill in "sprint_end" with "2014-12-01"
+    And I fill in "sprint_start" with "2014-12-01"
+    And I press "Create new sprint"
+    Then I should see "The sprint end must be a date after 2014-12-01"

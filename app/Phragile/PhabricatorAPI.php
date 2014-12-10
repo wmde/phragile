@@ -52,4 +52,29 @@ class PhabricatorAPI {
 			]
 		)['data']);
 	}
+
+	public function queryTasksByProject($projectPHID)
+	{
+		return $this->client->callMethodSynchronous(
+			'maniphest.query',
+			[
+				'projectPHIDs' => [$projectPHID]
+			]
+		);
+	}
+
+	public function createTask($projectPHID, array $task)
+	{
+		return $this->client->callMethodSynchronous(
+			'maniphest.createtask',
+			[
+				'title' => $task['title'],
+				'projectPHIDs' => [$projectPHID],
+				'priority' => $_ENV['MANIPHEST_PRIORITY_MAPPING.' . $task['priority']],
+				'auxiliary' => [
+					$_ENV['MANIPHEST_STORY_POINTS_FIELD'] => $task['points']
+				]
+			]
+		);
+	}
 }
