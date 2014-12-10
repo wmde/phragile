@@ -14,7 +14,7 @@
 			{{ link_to_route(
 				'sprint_path',
 				$sprint->title . ' on Phragile',
-				$sprint->phid
+				$sprint->phabricator_id
 			) }}
 		</li>
 		<li>
