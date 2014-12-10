@@ -218,6 +218,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iGoToTheSprintOverview($sprint)
 	{
-		$this->visit('/sprints/' . Sprint::where('title', $sprint)->first()->phid);
+		$this->visit('/sprints/' . Sprint::where('title', $sprint)->first()->phabricator_id);
 	}
 }

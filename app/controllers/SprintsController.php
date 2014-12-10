@@ -43,7 +43,7 @@ class SprintsController extends BaseController {
 			return Redirect::back();
 		}
 
-		return Redirect::route('sprint_confirmation_path', ['sprint' => $sprint->phid]);
+		return Redirect::route('sprint_confirmation_path', ['sprint' => $sprint->phabricator_id]);
 	}
 
 	public function confirmation(Sprint $sprint)
