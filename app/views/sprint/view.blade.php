@@ -11,7 +11,7 @@
 			<ul class="dropdown-menu">
 				@foreach($sprint->project->sprints as $s)
 					<li class="{{ $s->id === $sprint->id ? 'active' : '' }}">
-						<a href="{{ route('sprint_path', $s->phid) }}">
+						<a href="{{ route('sprint_path', $s->phabricator_id) }}">
 							@if($currentSprint && $currentSprint->id === $s->id)
 								Current sprint ({{ $s->title }})
 							@else
