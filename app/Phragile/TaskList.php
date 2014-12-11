@@ -36,4 +36,27 @@ class TaskList {
 			? 'patch to review'
 			: $task['status'];
 	}
+
+	public function tasksPerStatus()
+	{
+		return array_reduce($this->tasks, function($acc, $task)
+		{
+			$acc['total']['tasks'] += 1;
+			$acc['total']['points'] += $task['story_points'];
+
+			if (isset($acc[$task['status']]))
+			{
+				$acc[$task['status']]['tasks'] += 1;
+				$acc[$task['status']]['points'] += $task['story_points'];
+			} else
+			{
+				$acc[$task['status']] = [
+					'tasks' => 1,
+					'points' => $task['story_points']
+				];
+			}
+
+			return $acc;
+		}, ['total' => ['points' => 0, 'tasks' => '0']]);
+	}
 }

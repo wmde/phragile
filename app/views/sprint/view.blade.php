@@ -28,6 +28,19 @@
 		</a>
 	</h1>
 
+	<div class="row">
+		<div class="col-md-offset-8 col-md-4">
+			<table class="table">
+				@foreach($taskList->tasksPerstatus() as $status => $numbers)
+					<tr>
+						<th>{{ $status }}</td>
+						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
+					</tr>
+				@endforeach
+			</table>
+		</div>
+	</div>
+
 	<table class="table table-striped">
 		<tr>
 			<th>Title</th>
