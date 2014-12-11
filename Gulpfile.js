@@ -38,8 +38,15 @@ gulp.task('css', function () {
         .pipe(gulp.dest('public/css'));
 });
 
+gulp.task('fonts', function () {
+    return gulp.src([
+            config.componentsDir + '/bootstrap/fonts/*'
+        ])
+        .pipe(gulp.dest('public/fonts'));
+});
+
 gulp.task('watch', function () {
     gulp.watch(config.lessFiles, ['less']);
 });
 
-gulp.task('default', ['bower', 'less', 'js', 'css']);
+gulp.task('default', ['bower', 'less', 'js', 'css', 'fonts']);

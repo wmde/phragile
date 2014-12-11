@@ -22,6 +22,10 @@
 				@endforeach
 			</ul>
 		</span>
+
+		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" title="Go to Phabricator">
+			<span class="glyphicon glyphicon-new-window phab-link"></span>
+		</a>
 	</h1>
 
 	<table class="table table-striped">
