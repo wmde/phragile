@@ -1,6 +1,7 @@
 <?php
 
 use Phragile\TaskList;
+use Phragile\Burndown;
 
 class SprintsController extends BaseController {
 
@@ -8,8 +9,9 @@ class SprintsController extends BaseController {
 	{
 		$currentSprint = $sprint->project->currentSprint();
 		$taskList = new TaskList(App::make('phabricator'), $sprint->phid);
+		$burndown = new Burndown($sprint, $taskList);
 
-		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList'));
+		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown'));
 	}
 
 	public function create(Project $project)

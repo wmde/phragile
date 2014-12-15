@@ -29,11 +29,15 @@
 	</h1>
 
 	<div class="row">
-		<div class="col-md-offset-8 col-md-4">
+		<div class="col-md-8">
+			{{ HTML::ul($burndown->days()) }}
+		</div>
+
+		<div class="col-md-4">
 			<table class="table">
 				@foreach($taskList->tasksPerstatus() as $status => $numbers)
 					<tr>
-						<th>{{ $status }}</td>
+						<th>{{ $status }}</th>
 						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
 					</tr>
 				@endforeach
