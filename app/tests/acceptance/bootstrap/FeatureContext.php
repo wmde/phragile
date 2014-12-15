@@ -220,4 +220,16 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		$this->visit('/sprints/' . Sprint::where('title', $sprint)->first()->phabricator_id);
 	}
+
+	/**
+	 * @Given the sprint :sprint starts on :start and ends on :end
+	 */
+	public function itStartsOnAndEndsOn($sprint, $start, $end)
+	{
+		Sprint::where('title', $sprint)->update([
+				'sprint_start' => $start,
+				'sprint_end' => $end
+			]
+		);
+	}
 }
