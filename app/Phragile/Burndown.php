@@ -13,7 +13,7 @@ class Burndown {
 		$this->days = $this->daysInSprint();
 	}
 
-	public function daysInSprint()
+	private function daysInSprint()
 	{
 		$days = [];
 
@@ -21,7 +21,7 @@ class Burndown {
 		     $day <= strtotime($this->sprint->sprint_end);
 		     $day += 60*60*24)
 		{
-			$days[] = date('Y-m-d', $day);
+			$days[] = $day;
 		}
 
 		return $days;
@@ -31,13 +31,13 @@ class Burndown {
 	{
 		return array_map(function($day) use($format)
 		{
-			return date($format, strtotime($day));
+			return date($format, $day);
 		}, $this->days);
 	}
 
 	public function closedPerDay()
 	{
-		$closedPerDay = array_fill_keys(array_merge($this->days, ['before', 'after']), 0);
+		$closedPerDay = array_fill_keys(array_merge($this->getDays('Y-m-d'), ['before', 'after']), 0);
 
 		foreach ($this->closedTaskTimes() as $id => $time)
 		{
