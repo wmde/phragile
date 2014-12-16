@@ -52,4 +52,122 @@ class BurndownTest extends TestCase {
 
 		$this->assertEquals($burndown->getDays('Y-m-d'), $all);
 	}
+
+	private $tasks = [
+		'7' => [
+			'closed' => true,
+			'id' => '7',
+			'story_points' => 3
+		],
+		'42' => [
+			'closed' => true,
+			'id' => '42',
+			'story_points' => 13
+		],
+		'5' => [ // ignored, because closed => false
+			'closed' => false,
+			'id' => '5',
+			'story_points' => 3
+		],
+		'1' => [
+			'closed' => true,
+			'id' => '1',
+			'story_points' => 3
+		],
+		'2' => [
+			'closed' => false,
+			'id' => '2',
+			'story_points' => 13
+		],
+		'3' => [
+			'closed' => false,
+			'id' => '3',
+			'story_points' => 5
+		],
+	];
+
+	private $transactions = [
+		'1' => [[
+			'transactionType' => 'status',
+			'oldValue' => 'open',
+			'newValue' => 'resolved',
+			'dateCreated' => '1415664000', // Nov 11
+		]],
+		'2' => [[
+			'transactionType' => 'status',
+			'oldValue' => 'open',
+			'newValue' => 'resolved',
+			'dateCreated' => '1414664000', // Oct 30
+		]],
+		'3' => [[
+			'transactionType' => 'status',
+			'oldValue' => 'open',
+			'newValue' => 'resolved',
+			'dateCreated' => '1419033600', // Oct 30
+		]],
+		'7' => [
+			[
+				'transactionType' => 'status',
+				'oldValue' => 'open',
+				'newValue' => 'resolved',
+				'dateCreated' => '1418040000', // Dec 8
+			],
+			['transactionType' => 'priority'], // ignored because it's not a status transaction
+			[ // should be ignored because it's a status change from closed to closed
+				'transactionType' => 'status',
+				'oldValue' => 'resolved',
+				'newValue' => 'wontfix',
+				'dateCreated' => '1428050000', // Apr 3
+			]
+		],
+		'42' => [
+			[
+				'transactionType' => 'status',
+				'oldValue' => 'open',
+				'newValue' => 'resolved',
+				'dateCreated' => '1418040000', // Dec 8
+			],
+			[
+				'transactionType' => 'status',
+				'oldValue' => 'resolved',
+				'newValue' => 'open',
+				'dateCreated' => '1418050000', // Dec 8
+			],
+			[ // should override the previous one
+				'transactionType' => 'status',
+				'oldValue' => 'open',
+				'newValue' => 'wontfix',
+				'dateCreated' => '1418130000', // Dec 9
+			]
+		],
+	];
+
+	public function testClosedPerDay()
+	{
+		$phabricatorMock = $this->getMockBuilder('Phragile\PhabricatorAPI')
+			                ->disableOriginalConstructor()
+			                ->getMock();
+		$phabricatorMock->method('taskTransactions')->willReturn($this->transactions);
+
+		$taskListMock = $this->getMockBuilder('Phragile\TaskList')
+			->disableOriginalConstructor()
+			->getMock();
+		$taskListMock->method('getTasks')->willReturn($this->tasks);
+		$taskListMock->method('findTaskByID')->will($this->returnCallback(function($id)
+		{
+			return $this->tasks[$id];
+		}));
+
+		$burndown = new Burndown(
+			new Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
+			$taskListMock,
+			$phabricatorMock
+		);
+
+		$closed = $burndown->closedPerDay();
+		$this->assertEquals(16, $closed['before']); // task 1 + 2
+		$this->assertEquals(5, $closed['after']); // task 3
+		$this->assertEquals(13, $closed['2014-12-09']); // task 42
+		$this->assertEquals(3, $closed['2014-12-08']); // task 7
+	}
 }
