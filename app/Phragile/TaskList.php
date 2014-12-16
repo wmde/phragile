@@ -21,6 +21,8 @@ class TaskList {
 				'priority' => $task['priority'],
 				'status' => $this->taskStatus($task),
 				'story_points' => $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
+				'closed' => $task['isClosed'],
+				'id' => $task['id'],
 			];
 		}, array_values($this->phabricator->queryTasksByProject($phid)));
 	}
@@ -58,5 +60,16 @@ class TaskList {
 
 			return $acc;
 		}, ['total' => ['points' => 0, 'tasks' => '0']]);
+	}
+
+	public function findTaskByID($id)
+	{
+		foreach ($this->tasks as $task)
+		{
+			if ($task['id'] == $id)
+			{
+				return $task;
+			}
+		}
 	}
 }

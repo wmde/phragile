@@ -7,9 +7,10 @@ class SprintsController extends BaseController {
 
 	public function show(Sprint $sprint)
 	{
+		$phabricator = App::make('phabricator');
 		$currentSprint = $sprint->project->currentSprint();
-		$taskList = new TaskList(App::make('phabricator'), $sprint->phid);
-		$burndown = new Burndown($sprint, $taskList);
+		$taskList = new TaskList($phabricator, $sprint->phid);
+		$burndown = new Burndown($sprint, $taskList, $phabricator);
 
 		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown'));
 	}

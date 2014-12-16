@@ -30,7 +30,7 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			{{ HTML::ul($burndown->days()) }}
+			{{ HTML::ul($burndown->getDays()) }}
 		</div>
 
 		<div class="col-md-4">
