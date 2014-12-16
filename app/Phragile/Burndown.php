@@ -10,10 +10,10 @@ class Burndown {
 		$this->sprint = $sprint;
 		$this->tasks = $tasks;
 		$this->phabricator = $phabricator;
-		$this->days = $this->days();
+		$this->days = $this->daysInSprint();
 	}
 
-	public function days()
+	public function daysInSprint()
 	{
 		$days = [];
 
