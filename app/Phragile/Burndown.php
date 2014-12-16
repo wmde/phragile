@@ -41,22 +41,27 @@ class Burndown {
 
 		foreach ($this->closedTaskTimes() as $id => $time)
 		{
-			$task = $this->tasks->findTaskByID($id);
-			$formattedDate = date('Y-m-d', $time);
-
-			if (isset($closedPerDay[$formattedDate]))
-			{
-				$closedPerDay[$formattedDate] += $task['story_points'];
-			} elseif ($formattedDate < $this->sprint->sprint_start)
-			{
-				$closedPerDay['before'] += $task['story_points'];
-			} else
-			{
-				$closedPerDay['after'] += $task['story_points'];
-			}
+			$closedPerDay[$this->closedTimeInSprint($time)] += $this->tasks->findTaskByID($id)['story_points'];
 		}
 
 		return $closedPerDay;
+	}
+
+	private function closedTimeInSprint($time)
+	{
+		$format = 'Y-m-d';
+		$formattedDate = date($format, $time);
+
+		if (in_array($formattedDate, $this->getDays($format)))
+		{
+			return $formattedDate;
+		} elseif ($formattedDate < $this->sprint->sprint_start)
+		{
+			return 'before';
+		} else
+		{
+			return 'after';
+		}
 	}
 
 	private function closedTaskIDs()
