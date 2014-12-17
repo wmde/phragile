@@ -63,3 +63,8 @@
 		@endforeach
 	</table>
 @stop
+
+@section('optional_scripts')
+	{{ HTML::script('js/d3.min.js') }}
+	{{ HTML::script('js/burndown.js') }}
+@stop
