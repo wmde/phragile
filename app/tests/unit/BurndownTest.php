@@ -243,4 +243,37 @@ class BurndownTest extends TestCase {
 		$this->assertEquals(8, $closed['before']);
 		$this->assertEquals(2, $closed['after']);
 	}
+
+	public function testClosedPerDayIgnoresClosedToClosedTransaction()
+	{
+		$burndown = $this->mockWithTransactions(
+			[
+				'1' => [
+					'id' => 1,
+					'closed' => true,
+					'story_points' => 8
+				]
+			],
+			[
+				'1' => [
+					[
+						'transactionType' => 'status',
+						'oldValue' => 'open',
+						'newValue' => 'resolved',
+						'dateCreated' => '1418040000', // Dec 8
+					],
+					[
+						'transactionType' => 'status',
+						'oldValue' => 'resolved',
+						'newValue' => 'invalid',
+						'dateCreated' => '1418130000', // Dec 9
+					]
+				]
+			]
+		);
+
+		$closed = $burndown->closedPerDay();
+		$this->assertEquals(0, $closed['2014-12-09']);
+		$this->assertEquals(8, $closed['2014-12-08']);
+	}
 }
