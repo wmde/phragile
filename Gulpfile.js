@@ -2,25 +2,29 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     minify = require('gulp-minify-css'),
     uglify = require('gulp-uglify'),
-    bower = require('gulp-bower');
+    livereload = require('gulp-livereload'),
+    bower = require('gulp-bower'),
+    jshint = require('gulp-jshint');
 
 var config = {
     componentsDir: 'app/assets/bower_components',
-    lessFiles: 'app/assets/less/**/*.less'
+    lessFiles: 'app/assets/less/**/*.less',
+    jsFiles: 'public/js/burndown.js'
 };
 
 gulp.task('less', function () {
     return gulp.src(config.lessFiles)
             .pipe(less())
             .pipe(minify())
-            .pipe(gulp.dest('public/css'));
+            .pipe(gulp.dest('public/css'))
+            .pipe(livereload());
 });
 
 gulp.task('bower', function () {
     return bower();
 });
 
-gulp.task('js', function () {
+gulp.task('js-libs', function () {
     return gulp.src([
             config.componentsDir + '/jquery/dist/jquery.min.js',
             config.componentsDir + '/bootstrap/dist/js/bootstrap.min.js',
@@ -45,8 +49,17 @@ gulp.task('fonts', function () {
         .pipe(gulp.dest('public/fonts'));
 });
 
-gulp.task('watch', function () {
-    gulp.watch(config.lessFiles, ['less']);
+gulp.task('js', function () {
+    return gulp.src(config.jsFiles)
+        .pipe(livereload())
+        .pipe(jshint())
+        .pipe(jshint.reporter('default'));
 });
 
-gulp.task('default', ['bower', 'less', 'js', 'css', 'fonts']);
+gulp.task('watch', function () {
+    livereload.listen();
+    gulp.watch(config.lessFiles, ['less']);
+    gulp.watch(config.jsFiles, ['js']);
+});
+
+gulp.task('default', ['bower', 'less', 'js-libs', 'js', 'css', 'fonts']);
