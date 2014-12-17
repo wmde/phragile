@@ -76,21 +76,23 @@ class BurndownTest extends TestCase {
 		);
 	}
 
+	private $tasks = [
+		'1' => [
+			'id' => 1,
+			'closed' => true,
+			'story_points' => 8
+		],
+		'2' => [
+			'id' => 2,
+			'closed' => true,
+			'story_points' => 2
+		]
+	];
+
 	public function testClosedPerDayAddsStoryPoints()
 	{
 		$burndown = $this->mockWithTransactions(
-			[
-				'1' => [
-					'id' => 1,
-					'closed' => true,
-					'story_points' => 8
-				],
-				'2' => [
-					'id' => 2,
-					'closed' => true,
-					'story_points' => 2
-				]
-			],
+			$this->tasks,
 			[
 				'1' => [[
 					'transactionType' => 'status',
@@ -113,18 +115,7 @@ class BurndownTest extends TestCase {
 	public function testClosedPerDayDetectsBeforeAndAfter()
 	{
 		$burndown = $this->mockWithTransactions(
-			[
-				'1' => [
-					'id' => 1,
-					'closed' => true,
-					'story_points' => 8
-				],
-				'2' => [
-					'id' => 2,
-					'closed' => true,
-					'story_points' => 2
-				]
-			],
+			$this->tasks,
 			[
 				'1' => [[
 					'transactionType' => 'status',
@@ -149,13 +140,7 @@ class BurndownTest extends TestCase {
 	public function testClosedPerDayIgnoresClosedToClosedTransaction()
 	{
 		$burndown = $this->mockWithTransactions(
-			[
-				'1' => [
-					'id' => 1,
-					'closed' => true,
-					'story_points' => 8
-				]
-			],
+			['1' => $this->tasks['1']],
 			[
 				'1' => [
 					[
@@ -182,13 +167,7 @@ class BurndownTest extends TestCase {
 	public function testClosedPerDayOverridesTimeWhenClosedReopenedAndClosedAgain()
 	{
 		$burndown = $this->mockWithTransactions(
-			[
-				'1' => [
-					'id' => 1,
-					'closed' => true,
-					'story_points' => 8
-				]
-			],
+			['1' => $this->tasks['1']],
 			[
 				'1' => [
 					[
