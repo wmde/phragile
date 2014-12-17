@@ -170,9 +170,42 @@ class BurndownTest extends TestCase {
 		$burndown = $this->mockWithTransactions($this->tasks, $this->transactions);
 
 		$closed = $burndown->closedPerDay();
-		$this->assertEquals(16, $closed['before']); // task 1 + 2
 		$this->assertEquals(5, $closed['after']); // task 3
 		$this->assertEquals(13, $closed['2014-12-09']); // task 42
 		$this->assertEquals(3, $closed['2014-12-08']); // task 7
+	}
+
+	public function testClosedPerDayAddsStoryPointsCorrectly()
+	{
+		$burndown = $this->mockWithTransactions(
+			[
+				'1' => [
+					'id' => 1,
+					'closed' => true,
+					'story_points' => 8
+				],
+				'2' => [
+					'id' => 2,
+					'closed' => true,
+					'story_points' => 2
+				]
+			],
+			[
+				'1' => [[
+					'transactionType' => 'status',
+					'oldValue' => 'open',
+					'newValue' => 'resolved',
+					'dateCreated' => '1418040000', // Dec 8
+				]],
+				'2' => [[
+					'transactionType' => 'status',
+					'oldValue' => 'open',
+					'newValue' => 'resolved',
+					'dateCreated' => '1418050000', // Dec 8
+				]]
+			]
+		);
+
+		$this->assertEquals(10, $burndown->closedPerDay()['2014-12-08']);
 	}
 }
