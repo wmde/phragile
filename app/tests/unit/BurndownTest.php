@@ -142,27 +142,32 @@ class BurndownTest extends TestCase {
 		],
 	];
 
-	public function testClosedPerDay()
+	private function mockWithTransactions(array $tasks, array $transactions)
 	{
 		$phabricatorMock = $this->getMockBuilder('Phragile\PhabricatorAPI')
-			                ->disableOriginalConstructor()
-			                ->getMock();
-		$phabricatorMock->method('taskTransactions')->willReturn($this->transactions);
+			->disableOriginalConstructor()
+			->getMock();
+		$phabricatorMock->method('taskTransactions')->willReturn($transactions);
 
 		$taskListMock = $this->getMockBuilder('Phragile\TaskList')
 			->disableOriginalConstructor()
 			->getMock();
-		$taskListMock->method('getTasks')->willReturn($this->tasks);
-		$taskListMock->method('findTaskByID')->will($this->returnCallback(function($id)
+		$taskListMock->method('getTasks')->willReturn($tasks);
+		$taskListMock->method('findTaskByID')->will($this->returnCallback(function($id) use($tasks)
 		{
-			return $this->tasks[$id];
+			return $tasks[$id];
 		}));
 
-		$burndown = new Burndown(
+		return new Burndown(
 			new Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
 			$taskListMock,
 			$phabricatorMock
 		);
+	}
+
+	public function testClosedPerDay()
+	{
+		$burndown = $this->mockWithTransactions($this->tasks, $this->transactions);
 
 		$closed = $burndown->closedPerDay();
 		$this->assertEquals(16, $closed['before']); // task 1 + 2
