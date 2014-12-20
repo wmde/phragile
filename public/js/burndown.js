@@ -83,7 +83,9 @@ svg.append('path')
 
 svg.append('path')
     .attr('class', 'graph actual')
-    .attr('d', line(actualGraphData));
+    .attr('d', line(actualGraphData.filter(function (data) {
+        return data.day <= new Date();
+    })));
 
 svg.append('g')
     .attr('class', 'x axis')
