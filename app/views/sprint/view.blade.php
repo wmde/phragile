@@ -28,9 +28,16 @@
 		</a>
 	</h1>
 
+	<?php $closedPerDay = $burndown->closedPerDay() ?>
 	<div class="row">
 		<div class="col-md-8">
-			{{ HTML::ul($sprint->formatDays()) }}
+			<div id="burndown-data"
+				 class="hidden"
+				 data-total="{{ $taskList->tasksPerStatus()['total']['points'] }}"
+				 data-before="{{ $closedPerDay['before'] }}">
+				{{ json_encode($closedPerDay) }}
+			</div>
+			<div id="burndown"></div>
 		</div>
 
 		<div class="col-md-4">

@@ -13,3 +13,25 @@
     color: #444;
   }
 }
+
+#burndown {
+  .graph {
+    stroke: #09f;
+    stroke-width: 3px;
+    fill: none;
+  }
+
+  .axis {
+    path, line {
+      fill: none;
+      stroke: #777;
+      stroke-width: 1px;
+      shape-rendering: crispEdges;
+    }
+
+    &.x text {
+      transform: rotate(-65deg);
+      font-size: 11px;
+    }
+  }
+}
