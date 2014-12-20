@@ -16,7 +16,15 @@
 
 #burndown {
   .graph {
-    stroke: #09f;
+    &.actual {
+      stroke: #09f;
+    }
+
+    &.ideal {
+      stroke: #cfa;
+      stroke-dasharray: 10 5;
+    }
+
     stroke-width: 3px;
     fill: none;
   }

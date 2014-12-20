@@ -1,8 +1,10 @@
-var prepareData = function () {
-    var $burndownData = $('#burndown-data'),
-        days = $.parseJSON($burndownData.text()),
+var $burndownData = $('#burndown-data'),
+    totalPoints = $burndownData.data('total');
+
+var sprintData = function () {
+    var days = $.parseJSON($burndownData.text()),
         data = [],
-        remaining = $burndownData.data('total') - days.before;
+        remaining = totalPoints - days.before;
 
     for (var day in days) {
         data.push({
@@ -18,10 +20,37 @@ var prepareData = function () {
     return data;
 };
 
+var isWeekend = function (date) {
+    return date.getDay() % 6 === 0;
+}
 
-var data = prepareData(),
+var countWeekendDays = function (data) {
+    var count = 0;
 
-    margin = { top: 30, right: 30, bottom: 50, left: 30 },
+    data.forEach(function (data) {
+        if (isWeekend(data.day)) count++;
+    });
+
+    return count;
+};
+
+var calculateIdealGraph = function (data) {
+    var averagePointsPerDay = totalPoints / (data.length - countWeekendDays(data) - 1),
+        idealData = [],
+        remaining = totalPoints;
+
+    data.forEach(function (day) {
+        idealData.push({ day: day.day, points: remaining });
+        if (!isWeekend(day.day)) remaining -= averagePointsPerDay;
+    });
+
+    return idealData;
+};
+
+var actualGraphData = sprintData(),
+    idealGraphData = calculateIdealGraph(actualGraphData),
+
+    margin = { top: 10, right: 10, bottom: 50, left: 30 },
     width = 600 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom,
 
@@ -30,7 +59,7 @@ var data = prepareData(),
 
     xAxis = d3.svg.axis().scale(x)
                 .orient('bottom')
-                .ticks(data.length - 2) // -2 because `before` and `after` will not show
+                .ticks(actualGraphData.length - 2) // -2 because `before` and `after` will not show
                     .tickFormat(d3.time.format('%b %e')),
     yAxis = d3.svg.axis().scale(y)
                 .orient('left').ticks(5),
@@ -46,12 +75,16 @@ var data = prepareData(),
             .append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-x.domain(d3.extent(data, function (d) { return d.day; }));
-y.domain([0, d3.max(data, function (d) { return d.points; })]);
+x.domain(d3.extent(actualGraphData, function (d) { return d.day; }));
+y.domain([0, d3.max(actualGraphData, function (d) { return d.points; })]);
 
 svg.append('path')
-    .attr('class', 'graph')
-    .attr('d', line(data));
+    .attr('class', 'graph ideal')
+    .attr('d', line(idealGraphData));
+
+svg.append('path')
+    .attr('class', 'graph actual')
+    .attr('d', line(actualGraphData));
 
 svg.append('g')
     .attr('class', 'x axis')
