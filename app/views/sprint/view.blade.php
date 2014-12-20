@@ -28,13 +28,14 @@
 		</a>
 	</h1>
 
+	<?php $closedPerDay = $burndown->closedPerDay() ?>
 	<div class="row">
 		<div class="col-md-8">
 			<div id="burndown-data"
 				 class="hidden"
 				 data-total="{{ $taskList->getTasksPerStatus()['total']['points'] }}"
 				 data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">
-				{{ json_encode(array_diff_key($burndown->getPointsClosedPerDay(), ['before' => false, 'after' => false])) }}
+				{{ json_encode($burndown->getPointsClosedPerDay()) }}
 			</div>
 			<div id="burndown"></div>
 		</div>
