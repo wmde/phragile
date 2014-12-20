@@ -1,10 +1,11 @@
 var $burndownData = $('#burndown-data'),
-    totalPoints = $burndownData.data('total');
+    totalPoints = $burndownData.data('total'),
+    closedBefore = $burndownData.data('before');
 
 var sprintData = function () {
     var days = $.parseJSON($burndownData.text()),
         data = [],
-        remaining = totalPoints - days.before;
+        remaining = totalPoints - closedBefore;
 
     for (var day in days) {
         data.push({
@@ -14,8 +15,6 @@ var sprintData = function () {
 
         remaining -= days[day];
     }
-
-    data.pop(); data.pop(); // TODO: figure out what to do with `before` and `after`.
 
     return data;
 };
@@ -59,7 +58,7 @@ var actualGraphData = sprintData(),
 
     xAxis = d3.svg.axis().scale(x)
                 .orient('bottom')
-                .ticks(actualGraphData.length - 2) // -2 because `before` and `after` will not show
+                .ticks(actualGraphData.length)
                     .tickFormat(d3.time.format('%b %e')),
     yAxis = d3.svg.axis().scale(y)
                 .orient('left').ticks(5),

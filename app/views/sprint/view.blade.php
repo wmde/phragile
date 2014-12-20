@@ -35,7 +35,7 @@
 				 class="hidden"
 				 data-total="{{ $taskList->tasksPerStatus()['total']['points'] }}"
 				 data-before="{{ $closedPerDay['before'] }}">
-				{{ json_encode($closedPerDay) }}
+				{{ json_encode(array_diff_key($closedPerDay, ['before' => false, 'after' => false])) }}
 			</div>
 			<div id="burndown"></div>
 		</div>
