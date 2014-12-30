@@ -1,27 +1,44 @@
-var $burndownData = $('#burndown-data'),
-    totalPoints = $burndownData.data('total'),
-    closedBefore = $burndownData.data('before');
+var burndownDataToList = function (burndownData) {
+    var days = [];
 
-var sprintData = function () {
-    var days = $.parseJSON($burndownData.text()),
-        data = [],
-        remaining = totalPoints - closedBefore;
-
-    for (var day in days) {
-        data.push({
+    for (var day in burndownData) {
+        days.push({
             day: d3.time.format('%Y-%m-%d').parse(day),
-            points: remaining
+            points: burndownData[day]
         });
-
-        remaining -= days[day];
     }
 
-    return data;
+    return days;
+};
+
+var $burndownData = $('#burndown-data'),
+    totalPoints = $burndownData.data('total'),
+    closedBefore = $burndownData.data('before'),
+    closedPerDay = burndownDataToList($.parseJSON($burndownData.text()));
+
+var dayBefore = function (date) {
+    var previous = new Date(date);
+    previous.setDate(previous.getDate() - 1);
+
+    return previous;
+};
+
+var sprintData = function () {
+    var remaining = totalPoints - closedBefore;
+
+    return closedPerDay.map(function (day) {
+            remaining -= day.points;
+
+            return {
+                day: day.day,
+                points: remaining + day.points // adding the points again so the progress will not show for the previous day
+            };
+        });
 };
 
 var isWeekend = function (date) {
     return date.getDay() % 6 === 0;
-}
+};
 
 var countWeekendDays = function (data) {
     var count = 0;
@@ -56,6 +73,9 @@ var actualGraphData = sprintData(),
     x = d3.time.scale().range([0, width]),
     y = d3.scale.linear().range([height, 0]),
 
+    xOfDay = function (d) { return x(d.day); },
+    yOfPoints = function (d) { return y(d.points); },
+
     xAxis = d3.svg.axis().scale(x)
                 .orient('bottom')
                 .ticks(actualGraphData.length)
@@ -64,8 +84,8 @@ var actualGraphData = sprintData(),
                 .orient('left').ticks(5),
 
     line = d3.svg.line()
-                .x(function (d) { return x(d.day); })
-                .y(function (d) { return y(d.points); }),
+                .x(xOfDay)
+                .y(yOfPoints),
 
     svg = d3.select('#burndown')
             .append('svg')
@@ -75,7 +95,7 @@ var actualGraphData = sprintData(),
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 x.domain(d3.extent(actualGraphData, function (d) { return d.day; }));
-y.domain([0, d3.max(actualGraphData, function (d) { return d.points; })]);
+y.domain([0, totalPoints]);
 
 svg.append('path')
     .attr('class', 'graph ideal')
