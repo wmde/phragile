@@ -119,3 +119,12 @@ svg.append('g')
 svg.append('g')
     .attr('class', 'y axis')
     .call(yAxis);
+
+svg.selectAll('.daily-points')
+    .data(closedPerDay)
+    .enter().append('line')
+        .attr('class', 'daily-points')
+        .attr('x1', xOfDay)
+        .attr('y1', y(0))
+        .attr('x2', xOfDay)
+        .attr('y2', yOfPoints);

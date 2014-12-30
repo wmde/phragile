@@ -37,9 +37,19 @@
       shape-rendering: crispEdges;
     }
 
-    &.x text {
-      transform: rotate(-65deg);
-      font-size: 11px;
+    &.x {
+      text {
+        transform: rotate(-65deg);
+        font-size: 11px;
+      }
+      .tick:first-of-type {
+        display: none;
+      }
     }
+  }
+
+  .daily-points {
+    stroke-width: 2px;
+    stroke: #fc4;
   }
 }
