@@ -113,6 +113,14 @@ svg.append('g')
     .attr('class', 'y axis')
     .call(yAxis);
 
+svg.append('path')
+    .datum(actualGraphData)
+    .attr('class', 'graph-area')
+    .attr('d', d3.svg.area()
+        .x(xOfDay)
+        .y0(y(0))
+        .y1(yOfPoints));
+
 svg.selectAll('.daily-points')
     .data(closedPerDay)
     .enter().append('line')
