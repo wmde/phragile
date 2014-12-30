@@ -16,13 +16,6 @@ var $burndownData = $('#burndown-data'),
     closedBefore = $burndownData.data('before'),
     closedPerDay = burndownDataToList($.parseJSON($burndownData.text()));
 
-var dayBefore = function (date) {
-    var previous = new Date(date);
-    previous.setDate(previous.getDate() - 1);
-
-    return previous;
-};
-
 var sprintData = function () {
     var remaining = totalPoints - closedBefore;
 
