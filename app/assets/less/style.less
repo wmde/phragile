@@ -14,14 +14,18 @@
   }
 }
 
+@burndown-actual: #00a8c6;
+@burndown-ideal: #aee239;
+@burndown-daily-points: #8fbe00;
+
 #burndown {
   .graph {
     &.actual {
-      stroke: #09f;
+      stroke: @burndown-actual;
     }
 
     &.ideal {
-      stroke: #cfa;
+      stroke: @burndown-ideal;
       stroke-dasharray: 10 5;
     }
 
@@ -50,6 +54,9 @@
 
   .daily-points {
     stroke-width: 2px;
-    stroke: #fc4;
+    stroke: @burndown-daily-points;
+  }
+  .area {
+    fill: fadeout(@burndown-actual, 80);
   }
 }
