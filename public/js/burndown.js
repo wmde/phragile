@@ -16,6 +16,13 @@ var $burndownData = $('#burndown-data'),
     closedBefore = $burndownData.data('before'),
     closedPerDay = burndownDataToList($.parseJSON($burndownData.text()));
 
+var dayAfter = function (date) {
+    var next = new Date(date);
+    next.setDate(date.getDate() + 1);
+
+    return next;
+};
+
 var sprintData = function () {
     var remaining = totalPoints - closedBefore;
 
@@ -26,7 +33,10 @@ var sprintData = function () {
                 day: day.day,
                 points: remaining + day.points // adding the points again so the progress will not show for the previous day
             };
-        });
+        }).concat([{ // adding another "day" so that the progress of the last day is not hidden
+            day: dayAfter(closedPerDay[closedPerDay.length - 1].day),
+            points: remaining
+        }]);
 };
 
 var isWeekend = function (date) {
