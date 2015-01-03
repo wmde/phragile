@@ -57,13 +57,15 @@
 		</div>
 	</div>
 
-	<table class="table table-striped">
-		<tr>
-			<th>Title</th>
-			<th>Priority</th>
-			<th>Story Points</th>
-			<th>Status</th>
-		</tr>
+	<table class="table table-striped sprint-backlog">
+		<thead>
+			<tr>
+				<th>Title</th>
+				<th>Priority</th>
+				<th>Story Points</th>
+				<th>Status</th>
+			</tr>
+		</thead>
 
 		@foreach($taskList->getTasks() as $task)
 			<tr>
