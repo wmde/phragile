@@ -69,7 +69,12 @@
 
 		@foreach($taskList->getTasks() as $task)
 			<tr>
-				<td>{{ $task['title'] }}</td>
+				<td>
+					{{ link_to(
+						$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
+						$task['title']
+					) }}
+				</td>
 				<td>{{ $task['priority'] }}</td>
 				<td>{{ $task['story_points'] }}</td>
 				<td>{{ $task['status'] }}</td>
