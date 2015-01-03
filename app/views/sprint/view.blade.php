@@ -41,14 +41,19 @@
 		</div>
 
 		<div class="col-md-4">
-			<table class="table">
-				@foreach($taskList->getTasksPerStatus() as $status => $numbers)
+			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
+
+			<table class="table status-table">
+				@foreach($tasksPerStatus as $status => $numbers)
 					<tr>
 						<th>{{ $status }}</th>
 						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
 					</tr>
 				@endforeach
 			</table>
+
+			<div id="status-data" class="hidden">{{ json_encode(array_diff_key($tasksPerStatus, ['total' => false])) }}</div>
+			<div id="pie"></div>
 		</div>
 	</div>
 
@@ -74,4 +79,5 @@
 @section('optional_scripts')
 	{{ HTML::script('js/d3.min.js') }}
 	{{ HTML::script('js/burndown.js') }}
+	{{ HTML::script('js/pie_charts.js') }}
 @stop

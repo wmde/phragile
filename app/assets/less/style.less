@@ -61,3 +61,31 @@
     fill: fadeout(@burndown-actual, 80);
   }
 }
+
+.status-table {
+  margin-bottom: 0;
+}
+
+#pie {
+  .status {
+    stroke: #fff;
+    stroke-width: 2px;
+  }
+  .resolved {
+    fill: #4da74d;
+  }
+  .open {
+    fill: #edc240;
+  }
+  .wontfix {
+    fill: #ccc;
+  }
+  .patch {
+    fill: #afd8f8;
+  }
+
+  .status-name {
+    fill: #fff;
+    text-shadow: 0 0 3px #000;
+  }
+}

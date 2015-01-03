@@ -9,7 +9,7 @@ var gulp = require('gulp'),
 var config = {
     componentsDir: 'app/assets/bower_components',
     lessFiles: 'app/assets/less/**/*.less',
-    jsFiles: 'public/js/burndown.js'
+    jsFiles: ['public/js/**/*', '!public/js/**/*.min.js', '!public/js/bootstrap-datepicker.js']
 };
 
 gulp.task('less', function () {
