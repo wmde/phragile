@@ -1,5 +1,5 @@
 var options = {
-    valueNames: ['title']
+    valueNames: ['title', 'points', 'status', 'priority']
 };
 
 var backlog = new List('backlog', options);

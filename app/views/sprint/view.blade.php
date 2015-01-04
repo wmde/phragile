@@ -61,9 +61,9 @@
 		<thead>
 			<tr>
 				<th class="sort" data-sort="title">Title</th>
-				<th>Priority</th>
-				<th>Story Points</th>
-				<th>Status</th>
+				<th class="sort" data-sort="priority">Priority</th>
+				<th class="sort" data-sort="points">Story Points</th>
+				<th class="sort" data-sort="status">Status</th>
 			</tr>
 		</thead>
 
@@ -77,9 +77,12 @@
 							['class' => 'title']
 						) }}
 					</td>
-					<td>{{ $task['priority'] }}</td>
-					<td>{{ $task['story_points'] }}</td>
-					<td>{{ $task['status'] }}</td>
+					<td>
+						<span class="priority hidden">{{ $_ENV['MANIPHEST_PRIORITY_MAPPING.' . strtolower($task['priority'])] }}</span>
+						{{ $task['priority'] }}
+					</td>
+					<td class="points">{{ $task['story_points'] }}</td>
+					<td class="status">{{ $task['status'] }}</td>
 				</tr>
 			@endforeach
 		</tbody>
