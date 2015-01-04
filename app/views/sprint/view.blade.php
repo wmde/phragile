@@ -57,29 +57,32 @@
 		</div>
 	</div>
 
-	<table class="table table-striped sprint-backlog">
+	<table id="backlog" class="table table-striped sprint-backlog">
 		<thead>
 			<tr>
-				<th>Title</th>
+				<th class="sort" data-sort="title">Title</th>
 				<th>Priority</th>
 				<th>Story Points</th>
 				<th>Status</th>
 			</tr>
 		</thead>
 
-		@foreach($taskList->getTasks() as $task)
-			<tr>
-				<td>
-					{{ link_to(
-						$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
-						$task['title']
-					) }}
-				</td>
-				<td>{{ $task['priority'] }}</td>
-				<td>{{ $task['story_points'] }}</td>
-				<td>{{ $task['status'] }}</td>
-			</tr>
-		@endforeach
+		<tbody class="list">
+			@foreach($taskList->getTasks() as $task)
+				<tr>
+					<td>
+						{{ link_to(
+							$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
+							$task['title'],
+							['class' => 'title']
+						) }}
+					</td>
+					<td>{{ $task['priority'] }}</td>
+					<td>{{ $task['story_points'] }}</td>
+					<td>{{ $task['status'] }}</td>
+				</tr>
+			@endforeach
+		</tbody>
 	</table>
 @stop
 
@@ -87,4 +90,6 @@
 	{{ HTML::script('js/d3.min.js') }}
 	{{ HTML::script('js/burndown.js') }}
 	{{ HTML::script('js/pie_charts.js') }}
+	{{ HTML::script('js/list.min.js') }}
+	{{ HTML::script('js/sprint_backlog.js') }}
 @stop

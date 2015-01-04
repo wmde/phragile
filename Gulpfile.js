@@ -28,6 +28,7 @@ gulp.task('js-libs', function () {
     return gulp.src([
             config.componentsDir + '/jquery/dist/jquery.min.js',
             config.componentsDir + '/bootstrap/dist/js/bootstrap.min.js',
+            config.componentsDir + '/list.js/dist/list.min.js',
             config.componentsDir + '/bootstrap-datepicker/js/bootstrap-datepicker.js'
         ])
         .pipe(uglify())
