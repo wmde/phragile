@@ -77,8 +77,10 @@
 							['class' => 'title']
 						) }}
 					</td>
-					<td>
-						<span class="priority hidden">{{ $_ENV['MANIPHEST_PRIORITY_MAPPING.' . strtolower($task['priority'])] }}</span>
+
+					<?php $priorityValue = $_ENV['MANIPHEST_PRIORITY_MAPPING.' . strtolower($task['priority'])] ?>
+					<td class="filter-backlog" data-column="priority" data-value="{{ $priorityValue }}">
+						<span class="priority hidden">{{ $priorityValue }}</span>
 						{{ $task['priority'] }}
 					</td>
 					<td class="points">{{ $task['story_points'] }}</td>
