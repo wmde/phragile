@@ -36,7 +36,9 @@
                 .attr('class', 'arc')
                 .append('path')
                     .attr('d', arc)
-                    .attr('class', function (d) { return 'status ' + d.data.status; });
+                    .attr('class', function (d) { return 'status filter-backlog ' + d.data.status; })
+                    .attr('data-column', 'status')
+                    .attr('data-value', function (d) { return d.data.status; });
         };
 
         var setArc = function () {
