@@ -57,6 +57,7 @@
 		</div>
 	</div>
 
+	<button id="reset-filter" class="btn btn-default" disabled="disabled">Show all tasks</button>
 	<table id="backlog" class="table table-striped sprint-backlog">
 		<thead>
 			<tr>
