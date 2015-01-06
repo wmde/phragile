@@ -76,22 +76,34 @@
   cursor: pointer;
 }
 
+@resolved: @brand-success;
+@wontfix: lighten(@gray-light, 10%);
+@open: @brand-warning;
+@patch: @brand-info;
+
+
+.fillAndDarkenOnHover(@bg-color) {
+  fill: @bg-color;
+  &:hover {
+    fill: lighten(@bg-color, 5%);
+  }
+}
 #pie {
   .status {
     stroke: #fff;
     stroke-width: 2px;
   }
   .resolved {
-    fill: #4da74d;
+    .fillAndDarkenOnHover(@resolved);
   }
   .open {
-    fill: #edc240;
+    .fillAndDarkenOnHover(@open);
   }
   .wontfix {
-    fill: @gray-light;
+    .fillAndDarkenOnHover(@wontfix);
   }
   .patch {
-    fill: #afd8f8;
+    .fillAndDarkenOnHover(@patch);
   }
 
   .status-name {
