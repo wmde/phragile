@@ -27,6 +27,9 @@ class TaskList {
 		}, array_values($this->phabricator->queryTasksByProject($phid)));
 	}
 
+	/**
+	 * @return array[]
+	 */
 	public function getTasks()
 	{
 		return $this->tasks;
@@ -39,7 +42,10 @@ class TaskList {
 			: $task['status'];
 	}
 
-	public function tasksPerStatus()
+	/**
+	 * @return array[] Associative array of task number and story points per status
+	 */
+	public function getTasksPerStatus()
 	{
 		return array_reduce($this->tasks, function($acc, $task)
 		{
@@ -62,6 +68,10 @@ class TaskList {
 		}, ['total' => ['points' => 0, 'tasks' => 0]]);
 	}
 
+	/**
+	 * @param int $id
+	 * @return array Task data
+	 */
 	public function findTaskByID($id)
 	{
 		foreach ($this->tasks as $task)
