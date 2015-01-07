@@ -12,14 +12,6 @@ class BurndownChart {
 		$this->phabricator = $phabricator;
 	}
 
-	public function getDays($format = 'M j')
-	{
-		return array_map(function($day) use($format)
-		{
-			return date($format, $day);
-		}, $this->sprint->getDays());
-	}
-
 	public function closedPerDay()
 	{
 		$closedPerDay = array_fill_keys(array_merge($this->getDays('Y-m-d'), ['before', 'after']), 0);

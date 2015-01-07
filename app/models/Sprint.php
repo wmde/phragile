@@ -39,11 +39,20 @@ class Sprint extends Eloquent {
 	}
 
 	/**
-	 * Returns a list of dates from sprint_start to sprint_end
+	 * Returns a formatted list of dates from sprint_start to sprint_end
 	 *
+	 * @param string $format
 	 * @return array
 	 */
-	public function getDays()
+	public function formatDays($format = 'M j')
+	{
+		return array_map(function($date) use($format)
+		{
+			return date($format, $date);
+		}, $this->getDays());
+	}
+
+	private function getDays()
 	{
 		if ($this->days !== null)
 		{
