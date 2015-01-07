@@ -5,6 +5,9 @@ class BurndownChart {
 	// TODO: ideally these should come from a cached call to maniphest.querystatuses
 	private static $STATUS_OPEN = ['stalled', 'open'];
 
+	private $pointsClosedBeforeSprint = null;
+	private $pointsClosedPerDay = null;
+
 	public function __construct(\Sprint $sprint, TaskList $tasks, PhabricatorAPI $phabricator)
 	{
 		$this->sprint = $sprint;
@@ -12,32 +15,23 @@ class BurndownChart {
 		$this->phabricator = $phabricator;
 	}
 
-	public function closedPerDay()
+	private function calculatePointsClosedPerDay()
 	{
-		$closedPerDay = array_fill_keys(array_merge($this->getDays('Y-m-d'), ['before', 'after']), 0);
+		$dateFormat = 'Y-m-d';
+		$sprintDuration = $this->sprint->formatDays($dateFormat);
+		$this->pointsClosedPerDay = array_fill_keys($sprintDuration, 0);
 
 		foreach ($this->closedTaskTimes() as $id => $time)
 		{
-			$closedPerDay[$this->closedTimeInSprint($time)] += $this->tasks->findTaskByID($id)['story_points'];
-		}
+			$taskClosedDay = date($dateFormat, $time);
 
-		return $closedPerDay;
-	}
-
-	private function closedTimeInSprint($time)
-	{
-		$format = 'Y-m-d';
-		$formattedDate = date($format, $time);
-
-		if (in_array($formattedDate, $this->getDays($format)))
-		{
-			return $formattedDate;
-		} elseif ($formattedDate < $this->sprint->sprint_start)
-		{
-			return 'before';
-		} else
-		{
-			return 'after';
+			if (in_array($taskClosedDay, $sprintDuration))
+			{
+				$this->pointsClosedPerDay[$taskClosedDay] += $this->tasks->findTaskByID($id)['story_points'];
+			} elseif ($taskClosedDay < $this->sprint->sprint_start)
+			{
+				$this->pointsClosedBeforeSprint += $this->tasks->findTaskByID($id)['story_points'];
+			}
 		}
 	}
 
@@ -80,5 +74,33 @@ class BurndownChart {
 				}
 			}
 		);
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPointsClosedBeforeSprint()
+	{
+		if ($this->pointsClosedBeforeSprint === null)
+		{
+			$this->calculatePointsClosedPerDay();
+		}
+
+		return $this->pointsClosedBeforeSprint;
+	}
+
+	/**
+	 * Returns an associative array that maps the number of closed points to a day of the sprint.
+	 *
+	 * @return array
+	 */
+	public function getPointsClosedPerDay()
+	{
+		if ($this->pointsClosedPerDay === null)
+		{
+			$this->calculatePointsClosedPerDay();
+		}
+
+		return $this->pointsClosedPerDay;
 	}
 }

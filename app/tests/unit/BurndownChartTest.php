@@ -60,32 +60,22 @@ class BurndownChartTest extends TestCase {
 			]
 		);
 
-		$this->assertSame(10, $burndown->closedPerDay()['2014-12-08']);
+		$this->assertSame(10, $burndown->getPointsClosedPerDay()['2014-12-08']);
 	}
 
-	public function testClosedPerDayDetectsBeforeAndAfter()
+	public function testClosedPerDayDetectsBefore()
 	{
 		$burndown = $this->mockWithTransactions(
 			$this->tasks,
-			[
-				'1' => [[
-					'transactionType' => 'status',
-					'oldValue' => 'open',
-					'newValue' => 'resolved',
-					'dateCreated' => '1415664000', // Nov 11
-				]],
-				'2' => [[
-					'transactionType' => 'status',
-					'oldValue' => 'open',
-					'newValue' => 'resolved',
-					'dateCreated' => '1428050000', // Apr 3
-				]]
-			]
+			['1' => [[
+				'transactionType' => 'status',
+				'oldValue' => 'open',
+				'newValue' => 'resolved',
+				'dateCreated' => '1415664000', // Nov 11
+			]]]
 		);
 
-		$closed = $burndown->closedPerDay();
-		$this->assertSame(8, $closed['before']);
-		$this->assertSame(2, $closed['after']);
+		$this->assertSame(8, $burndown->getPointsClosedBeforeSprint());
 	}
 
 	public function testClosedPerDayIgnoresClosedToClosedTransaction()
@@ -110,7 +100,7 @@ class BurndownChartTest extends TestCase {
 			]
 		);
 
-		$closed = $burndown->closedPerDay();
+		$closed = $burndown->getPointsClosedPerDay();
 		$this->assertSame(0, $closed['2014-12-09']);
 		$this->assertSame(8, $closed['2014-12-08']);
 	}
@@ -143,7 +133,7 @@ class BurndownChartTest extends TestCase {
 			]
 		);
 
-		$closed = $burndown->closedPerDay();
+		$closed = $burndown->getPointsClosedPerDay();
 		$this->assertSame(0, $closed['2014-12-08']);
 		$this->assertSame(8, $closed['2014-12-09']);
 	}
