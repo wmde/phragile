@@ -21,7 +21,7 @@ class BurndownChart {
 		$sprintDuration = $this->sprint->formatDays($dateFormat);
 		$this->pointsClosedPerDay = array_fill_keys($sprintDuration, 0);
 
-		foreach ($this->closedTaskTimes() as $id => $time)
+		foreach ($this->getClosedTaskTimes() as $id => $time)
 		{
 			$taskClosedDay = date($dateFormat, $time);
 
@@ -35,7 +35,7 @@ class BurndownChart {
 		}
 	}
 
-	private function closedTaskIDs()
+	private function getClosedTaskIDs()
 	{
 		return array_map(function($task)
 		{
@@ -47,9 +47,9 @@ class BurndownChart {
 		);
 	}
 
-	private function closedTaskTimes()
+	private function getClosedTaskTimes()
 	{
-		$taskTransactions = $this->phabricator->taskTransactions($this->closedTaskIDs());
+		$taskTransactions = $this->phabricator->taskTransactions($this->getClosedTaskIDs());
 
 		return array_map(function($transactions)
 		{
