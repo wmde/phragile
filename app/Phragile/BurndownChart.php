@@ -7,6 +7,9 @@ class BurndownChart {
 
 	private $pointsClosedBeforeSprint = null;
 	private $pointsClosedPerDay = null;
+	private $sprint = null;
+	private $tasks = null;
+	private $phabricator = null;
 
 	public function __construct(\Sprint $sprint, TaskList $tasks, PhabricatorAPI $phabricator)
 	{
