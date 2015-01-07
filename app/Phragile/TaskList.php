@@ -59,7 +59,7 @@ class TaskList {
 			}
 
 			return $acc;
-		}, ['total' => ['points' => 0, 'tasks' => '0']]);
+		}, ['total' => ['points' => 0, 'tasks' => 0]]);
 	}
 
 	public function findTaskByID($id)
