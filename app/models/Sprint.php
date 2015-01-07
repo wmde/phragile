@@ -7,6 +7,7 @@ class Sprint extends Eloquent {
 	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end'];
 
 	private $phabricatorError = null;
+	private $days = null;
 
 	public function project()
 	{
@@ -35,6 +36,30 @@ class Sprint extends Eloquent {
 	public function getPhabricatorError()
 	{
 		return $this->phabricatorError;
+	}
+
+	/**
+	 * Returns a list of dates from sprint_start to sprint_end
+	 *
+	 * @return array
+	 */
+	public function getDays()
+	{
+		if ($this->days !== null)
+		{
+			return $this->days;
+		}
+
+		$this->days = [];
+
+		for ($day = strtotime($this->sprint_start);
+			 $day <= strtotime($this->sprint_end);
+			 $day += 60*60*24)
+		{
+			$this->days[] = $day;
+		}
+
+		return $this->days;
 	}
 
 	private function createPhabricatorProject()

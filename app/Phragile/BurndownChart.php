@@ -10,21 +10,6 @@ class BurndownChart {
 		$this->sprint = $sprint;
 		$this->tasks = $tasks;
 		$this->phabricator = $phabricator;
-		$this->days = $this->daysInSprint();
-	}
-
-	private function daysInSprint()
-	{
-		$days = [];
-
-		for ($day = strtotime($this->sprint->sprint_start);
-		     $day <= strtotime($this->sprint->sprint_end);
-		     $day += 60*60*24)
-		{
-			$days[] = $day;
-		}
-
-		return $days;
 	}
 
 	public function getDays($format = 'M j')
@@ -32,7 +17,7 @@ class BurndownChart {
 		return array_map(function($day) use($format)
 		{
 			return date($format, $day);
-		}, $this->days);
+		}, $this->sprint->getDays());
 	}
 
 	public function closedPerDay()
