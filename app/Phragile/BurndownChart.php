@@ -56,11 +56,11 @@ class BurndownChart {
 
 		return array_map(function($transactions)
 		{
-			return $this->findLastClosed($transactions);
+			return $this->findLastStatusChangeToClosed($transactions);
 		}, $taskTransactions);
 	}
 
-	private function findLastClosed(array $transactions)
+	private function findLastStatusChangeToClosed(array $transactions)
 	{
 		return array_reduce(
 			$transactions,
