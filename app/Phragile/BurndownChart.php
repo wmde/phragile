@@ -1,7 +1,7 @@
 <?php
 namespace Phragile;
 
-class Burndown {
+class BurndownChart {
 	// TODO: ideally these should come from a cached call to maniphest.querystatuses
 	private static $STATUS_OPEN = ['stalled', 'open'];
 

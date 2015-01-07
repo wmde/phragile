@@ -1,12 +1,12 @@
 <?php
 
-use Phragile\Burndown;
+use Phragile\BurndownChart;
 
 class BurndownTest extends TestCase {
 
 	private function mockWithSprint(Sprint $sprint)
 	{
-		return new Burndown(
+		return new BurndownChart(
 			$sprint,
 			$this->getMockBuilder('Phragile\TaskList')->disableOriginalConstructor()->getMock(),
 			$this->getMockBuilder('Phragile\PhabricatorAPI')->disableOriginalConstructor()->getMock());
@@ -69,7 +69,7 @@ class BurndownTest extends TestCase {
 			return $tasks[$id];
 		}));
 
-		return new Burndown(
+		return new BurndownChart(
 			new Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
 			$taskListMock,
 			$phabricatorMock
