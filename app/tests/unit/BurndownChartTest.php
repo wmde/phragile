@@ -2,7 +2,7 @@
 
 use Phragile\BurndownChart;
 
-class BurndownTest extends TestCase {
+class BurndownChartTest extends TestCase {
 
 	private function mockWithSprint(Sprint $sprint)
 	{
