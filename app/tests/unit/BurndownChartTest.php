@@ -51,7 +51,7 @@ class BurndownChartTest extends TestCase {
 	{
 		$burndown = $this->mockWithSprint(new Sprint(['sprint_start' => $start, 'sprint_end' => $end]));
 
-		$this->assertEquals($burndown->getDays('Y-m-d'), $all);
+		$this->assertSame($burndown->getDays('Y-m-d'), $all);
 	}
 
 	private function mockWithTransactions(array $tasks, array $transactions)
@@ -110,7 +110,7 @@ class BurndownChartTest extends TestCase {
 			]
 		);
 
-		$this->assertEquals(10, $burndown->closedPerDay()['2014-12-08']);
+		$this->assertSame(10, $burndown->closedPerDay()['2014-12-08']);
 	}
 
 	public function testClosedPerDayDetectsBeforeAndAfter()
@@ -134,8 +134,8 @@ class BurndownChartTest extends TestCase {
 		);
 
 		$closed = $burndown->closedPerDay();
-		$this->assertEquals(8, $closed['before']);
-		$this->assertEquals(2, $closed['after']);
+		$this->assertSame(8, $closed['before']);
+		$this->assertSame(2, $closed['after']);
 	}
 
 	public function testClosedPerDayIgnoresClosedToClosedTransaction()
@@ -161,8 +161,8 @@ class BurndownChartTest extends TestCase {
 		);
 
 		$closed = $burndown->closedPerDay();
-		$this->assertEquals(0, $closed['2014-12-09']);
-		$this->assertEquals(8, $closed['2014-12-08']);
+		$this->assertSame(0, $closed['2014-12-09']);
+		$this->assertSame(8, $closed['2014-12-08']);
 	}
 
 	public function testClosedPerDayOverridesTimeWhenClosedReopenedAndClosedAgain()
@@ -194,7 +194,7 @@ class BurndownChartTest extends TestCase {
 		);
 
 		$closed = $burndown->closedPerDay();
-		$this->assertEquals(0, $closed['2014-12-08']);
-		$this->assertEquals(8, $closed['2014-12-09']);
+		$this->assertSame(0, $closed['2014-12-08']);
+		$this->assertSame(8, $closed['2014-12-09']);
 	}
 }
