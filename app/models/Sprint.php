@@ -14,6 +14,11 @@ class Sprint extends Eloquent {
 		return $this->belongsTo('Project');
 	}
 
+	public function sprintSnapshots()
+	{
+		return $this->hasMany('SprintSnapshot');
+	}
+
 	public function validate()
 	{
 		$rules = [
