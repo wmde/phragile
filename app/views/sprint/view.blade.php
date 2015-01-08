@@ -35,7 +35,7 @@
 
 		<div class="col-md-4">
 			<table class="table">
-				@foreach($taskList->tasksPerstatus() as $status => $numbers)
+				@foreach($taskList->getTasksPerStatus() as $status => $numbers)
 					<tr>
 						<th>{{ $status }}</th>
 						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
