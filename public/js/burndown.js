@@ -77,20 +77,21 @@ var actualGraphData = sprintData(),
     y = d3.scale.linear().range([height, 0]),
 
     xOfDay = function (d) { return x(d.day); },
-    yOfPoints = function (d) { return y(d.points); },
+    yOfPoints = function (d) { return y(d.points); };
 
-    xAxis = d3.svg.axis().scale(x)
+var xAxis = d3.svg.axis().scale(x)
                 .orient('bottom')
                 .ticks(actualGraphData.length)
-                    .tickFormat(d3.time.format('%b %e')),
-    yAxis = d3.svg.axis().scale(y)
-                .orient('left').ticks(5),
+                    .tickFormat(d3.time.format('%b %e'));
 
-    line = d3.svg.line()
+var yAxis = d3.svg.axis().scale(y)
+                .orient('left').ticks(5);
+
+var line = d3.svg.line()
                 .x(xOfDay)
-                .y(yOfPoints),
+                .y(yOfPoints);
 
-    svg = d3.select('#burndown')
+var svg = d3.select('#burndown')
             .append('svg')
                 .attr('width', width + margin.left + margin.right)
                 .attr('height', height + margin.top + margin.bottom)
