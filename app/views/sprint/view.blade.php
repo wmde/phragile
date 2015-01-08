@@ -28,6 +28,23 @@
 		</a>
 	</h1>
 
+	<div class="row">
+		<div class="col-md-8">
+			{{ HTML::ul($sprint->formatDays()) }}
+		</div>
+
+		<div class="col-md-4">
+			<table class="table">
+				@foreach($taskList->getTasksPerStatus() as $status => $numbers)
+					<tr>
+						<th>{{ $status }}</th>
+						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
+					</tr>
+				@endforeach
+			</table>
+		</div>
+	</div>
+
 	<table class="table table-striped">
 		<tr>
 			<th>Title</th>

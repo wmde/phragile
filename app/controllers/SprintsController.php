@@ -1,15 +1,18 @@
 <?php
 
 use Phragile\TaskList;
+use Phragile\BurndownChart;
 
 class SprintsController extends BaseController {
 
 	public function show(Sprint $sprint)
 	{
+		$phabricator = App::make('phabricator');
 		$currentSprint = $sprint->project->currentSprint();
-		$taskList = new TaskList(App::make('phabricator'), $sprint->phid);
+		$taskList = new TaskList($phabricator, $sprint->phid);
+		$burndown = new BurndownChart($sprint, $taskList, $phabricator);
 
-		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList'));
+		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown'));
 	}
 
 	public function create(Project $project)
