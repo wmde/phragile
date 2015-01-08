@@ -78,7 +78,7 @@ class PhabricatorAPI {
 		);
 	}
 
-	public function taskTransactions(array $ids)
+	public function getTaskTransactions(array $ids)
 	{
 		return $this->client->callMethodSynchronous(
 			'maniphest.gettasktransactions',

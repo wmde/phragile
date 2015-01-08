@@ -9,7 +9,7 @@ class BurndownChartTest extends TestCase {
 		$phabricatorMock = $this->getMockBuilder('Phragile\PhabricatorAPI')
 			->disableOriginalConstructor()
 			->getMock();
-		$phabricatorMock->method('taskTransactions')->willReturn($transactions);
+		$phabricatorMock->method('getTaskTransactions')->willReturn($transactions);
 
 		$taskListMock = $this->getMockBuilder('Phragile\TaskList')
 			->disableOriginalConstructor()

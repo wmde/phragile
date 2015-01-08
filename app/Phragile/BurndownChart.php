@@ -52,7 +52,7 @@ class BurndownChart {
 
 	private function getClosedTaskTimes()
 	{
-		$taskTransactions = $this->phabricator->taskTransactions($this->getClosedTaskIDs());
+		$taskTransactions = $this->phabricator->getTaskTransactions($this->getClosedTaskIDs());
 
 		return array_map(function($transactions)
 		{
