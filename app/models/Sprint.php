@@ -54,21 +54,23 @@ class Sprint extends Eloquent {
 
 	private function getDays()
 	{
-		if ($this->days !== null)
-		{
-			return $this->days;
-		}
+		if ($this->days === null) $this->days = $this->computeDays();
 
-		$this->days = [];
+		return $this->days;
+	}
+
+	private function computeDays()
+	{
+		$days = [];
 
 		for ($day = strtotime($this->sprint_start);
 			 $day <= strtotime($this->sprint_end);
 			 $day += 60*60*24)
 		{
-			$this->days[] = $day;
+			$days[] = $day;
 		}
 
-		return $this->days;
+		return $days;
 	}
 
 	private function createPhabricatorProject()
