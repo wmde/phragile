@@ -66,9 +66,7 @@ class BurndownChart {
 			$transactions,
 			function($time, $transaction)
 			{
-				if ($transaction['transactionType'] === 'status'
-				    && in_array($transaction['oldValue'], self::$STATUS_OPEN)
-				    && !in_array($transaction['newValue'], self::$STATUS_OPEN))
+				if ($this->statusChangedFromOpen($transaction))
 				{
 					return $transaction['dateCreated'];
 				} else
@@ -77,6 +75,13 @@ class BurndownChart {
 				}
 			}
 		);
+	}
+
+	private function statusChangedFromOpen(array $transaction)
+	{
+		return $transaction['transactionType'] === 'status'
+			&& in_array($transaction['oldValue'], self::$STATUS_OPEN)
+			&& !in_array($transaction['newValue'], self::$STATUS_OPEN);
 	}
 
 	/**
