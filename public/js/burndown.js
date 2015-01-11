@@ -230,7 +230,7 @@
             getIdealGraphData: function () {
                 return calculateIdealGraph(remainingPointsPerDay);
             }
-        }
+        };
     }();
 
     var $burndownData = $('#burndown-data');
