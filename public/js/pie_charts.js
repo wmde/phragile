@@ -13,7 +13,9 @@ var statusPieChart = (function () {
     var width, height, radius,
 
         svg,
-        arc;
+        arc,
+
+        pieData;
 
     var setSVG = function (id) {
         svg = d3.select(id).append('svg')
@@ -28,7 +30,7 @@ var statusPieChart = (function () {
             .value(function (d) { return d.points; });
 
         svg.selectAll('.arc')
-            .data(pie(statusData()))
+            .data(pie(pieData))
             .enter().append('g')
             .attr('class', 'arc')
             .append('path')
@@ -52,8 +54,11 @@ var statusPieChart = (function () {
     };
 
     return {
-        init: function () {
-
+        /**
+         * @param {Object[]} data - List of objects containing status name and number of points for the respective status.
+         */
+        init: function (data) {
+            pieData = data;
         },
 
         /**
