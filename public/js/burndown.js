@@ -68,8 +68,6 @@
             .x(xOfDay)
             .y(yOfPoints);
 
-
-
         var addClosedTasksPerDayBars = function () {
             svg.selectAll('.daily-points')
                 .data(sprintData.getPointsClosedPerDay())
