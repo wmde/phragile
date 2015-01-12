@@ -107,7 +107,7 @@
   }
 }
 
-.fillAndDarkenOnHover(@bg-color) {
+.fillAndHighlightOnHover(@bg-color) {
   fill: @bg-color;
   &:hover {
     fill: lighten(@bg-color, 5%);
@@ -119,15 +119,15 @@
     stroke-width: 2px;
   }
   .resolved {
-    .fillAndDarkenOnHover(@resolved);
+    .fillAndHighlightOnHover(@resolved);
   }
   .open {
-    .fillAndDarkenOnHover(@open);
+    .fillAndHighlightOnHover(@open);
   }
   .wontfix {
-    .fillAndDarkenOnHover(@wontfix);
+    .fillAndHighlightOnHover(@wontfix);
   }
   .patch {
-    .fillAndDarkenOnHover(@patch);
+    .fillAndHighlightOnHover(@patch);
   }
 }
