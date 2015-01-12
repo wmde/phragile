@@ -232,4 +232,20 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 			]
 		);
 	}
+
+    /**
+     * @When I create a sprint snapshot for :sprint
+     */
+    public function iCreateASprintSnapshotFor($sprint)
+    {
+        throw new PendingException();
+    }
+
+    /**
+     * @Then I should see a snapshot for :sprint that was created today
+     */
+    public function iShouldSeeASnapshotForThatWasCreatedToday($sprint)
+    {
+        throw new PendingException();
+    }
 }
