@@ -10,7 +10,7 @@ class SprintsController extends BaseController {
 		$phabricator = App::make('phabricator');
 		$currentSprint = $sprint->project->currentSprint();
 		$taskList = new TaskList($phabricator, $sprint->phid);
-		$burndown = new BurndownChart($sprint, $taskList, $phabricator);
+		$burndown = new BurndownChart($sprint, $taskList, $phabricator->getTaskTransactions($taskList->getClosedTaskIDs()));
 
 		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown'));
 	}

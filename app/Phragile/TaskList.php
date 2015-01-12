@@ -82,4 +82,19 @@ class TaskList {
 			}
 		}
 	}
+
+	/**
+	 * @return int[] List of IDs of closed tasks
+	 */
+	public function getClosedTaskIDs()
+	{
+		return array_map(function($task)
+		{
+			return $task['id'];
+		}, array_filter($this->tasks, function($task)
+			{
+				return $task['closed'];
+			})
+		);
+	}
 }
