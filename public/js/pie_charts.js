@@ -47,15 +47,6 @@
                 .innerRadius(0);
         };
 
-        var addArcLables = function () {
-            svg.selectAll('.arc').append('text')
-                .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
-                .attr('dy', '.35em')
-                .attr('class', 'status-name')
-                .style('text-anchor', 'middle')
-                .text(function(d) { return d.data.status; });
-        };
-
         return {
             /**
              * @param {Object[]} data - List of objects containing status name and number of points for the respective status.
@@ -78,7 +69,6 @@
                 setArc();
 
                 addPie();
-                addArcLables();
             }
         };
     })();
