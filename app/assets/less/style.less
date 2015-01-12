@@ -81,6 +81,31 @@
 @open: @brand-warning;
 @patch: @brand-info;
 
+.status-table, .sprint-backlog {
+  .status-label {
+    border-radius: 3px;
+    color: #fff;
+    font-weight: normal;
+    padding: 2px 3px;
+  }
+  .total {
+    color: #000;
+    font-weight: bold;
+  }
+
+  .resolved {
+    background-color: @resolved;
+  }
+  .wontfix {
+    background-color: @wontfix;
+  }
+  .open {
+    background-color: @open;
+  }
+  .patch {
+    background-color: @patch;
+  }
+}
 
 .fillAndDarkenOnHover(@bg-color) {
   fill: @bg-color;

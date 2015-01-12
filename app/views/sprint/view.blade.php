@@ -46,7 +46,7 @@
 			<table class="table status-table">
 				@foreach($tasksPerStatus as $status => $numbers)
 					<tr class="filter-backlog" data-column="status" data-value="{{ $status === 'total' ? '' : $status }}">
-						<th>{{ $status }}</th>
+						<th><span class="status-label {{ $status }}">{{ $status }}</span></th>
 						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
 					</tr>
 				@endforeach
@@ -86,7 +86,7 @@
 					</td>
 					<td class="points">{{ $task['story_points'] }}</td>
 					<td class="status filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
-						{{ $task['status'] }}
+						<span class="status-label {{ $task['status'] }}">{{ $task['status'] }}</span>
 					</td>
 				</tr>
 			@endforeach
