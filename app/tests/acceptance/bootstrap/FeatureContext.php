@@ -238,14 +238,45 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
      */
     public function iCreateASprintSnapshotFor($sprint)
     {
-        throw new PendingException();
+		Sprint::where(['title' => $sprint])->first()
+			->createSnapshot();
     }
 
     /**
-     * @Then I should see a snapshot for :sprint that was created today
+     * @Then I should see a snapshot that was created today
      */
-    public function iShouldSeeASnapshotForThatWasCreatedToday($sprint)
+    public function iShouldSeeASnapshotForThatWasCreatedToday()
     {
-        throw new PendingException();
+        $this->assertElementContains('#snapshots', date('Y-m-d'));
+    }
+
+    /**
+     * @Given :sprint contains task :taskID
+     */
+    public function containsTask($sprint, $taskID)
+    {
+		App::make('phabricator')->updateTask(
+			$taskID,
+			[
+				'projectPHIDs' => [Sprint::where(['title' => $sprint])->first()->phid]
+			]
+		);
+    }
+
+    /**
+     * @When I remove task :taskID from all projects
+     */
+    public function iRemoveTaskFrom($taskID)
+    {
+		App::make('phabricator')->updateTask($taskID, ['projectPHIDs' => []]);
+    }
+
+    /**
+     * @Then I should see :text in the latest :sprint snapshot
+     */
+    public function iShouldSeeInTheLatestSnapshot($text, $sprint)
+    {
+        $this->visit('/snapshots/' . $sprint->snapshots->first()->id);
+		$this->assertPageContainsText($text);
     }
 }
