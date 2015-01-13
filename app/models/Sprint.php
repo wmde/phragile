@@ -17,7 +17,7 @@ class Sprint extends Eloquent {
 
 	public function sprintSnapshots()
 	{
-		return $this->hasMany('SprintSnapshot');
+		return $this->hasMany('SprintSnapshot')->orderBy('created_at', 'desc');
 	}
 
 	public function validate()
