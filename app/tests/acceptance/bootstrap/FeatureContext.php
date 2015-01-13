@@ -233,50 +233,50 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		);
 	}
 
-    /**
-     * @When I create a sprint snapshot for :sprint
-     */
-    public function iCreateASprintSnapshotFor($sprint)
-    {
+	/**
+	 * @When I create a sprint snapshot for :sprint
+	 */
+	public function iCreateASprintSnapshotFor($sprint)
+	{
 		Sprint::where(['title' => $sprint])->first()
 			->createSnapshot();
-    }
+	}
 
-    /**
-     * @Then I should see a snapshot that was created today
-     */
-    public function iShouldSeeASnapshotForThatWasCreatedToday()
-    {
-        $this->assertElementContains('#snapshots', date('Y-m-d'));
-    }
+	/**
+	 * @Then I should see a snapshot that was created today
+	 */
+	public function iShouldSeeASnapshotForThatWasCreatedToday()
+	{
+		$this->assertElementContains('#snapshots', date('Y-m-d'));
+	}
 
-    /**
-     * @Given :sprint contains task :taskID
-     */
-    public function containsTask($sprint, $taskID)
-    {
+	/**
+	 * @Given :sprint contains task :taskID
+	 */
+	public function containsTask($sprint, $taskID)
+	{
 		App::make('phabricator')->updateTask(
 			$taskID,
 			[
 				'projectPHIDs' => [Sprint::where(['title' => $sprint])->first()->phid]
 			]
 		);
-    }
+	}
 
-    /**
-     * @When I remove task :taskID from all projects
-     */
-    public function iRemoveTaskFrom($taskID)
-    {
+	/**
+	 * @When I remove task :taskID from all projects
+	 */
+	public function iRemoveTaskFrom($taskID)
+	{
 		App::make('phabricator')->updateTask($taskID, ['projectPHIDs' => []]);
-    }
+	}
 
-    /**
-     * @Then I should see :text in the latest :sprint snapshot
-     */
-    public function iShouldSeeInTheLatestSnapshot($text, $sprint)
-    {
-        $this->visit('/snapshots/' . $sprint->snapshots->first()->id);
+	/**
+	 * @Then I should see :text in the latest :sprint snapshot
+	 */
+	public function iShouldSeeInTheLatestSnapshot($text, $sprint)
+	{
+		$this->visit('/snapshots/' . Sprint::where(['title' => $sprint])->first()->sprintSnapshots->first()->id);
 		$this->assertPageContainsText($text);
-    }
+	}
 }
