@@ -6,4 +6,5 @@ Feature: Sprint Snapshots
   Scenario: Create sprint snapshot
     Given a sprint "Sprint 42" exists for the "Wikidata" project
     When I create a sprint snapshot for "Sprint 42"
-    Then I should see a snapshot for "Sprint 42" that was created today
+    And I go to the "Sprint 42" sprint overview
+    Then I should see a snapshot that was created today
