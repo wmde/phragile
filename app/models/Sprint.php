@@ -1,6 +1,7 @@
 <?php
 
 use Phragile\PhabricatorAPI;
+use Phragile\TaskList;
 
 class Sprint extends Eloquent {
 
@@ -96,5 +97,29 @@ class Sprint extends Eloquent {
 		$this->phabricator_id = $response['id'];
 
 		return true;
+	}
+
+	/**
+	 * @return bool Returns whether the snapshot was successfully created
+	 */
+	public function createSnapshot()
+	{
+		$snapshot = new SprintSnapshot([
+			'sprint_id' => $this->id,
+			'data' => json_encode($this->fetchSnapshotData())
+		]);
+
+		return $snapshot->save();
+	}
+
+	private function fetchSnapshotData()
+	{
+		$phabricator = App::make('phabricator');
+		$tasks = $phabricator->queryTasksByProject($this->phid);
+
+		return [
+			'tasks' => $tasks,
+			'transactions' => $phabricator->getTaskTransactions((new TaskList($tasks))->getClosedTaskIDs())
+		];
 	}
 }
