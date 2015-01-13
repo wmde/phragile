@@ -41,8 +41,23 @@
 		</div>
 
 		<div class="col-md-4">
-			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
+			@if(!$sprint->sprintSnapshots->isEmpty())
+				<div class="dropdown" id="snapshots">
+					<button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+						Snapshots of this sprint
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						@foreach($sprint->sprintSnapshots as $snapshot)
+							<li>
+								{{ link_to_route('snapshot_path', $snapshot->created_at, ['snapshot' => $snapshot->id]) }}
+							</li>
+						@endforeach
+					</ul>
+				</div>
+			@endif
 
+			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
 			<table class="table status-table">
 				@foreach($tasksPerStatus as $status => $numbers)
 					<tr class="filter-backlog" data-column="status" data-value="{{ $status === 'total' ? '' : $status }}">
