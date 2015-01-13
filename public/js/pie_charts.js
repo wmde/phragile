@@ -74,5 +74,5 @@
     })();
 
     statusPieChart.init(statusData());
-    statusPieChart.render('#pie', 250, 300);
+    statusPieChart.render('#pie', 250, 250);
 })();
