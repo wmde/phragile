@@ -45,13 +45,17 @@
 			@if(!$sprint->sprintSnapshots->isEmpty())
 				<div class="dropdown" id="snapshots">
 					<button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-						Snapshots of this sprint
+						{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Live version' }}
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu">
-						@foreach($sprint->sprintSnapshots as $snapshot)
-							<li>
-								{{ link_to_route('snapshot_path', $snapshot->created_at, ['snapshot' => $snapshot->id]) }}
+						<li class="{{ isset($snapshot) ? '' : 'active' }}">
+							{{ link_to_route('sprint_path',	'Live version',	['sprint' => $sprint->phabricator_id]) }}
+						</li>
+
+						@foreach($sprint->sprintSnapshots as $sprintSnapshot)
+							<li class="{{ isset($snapshot) && $snapshot->id === $sprintSnapshot->id ? 'active' : '' }}">
+								{{ link_to_route('snapshot_path', $sprintSnapshot->created_at, ['snapshot' => $sprintSnapshot->id]) }}
 							</li>
 						@endforeach
 					</ul>
