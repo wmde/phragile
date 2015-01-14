@@ -7,6 +7,17 @@ class SprintsController extends BaseController {
 
 	public function show(Sprint $sprint)
 	{
+		if ($sprint->hasEnded() && !$sprint->sprintSnapshots->isEmpty())
+		{
+			return App::make('SprintSnapshotsController')->show($sprint->sprintSnapshots->first());
+		} else
+		{
+			return $this->showWithLiveData($sprint);
+		}
+	}
+
+	public function showWithLiveData(Sprint $sprint)
+	{
 		$phabricator = App::make('phabricator');
 		$currentSprint = $sprint->project->currentSprint();
 		$taskList = new TaskList($phabricator->queryTasksByProject($sprint->phid));

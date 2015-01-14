@@ -50,7 +50,7 @@
 					</button>
 					<ul class="dropdown-menu">
 						<li class="{{ isset($snapshot) ? '' : 'active' }}">
-							{{ link_to_route('sprint_path',	'Live version',	['sprint' => $sprint->phabricator_id]) }}
+							{{ link_to_route('sprint_live_path', 'Live version', ['sprint' => $sprint->phabricator_id]) }}
 						</li>
 
 						@foreach($sprint->sprintSnapshots as $sprintSnapshot)

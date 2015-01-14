@@ -122,4 +122,9 @@ class Sprint extends Eloquent {
 			'transactions' => $phabricator->getTaskTransactions((new TaskList($tasks))->getClosedTaskIDs())
 		];
 	}
+
+	public function hasEnded()
+	{
+		return $this->sprint_end < date('Y-m-d');
+	}
 }

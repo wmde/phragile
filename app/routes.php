@@ -68,6 +68,11 @@ Route::get('/sprints/{sprint}', [
 	'uses' => 'SprintsController@show'
 ]);
 
+Route::get('/live/{sprint}', [
+	'as' => 'sprint_live_path',
+	'uses' => 'SprintsController@showWithLiveData'
+]);
+
 Route::get('snapshots/{snapshot}', [
 	'as' => 'snapshot_path',
 	'uses' => 'SprintSnapshotsController@show'
