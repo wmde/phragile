@@ -47,6 +47,28 @@
                 .innerRadius(0);
         };
 
+        var showTooltipOnMouseOver = function () {
+            svg.selectAll('.status')
+                .on('mousemove', function (d) {
+                    svg.select('#label-tooltip')
+                        .text(d.data.status)
+                        .style('display', 'block')
+                        .attr('x', d3.mouse(this)[0] + 10)
+                        .attr('y', d3.mouse(this)[1] + 10)
+                })
+                .on('mouseout', function () {
+                    svg.select('#label-tooltip').style('display', 'none');
+                });
+        };
+
+        var addLabelToolTip = function () {
+            svg.append('text')
+                .attr('id', 'label-tooltip')
+                .style('display', 'none');
+
+            showTooltipOnMouseOver();
+        };
+
         return {
             /**
              * @param {Object[]} data - List of objects containing status name and number of points for the respective status.
@@ -69,6 +91,7 @@
                 setArc();
 
                 addPie();
+                addLabelToolTip();
             }
         };
     })();
