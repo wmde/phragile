@@ -36,22 +36,15 @@
                 .attr('class', 'arc')
                 .append('path')
                     .attr('d', arc)
-                    .attr('class', function (d) { return 'status ' + d.data.status; });
+                    .attr('class', function (d) { return 'status filter-backlog ' + d.data.status; })
+                    .attr('data-column', 'status')
+                    .attr('data-value', function (d) { return d.data.status; });
         };
 
         var setArc = function () {
             arc = d3.svg.arc()
                 .outerRadius(radius - 10)
                 .innerRadius(0);
-        };
-
-        var addArcLables = function () {
-            svg.selectAll('.arc').append('text')
-                .attr('transform', function(d) { return 'translate(' + arc.centroid(d) + ')'; })
-                .attr('dy', '.35em')
-                .attr('class', 'status-name')
-                .style('text-anchor', 'middle')
-                .text(function(d) { return d.data.status; });
         };
 
         return {
@@ -76,11 +69,10 @@
                 setArc();
 
                 addPie();
-                addArcLables();
             }
         };
     })();
 
     statusPieChart.init(statusData());
-    statusPieChart.render('#pie', 250, 300);
+    statusPieChart.render('#pie', 250, 250);
 })();

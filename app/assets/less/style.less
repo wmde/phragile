@@ -6,11 +6,11 @@
 
   .dropdown-toggle {
     background: #fff;
-    border: 1px solid #aaa;
+    border: 1px solid @gray-light;
   }
 
   .phab-link {
-    color: #444;
+    color: @gray-dark;
   }
 }
 
@@ -36,7 +36,7 @@
   .axis {
     path, line {
       fill: none;
-      stroke: #777;
+      stroke: @gray;
       stroke-width: 1px;
       shape-rendering: crispEdges;
     }
@@ -67,28 +67,67 @@
 }
 .sprint-backlog {
   margin-top: 10px;
+
+  th {
+    cursor: pointer;
+  }
+}
+.filter-backlog {
+  cursor: pointer;
 }
 
+@resolved: @brand-success;
+@wontfix: lighten(@resolved, 10%);
+@open: @brand-warning;
+@patch: @brand-info;
+
+.status-table, .sprint-backlog {
+  .status-label {
+    border-radius: 3px;
+    color: #fff;
+    font-weight: normal;
+    padding: 2px 3px;
+  }
+  .total {
+    color: #000;
+    font-weight: bold;
+  }
+
+  .resolved {
+    background-color: @resolved;
+  }
+  .wontfix {
+    background-color: @wontfix;
+  }
+  .open {
+    background-color: @open;
+  }
+  .patch {
+    background-color: @patch;
+  }
+}
+
+.fillAndHighlightOnHover(@bg-color) {
+  fill: @bg-color;
+  &:hover {
+    fill: lighten(@bg-color, 5%);
+  }
+}
 #pie {
   .status {
     stroke: #fff;
     stroke-width: 2px;
   }
   .resolved {
-    fill: #4da74d;
+    .fillAndHighlightOnHover(@resolved);
   }
   .open {
-    fill: #edc240;
+    .fillAndHighlightOnHover(@open);
   }
   .wontfix {
-    fill: #ccc;
+    .fillAndHighlightOnHover(@wontfix);
   }
   .patch {
-    fill: #afd8f8;
-  }
-
-  .status-name {
-    fill: #fff;
-    text-shadow: 0 0 3px #000;
+    .fillAndHighlightOnHover(@patch);
   }
 }

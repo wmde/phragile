@@ -28,13 +28,14 @@
 		</a>
 	</h1>
 
+	<?php $closedPerDay = $burndown->getPointsClosedPerDay() ?>
 	<div class="row">
 		<div class="col-md-8">
 			<div id="burndown-data"
 				 class="hidden"
 				 data-total="{{ $taskList->getTasksPerStatus()['total']['points'] }}"
 				 data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">
-				{{ json_encode(array_diff_key($burndown->getPointsClosedPerDay(), ['before' => false, 'after' => false])) }}
+				{{ json_encode($burndown->getPointsClosedPerDay()) }}
 			</div>
 			<div id="burndown"></div>
 		</div>
@@ -44,8 +45,8 @@
 
 			<table class="table status-table">
 				@foreach($tasksPerStatus as $status => $numbers)
-					<tr>
-						<th>{{ $status }}</th>
+					<tr class="filter-backlog" data-column="status" data-value="{{ $status === 'total' ? '' : $status }}">
+						<th><span class="status-label {{ $status }}">{{ $status }}</span></th>
 						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
 					</tr>
 				@endforeach
@@ -56,24 +57,40 @@
 		</div>
 	</div>
 
-	<table class="table table-striped sprint-backlog">
+	<button id="reset-filter" class="btn btn-default" disabled="disabled">Show all tasks</button>
+	<table id="backlog" class="table table-striped sprint-backlog">
 		<thead>
 			<tr>
-				<th>Title</th>
-				<th>Priority</th>
-				<th>Story Points</th>
-				<th>Status</th>
+				<th class="sort" data-sort="title">Title</th>
+				<th class="sort" data-sort="priority">Priority</th>
+				<th class="sort" data-sort="points">Story Points</th>
+				<th class="sort" data-sort="status">Status</th>
 			</tr>
 		</thead>
 
-		@foreach($taskList->getTasks() as $task)
-			<tr>
-				<td>{{ $task['title'] }}</td>
-				<td>{{ $task['priority'] }}</td>
-				<td>{{ $task['story_points'] }}</td>
-				<td>{{ $task['status'] }}</td>
-			</tr>
-		@endforeach
+		<tbody class="list">
+			@foreach($taskList->getTasks() as $task)
+				<tr>
+					<td>
+						{{ link_to(
+							$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
+							$task['title'],
+							['class' => 'title']
+						) }}
+					</td>
+
+					<?php $priorityValue = $_ENV['MANIPHEST_PRIORITY_MAPPING.' . strtolower($task['priority'])] ?>
+					<td class="filter-backlog" data-column="priority" data-value="{{ $priorityValue }}">
+						<span class="priority hidden">{{ $priorityValue }}</span>
+						{{ $task['priority'] }}
+					</td>
+					<td class="points">{{ $task['story_points'] }}</td>
+					<td class="status filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
+						<span class="status-label {{ $task['status'] }}">{{ $task['status'] }}</span>
+					</td>
+				</tr>
+			@endforeach
+		</tbody>
 	</table>
 @stop
 
@@ -81,4 +98,6 @@
 	{{ HTML::script('js/d3.min.js') }}
 	{{ HTML::script('js/burndown.js') }}
 	{{ HTML::script('js/pie_charts.js') }}
+	{{ HTML::script('js/list.min.js') }}
+	{{ HTML::script('js/sprint_backlog.js') }}
 @stop
