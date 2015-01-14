@@ -7,7 +7,8 @@
 		<li>
 			{{ link_to(
 				$_ENV['PHABRICATOR_URL'] . 'project/view/' . $sprint->phabricator_id,
-				$sprint->title . ' on Phabricator'
+				$sprint->title . ' on Phabricator',
+				['target' => '_blank']
 			) }}
 		</li>
 		<li>

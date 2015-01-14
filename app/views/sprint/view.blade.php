@@ -23,7 +23,7 @@
 			</ul>
 		</span>
 
-		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" title="Go to Phabricator">
+		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" title="Go to Phabricator" target="_blank">
 			<span class="glyphicon glyphicon-new-window phab-link"></span>
 		</a>
 	</h1>
@@ -75,7 +75,10 @@
 						{{ link_to(
 							$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
 							$task['title'],
-							['class' => 'title']
+							[
+								'class' => 'title',
+								'target' => '_blank'
+							]
 						) }}
 					</td>
 
