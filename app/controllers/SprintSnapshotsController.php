@@ -13,6 +13,6 @@ class SprintSnapshotsController extends BaseController {
 		$taskList = new TaskList($sprintData['tasks']);
 		$burndown = new BurndownChart($sprint, $taskList, $sprintData['transactions']);
 
-		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown'));
+		return View::make('sprint.view', compact('snapshot', 'sprint', 'currentSprint', 'taskList', 'burndown'));
 	}
 }

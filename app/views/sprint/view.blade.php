@@ -2,7 +2,8 @@
 
 @section('content')
 	<h1 class="sprint-overview-title">
-		{{ $sprint->project->title }} Sprint Overview:
+		{{ $sprint->project->title }}
+		{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Sprint Overview' }}
 		<span class="dropdown">
 			<button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
 				{{ $sprint->title }}
