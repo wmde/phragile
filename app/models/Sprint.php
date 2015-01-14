@@ -123,6 +123,9 @@ class Sprint extends Eloquent {
 		];
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function hasEnded()
 	{
 		return $this->sprint_end < date('Y-m-d');
