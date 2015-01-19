@@ -46,11 +46,7 @@ class SprintsController extends BaseController {
 			return Redirect::back();
 		}
 
-		return Redirect::route('sprint_confirmation_path', ['sprint' => $sprint->phabricator_id]);
-	}
-
-	public function confirmation(Sprint $sprint)
-	{
-		return View::make('sprint.confirmation', compact('sprint'));
+		Flash::success("Successfully created \"$sprint->title\"");
+		return Redirect::route('sprint_path', ['sprint' => $sprint->phabricator_id]);
 	}
 }

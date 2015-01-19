@@ -62,8 +62,3 @@ Route::get('/sprints/{sprint}', [
 	'as' => 'sprint_path',
 	'uses' => 'SprintsController@show'
 ]);
-
-Route::get('/confirmation/{sprint}', [
-	'as' => 'sprint_confirmation_path',
-	'uses' => 'SprintsController@confirmation'
-]);
