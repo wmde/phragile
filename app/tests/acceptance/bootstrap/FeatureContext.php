@@ -277,6 +277,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function iShouldSeeInTheLatestSnapshot($text, $sprint)
 	{
 		$this->visit('/snapshots/' . Sprint::where(['title' => $sprint])->first()->sprintSnapshots->first()->id);
-		$this->assertPageContainsText($text);
+		$this->assertResponseContains($text);
 	}
 }
