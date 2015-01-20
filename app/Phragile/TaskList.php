@@ -4,15 +4,13 @@ namespace Phragile;
 
 class TaskList {
 	private $tasks = null;
-	private $phabricator = null;
 
-	public function __construct(PhabricatorAPI $phabricator, $phid)
+	public function __construct(array $phabricatorTaskData)
 	{
-		$this->phabricator = $phabricator;
-		$this->tasks = $this->fetchTasks($phid);
+		$this->tasks = $this->processTasks($phabricatorTaskData);
 	}
 
-	private function fetchTasks($phid)
+	private function processTasks($taskData)
 	{
 		return array_map(function($task)
 		{
@@ -24,7 +22,7 @@ class TaskList {
 				'closed' => $task['isClosed'],
 				'id' => $task['id'],
 			];
-		}, array_values($this->phabricator->queryTasksByProject($phid)));
+		}, array_values($taskData));
 	}
 
 	/**
@@ -81,5 +79,20 @@ class TaskList {
 				return $task;
 			}
 		}
+	}
+
+	/**
+	 * @return int[] List of IDs of closed tasks
+	 */
+	public function getClosedTaskIDs()
+	{
+		return array_map(function($task)
+		{
+			return $task['id'];
+		}, array_filter($this->tasks, function($task)
+			{
+				return $task['closed'];
+			})
+		);
 	}
 }

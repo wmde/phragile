@@ -78,6 +78,17 @@ class PhabricatorAPI {
 		);
 	}
 
+	public function updateTask($taskID, array $fields)
+	{
+		return $this->client->callMethodSynchronous(
+			'maniphest.update',
+			array_merge(
+				['id' => $taskID],
+				$fields
+			)
+		);
+	}
+
 	public function getTaskTransactions(array $ids)
 	{
 		return $this->client->callMethodSynchronous(

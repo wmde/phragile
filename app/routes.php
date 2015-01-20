@@ -21,6 +21,11 @@ Route::bind('sprint', function($phabricatorID)
 	return Sprint::where('phabricator_id', $phabricatorID)->first();
 });
 
+Route::bind('snapshot', function($snapshotID)
+{
+	return SprintSnapshot::where('id', $snapshotID)->first();
+});
+
 Route::get('/', [
 	'as' => 'home_path',
 	'uses' => 'ProjectsController@index'
@@ -61,4 +66,14 @@ Route::post('projects/{project}/sprints/store', [
 Route::get('/sprints/{sprint}', [
 	'as' => 'sprint_path',
 	'uses' => 'SprintsController@show'
+]);
+
+Route::get('/live/{sprint}', [
+	'as' => 'sprint_live_path',
+	'uses' => 'SprintsController@showWithLiveData'
+]);
+
+Route::get('snapshots/{snapshot}', [
+	'as' => 'snapshot_path',
+	'uses' => 'SprintSnapshotsController@show'
 ]);

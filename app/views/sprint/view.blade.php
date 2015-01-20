@@ -2,7 +2,8 @@
 
 @section('content')
 	<h1 class="sprint-overview-title">
-		{{ $sprint->project->title }} Sprint Overview:
+		{{ $sprint->project->title }}
+		{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Sprint Overview' }}
 		<span class="dropdown">
 			<button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
 				{{ $sprint->title }}
@@ -23,8 +24,8 @@
 			</ul>
 		</span>
 
-		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" title="Go to Phabricator" target="_blank">
-			<span class="glyphicon glyphicon-new-window phab-link"></span>
+		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" class="btn btn-default" title="Go to Phabricator" target="_blank">
+			<img src="/images/phabricator.png" class="phabricator-icon"/>
 		</a>
 	</h1>
 
@@ -41,8 +42,27 @@
 		</div>
 
 		<div class="col-md-4">
-			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
+			@if(!$sprint->sprintSnapshots->isEmpty())
+				<div class="dropdown" id="snapshots">
+					<button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+						{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Live version' }}
+						<span class="caret"></span>
+					</button>
+					<ul class="dropdown-menu">
+						<li class="{{ isset($snapshot) ? '' : 'active' }}">
+							{{ link_to_route('sprint_live_path', 'Live version', ['sprint' => $sprint->phabricator_id]) }}
+						</li>
 
+						@foreach($sprint->sprintSnapshots as $sprintSnapshot)
+							<li class="{{ isset($snapshot) && $snapshot->id === $sprintSnapshot->id ? 'active' : '' }}">
+								{{ link_to_route('snapshot_path', $sprintSnapshot->created_at, ['snapshot' => $sprintSnapshot->id]) }}
+							</li>
+						@endforeach
+					</ul>
+				</div>
+			@endif
+
+			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
 			<table class="table status-table">
 				@foreach($tasksPerStatus as $status => $numbers)
 					<tr class="filter-backlog" data-column="status" data-value="{{ $status === 'total' ? '' : $status }}">

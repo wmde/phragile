@@ -1,17 +1,28 @@
 @import "../bower_components/bootstrap/less/bootstrap";
 
+.phragile-dropdown {
+  background: #fff;
+  border: 1px solid lighten(@gray-light, 20%);
+}
+
 .sprint-overview-title {
   margin-top: 0;
   font-size: 20px;
 
   .dropdown-toggle {
-    background: #fff;
-    border: 1px solid @gray-light;
+    .phragile-dropdown;
   }
 
-  .phab-link {
-    color: @gray-dark;
+  .phabricator-icon {
+    width: 31px;
   }
+}
+#snapshots {
+   .dropdown-toggle {
+     .phragile-dropdown;
+   }
+
+   margin-bottom: 15px;
 }
 
 @burndown-actual: #00a8c6;
@@ -67,6 +78,10 @@
 }
 .sprint-backlog {
   margin-top: 10px;
+
+  td {
+    min-width: 120px;
+  }
 
   th {
     cursor: pointer;

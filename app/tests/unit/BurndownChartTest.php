@@ -6,11 +6,6 @@ class BurndownChartTest extends TestCase {
 
 	private function mockWithTransactions(array $tasks, array $transactions)
 	{
-		$phabricatorMock = $this->getMockBuilder('Phragile\PhabricatorAPI')
-			->disableOriginalConstructor()
-			->getMock();
-		$phabricatorMock->method('getTaskTransactions')->willReturn($transactions);
-
 		$taskListMock = $this->getMockBuilder('Phragile\TaskList')
 			->disableOriginalConstructor()
 			->getMock();
@@ -23,7 +18,7 @@ class BurndownChartTest extends TestCase {
 		return new BurndownChart(
 			new Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
 			$taskListMock,
-			$phabricatorMock
+			$transactions
 		);
 	}
 

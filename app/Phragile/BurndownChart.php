@@ -9,13 +9,18 @@ class BurndownChart {
 	private $pointsClosedPerDay = null;
 	private $sprint = null;
 	private $tasks = null;
-	private $phabricator = null;
+	private $transactions = null;
 
-	public function __construct(\Sprint $sprint, TaskList $tasks, PhabricatorAPI $phabricator)
+	/**
+	 * @param \Sprint $sprint
+	 * @param TaskList $tasks
+	 * @param array $transactions - an associative array that maps an array of transactions to task IDs
+	 */
+	public function __construct(\Sprint $sprint, TaskList $tasks, array $transactions)
 	{
 		$this->sprint = $sprint;
 		$this->tasks = $tasks;
-		$this->phabricator = $phabricator;
+		$this->transactions = $transactions;
 	}
 
 	private function calculatePointsClosedPerDay()
@@ -38,26 +43,12 @@ class BurndownChart {
 		}
 	}
 
-	private function getClosedTaskIDs()
-	{
-		return array_map(function($task)
-		{
-			return $task['id'];
-		}, array_filter($this->tasks->getTasks(), function($task)
-			{
-				return $task['closed'];
-			})
-		);
-	}
-
 	private function getClosedTaskTimes()
 	{
-		$taskTransactions = $this->phabricator->getTaskTransactions($this->getClosedTaskIDs());
-
 		return array_map(function($transactions)
 		{
 			return $this->findLastStatusChangeToClosed($transactions);
-		}, $taskTransactions);
+		}, $this->transactions);
 	}
 
 	private function findLastStatusChangeToClosed(array $transactions)
