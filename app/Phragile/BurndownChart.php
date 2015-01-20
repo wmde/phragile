@@ -11,6 +11,11 @@ class BurndownChart {
 	private $tasks = null;
 	private $transactions = null;
 
+	/**
+	 * @param \Sprint $sprint
+	 * @param TaskList $tasks
+	 * @param array $transactions - an associative array that maps an array of transactions to task IDs
+	 */
 	public function __construct(\Sprint $sprint, TaskList $tasks, array $transactions)
 	{
 		$this->sprint = $sprint;
