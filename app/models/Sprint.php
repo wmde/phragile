@@ -99,17 +99,12 @@ class Sprint extends Eloquent {
 		return true;
 	}
 
-	/**
-	 * @return bool Returns whether the snapshot was successfully created
-	 */
 	public function createSnapshot()
 	{
-		$snapshot = new SprintSnapshot([
+		SprintSnapshot::create([
 			'sprint_id' => $this->id,
 			'data' => json_encode($this->fetchSnapshotData())
 		]);
-
-		return $snapshot->save();
 	}
 
 	private function fetchSnapshotData()
