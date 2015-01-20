@@ -10,11 +10,17 @@ class Sprint extends Eloquent {
 	private $phabricatorError = null;
 	private $days = null;
 
+	/**
+	 * @return Project
+	 */
 	public function project()
 	{
 		return $this->belongsTo('Project');
 	}
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Collection
+	 */
 	public function sprintSnapshots()
 	{
 		return $this->hasMany('SprintSnapshot')->orderBy('created_at', 'desc');

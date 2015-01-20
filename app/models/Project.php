@@ -4,6 +4,9 @@ class Project extends Eloquent {
 
 	protected $fillable = ['title', 'slug'];
 
+	/**
+	 * @return \Illuminate\Database\Eloquent\Collection
+	 */
 	public function sprints()
 	{
 		return $this->hasMany('Sprint')->orderBy('sprint_start', 'desc');
