@@ -24,8 +24,8 @@
 			</ul>
 		</span>
 
-		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" title="Go to Phabricator" target="_blank">
-			<span class="glyphicon glyphicon-new-window phab-link"></span>
+		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" class="btn btn-default" title="Go to Phabricator" target="_blank">
+			<img src="/images/phabricator.png" class="phabricator-icon"/>
 		</a>
 	</h1>
 
