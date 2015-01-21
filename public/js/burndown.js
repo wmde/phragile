@@ -40,14 +40,16 @@
         };
 
         var addActualProgressLine = function () {
-            svg.append('path')
-                .attr('class', 'graph actual')
-                .attr('d', line(sprintData.getBurndownData().filter(function (data) {
-                    return data.day <= new Date();
-                })));
+            var pastSprintDays = sprintData.getBurndownData().filter(function (data) {
+                return data.day <= new Date();
+            });
 
             svg.append('path')
-                .datum(sprintData.getBurndownData())
+                .attr('class', 'graph actual')
+                .attr('d', line(pastSprintDays));
+
+            svg.append('path')
+                .datum(pastSprintDays)
                 .attr('class', 'graph-area')
                 .attr('d', d3.svg.area()
                     .x(xOfDay)
