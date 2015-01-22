@@ -74,6 +74,12 @@ Route::get('/sprints/{sprint}/snapshot', [ // should technically be a POST
 	'uses' => 'SprintSnapshotsController@store'
 ]);
 
+Route::get('/snapshots/{snapshot}/delete', [ // should be a DELETE
+	'as' => 'delete_snapshot_path',
+	'before' => 'auth',
+	'uses' => 'SprintSnapshotsController@delete'
+]);
+
 Route::get('/live/{sprint}', [
 	'as' => 'sprint_live_path',
 	'uses' => 'SprintsController@showWithLiveData'

@@ -30,4 +30,17 @@ class SprintSnapshotsController extends BaseController {
 			return Redirect::route('sprint_live_path', $sprint->phabricator_id);
 		}
 	}
+
+	public function delete(SprintSnapshot $snapshot)
+	{
+		if ($snapshot->delete())
+		{
+			Flash::success('The snapshot was deleted.');
+			return Redirect::route('sprint_path', ['sprint' => $snapshot->sprint->phabricator_id]);
+		} else
+		{
+			Flash::error('The snapshot could not be deleted. Please try again.');
+			return Redirect::back();
+		}
+	}
 }
