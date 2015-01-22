@@ -15,4 +15,19 @@ class SprintSnapshotsController extends BaseController {
 
 		return View::make('sprint.view', compact('snapshot', 'sprint', 'currentSprint', 'taskList', 'burndown'));
 	}
+
+	public function store(Sprint $sprint)
+	{
+		$snapshot = $sprint->createSnapshot();
+
+		if ($snapshot->exists)
+		{
+			Flash::success("Successfully created a snapshot for \"$sprint->title\"");
+			return Redirect::route('snapshot_path', $snapshot->id);
+		} else
+		{
+			Flash::error("The snapshot could not be created. Please try again");
+			return Redirect::route('sprint_live_path', $sprint->phabricator_id);
+		}
+	}
 }

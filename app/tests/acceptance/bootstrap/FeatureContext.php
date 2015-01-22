@@ -279,4 +279,12 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->visit('/snapshots/' . Sprint::where(['title' => $sprint])->first()->sprintSnapshots->first()->id);
 		$this->assertResponseContains($text);
 	}
+
+	/**
+	 * @When I go to the :sprint live page
+	 */
+	public function iGoToTheSprintLivePage($sprint)
+	{
+		$this->visit('/live/' . Sprint::where('title', $sprint)->first()->phabricator_id);
+	}
 }

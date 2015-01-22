@@ -59,8 +59,15 @@
 							</li>
 						@endforeach
 					</ul>
+
+					@if(!isset($snapshot))
+						<a class="btn btn-default btn-sm" href="{{ route('create_snapshot_path', $sprint->phabricator_id) }}">
+							Create snapshot
+						</a>
+					@endif
 				</div>
 			@endif
+
 
 			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
 			<table class="table status-table">

@@ -68,6 +68,12 @@ Route::get('/sprints/{sprint}', [
 	'uses' => 'SprintsController@show'
 ]);
 
+Route::get('/sprints/{sprint}/snapshot', [ // should technically be a POST
+	'as' => 'create_snapshot_path',
+	'before' => 'auth',
+	'uses' => 'SprintSnapshotsController@store'
+]);
+
 Route::get('/live/{sprint}', [
 	'as' => 'sprint_live_path',
 	'uses' => 'SprintsController@showWithLiveData'
