@@ -1,4 +1,11 @@
 (function () {
+    var dayAfter = function (date) {
+        var next = new Date(date);
+        next.setDate(date.getDate() + 1);
+
+        return next;
+    };
+
     var burndownChart = (function () {
         var sprintData,
             dimensions,
@@ -41,7 +48,7 @@
 
         var addActualProgressLine = function () {
             var pastSprintDays = sprintData.getBurndownData().filter(function (data) {
-                return data.day <= new Date();
+                return data.day <= dayAfter(new Date());
             });
 
             svg.append('path')
@@ -132,13 +139,6 @@
             }
 
             return days;
-        };
-
-        var dayAfter = function (date) {
-            var next = new Date(date);
-            next.setDate(date.getDate() + 1);
-
-            return next;
         };
 
         var calculateActualProgressData = function (closedPerDay) {
