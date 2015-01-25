@@ -42,8 +42,8 @@
 		</div>
 
 		<div class="col-md-4">
-			@if(!$sprint->sprintSnapshots->isEmpty())
-				<div class="dropdown" id="snapshots">
+			<div class="dropdown" id="snapshots">
+				@if(!$sprint->sprintSnapshots->isEmpty())
 					<button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
 						{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Live version' }}
 						<span class="caret"></span>
@@ -59,8 +59,28 @@
 							</li>
 						@endforeach
 					</ul>
-				</div>
-			@endif
+				@endif
+
+				@if(!isset($snapshot) && Auth::check())
+					<a class="btn btn-default btn-sm" href="{{ route('create_snapshot_path', $sprint->phabricator_id) }}">
+						Create snapshot
+					</a>
+				@endif
+
+				@if(isset($snapshot) && Auth::check())
+					{{ link_to_route(
+						'delete_snapshot_path',
+						'',
+						['snapshot' => $snapshot->id],
+						[
+							'class' => 'btn btn-danger btn-sm glyphicon glyphicon-remove',
+							'title' => 'Delete snapshot',
+							'onclick' => 'return confirm("Delete this snapshot?")'
+						]
+					) }}
+				@endif
+			</div>
+
 
 			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
 			<table class="table status-table">

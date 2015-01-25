@@ -276,7 +276,43 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iShouldSeeInTheLatestSnapshot($text, $sprint)
 	{
-		$this->visit('/snapshots/' . Sprint::where(['title' => $sprint])->first()->sprintSnapshots->first()->id);
+		$this->iGoToTheLatestSnapshotPageOf($sprint);
 		$this->assertResponseContains($text);
+	}
+
+	/**
+	 * @When I go to the :sprint live page
+	 */
+	public function iGoToTheSprintLivePage($sprint)
+	{
+		$this->visit('/live/' . Sprint::where('title', $sprint)->first()->phabricator_id);
+	}
+
+	/**
+	 * @Given :sprint has one snapshot
+	 */
+	public function hasOneSnapshot($sprint)
+	{
+		$sprint = Sprint::where('title', $sprint)->first();
+
+		$sprint->sprintSnapshots()->delete();
+		$sprint->createSnapshot();
+	}
+
+	/**
+	 * @When I go to the latest snapshot page of :sprint
+	 */
+	public function iGoToTheLatestSnapshotPageOf($sprint)
+	{
+		$this->visit('/snapshots/' . Sprint::where(['title' => $sprint])->first()->sprintSnapshots->first()->id);
+	}
+
+	/**
+	 * @Then :sprint should not have any snapshots
+	 */
+	public function shouldNotHaveAnySnapshots($sprint)
+	{
+		$this->iGoToTheSprintLivePage($sprint);
+		$this->assertElementNotOnPage('#snapshots ul');
 	}
 }
