@@ -33,11 +33,21 @@ class TaskList {
 		return $this->tasks;
 	}
 
+	private function isTaskInReview(array $task)
+	{
+		return !$task['isClosed'] && in_array($_ENV['REVIEW_TAG_PHID'], $task['projectPHIDs']);
+	}
+
+	private function isTaskBeingDone(array $task)
+	{
+		return !$task['isClosed'] && !is_null($task['ownerPHID']);
+	}
+
 	private function taskStatus(array $task)
 	{
-		return !$task['isClosed'] && in_array($_ENV['REVIEW_TAG_PHID'], $task['projectPHIDs'])
-			? 'patch to review'
-			: $task['status'];
+		if ($this->isTaskInReview($task)) return 'patch to review';
+		elseif ($this->isTaskBeingDone($task)) return 'doing';
+		else return $task['status'];
 	}
 
 	/**
