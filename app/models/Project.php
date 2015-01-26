@@ -12,6 +12,17 @@ class Project extends Eloquent {
 		return $this->hasMany('Sprint')->orderBy('sprint_start', 'desc');
 	}
 
+	/**
+	 * @return \Illuminate\Validation\Validator
+	 */
+	public function validate()
+	{
+		return Validator::make(
+			$this->getAttributes(),
+			['title' => 'required|unique:projects']
+		);
+	}
+
 	public function currentSprint()
 	{
 		return $this->newestPastSprint() ?: $this->closestFutureSprint();
