@@ -315,4 +315,23 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->iGoToTheSprintLivePage($sprint);
 		$this->assertElementNotOnPage('#snapshots ul');
 	}
+
+	/**
+	 * @Given I am a Phragile admin
+	 */
+	public function iAmAPhragileAdmin()
+	{
+		if (!User::where('username', $this->params['phabricator_username'])->first()->isAdmin())
+		{
+			throw new Exception($this->params['phabricator_username'] . ' is not a Phragile admin.');
+		}
+	}
+
+	/**
+	 * @Given the project :project does not exist
+	 */
+	public function theProjectDoesNotExist($project)
+	{
+		Project::where('title', $project)->delete();
+	}
 }

@@ -14,3 +14,21 @@ Feature: Projects
     When I am on "/"
     Then I should see "Wikidata"
     And I should see "Some Other Project"
+
+  Scenario: Create project
+    Given I am on "/"
+    And I am logged in
+    And I am a Phragile admin
+    And the project "Foobar" does not exist
+    When I fill in "title" with "Foobar"
+    And I press "Create"
+    Then I should see "Foobar" in the "#projects" element
+    And I should see "Foobar" on "/projects/foobar"
+
+  Scenario: Project titles have to be unique
+    Given I am on "/"
+    And I am logged in
+    And the "Foobar" project exists
+    When I fill in "title" with "Foobar"
+    And I press "Create"
+    Then I should see "The title has already been taken"
