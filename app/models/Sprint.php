@@ -56,7 +56,7 @@ class Sprint extends Eloquent {
 	 * @param string $format
 	 * @return array
 	 */
-	public function formatDays($format = 'M j')
+	public function getFormattedDays($format = 'M j')
 	{
 		return array_map(function($date) use($format)
 		{

@@ -20,7 +20,7 @@ class SprintTest extends TestCase {
 
 		$this->assertCount(
 			$numberOfDays,
-			$sprint->formatDays()
+			$sprint->getFormattedDays()
 		);
 	}
 
@@ -40,6 +40,6 @@ class SprintTest extends TestCase {
 	{
 		$sprint = new Sprint(['sprint_start' => $start, 'sprint_end' => $end]);
 
-		$this->assertSame($sprint->formatDays('Y-m-d'), $all);
+		$this->assertSame($sprint->getFormattedDays('Y-m-d'), $all);
 	}
 }

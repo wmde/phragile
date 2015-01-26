@@ -26,7 +26,7 @@ class BurndownChart {
 	private function calculatePointsClosedPerDay()
 	{
 		$dateFormat = 'Y-m-d';
-		$sprintDuration = $this->sprint->formatDays($dateFormat);
+		$sprintDuration = $this->sprint->getFormattedDays($dateFormat);
 		$this->pointsClosedPerDay = array_fill_keys($sprintDuration, 0);
 
 		foreach ($this->getClosedTaskTimes() as $id => $time)
