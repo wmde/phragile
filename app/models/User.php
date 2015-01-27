@@ -32,6 +32,9 @@ class User extends Eloquent implements UserInterface {
 
 	public function isAdmin()
 	{
-		return in_array(strtolower($this->username), array_map('trim', explode(',', $_ENV['PHRAGILE_ADMINS'])));
+		return in_array(
+			strtolower($this->username),
+			array_map('trim', explode(',', $_ENV['PHRAGILE_ADMINS']))
+		);
 	}
 }
