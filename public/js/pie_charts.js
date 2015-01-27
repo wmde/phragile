@@ -54,7 +54,7 @@
                         .text(d.data.status)
                         .style('display', 'block')
                         .attr('x', d3.mouse(this)[0] + 10)
-                        .attr('y', d3.mouse(this)[1] + 10)
+                        .attr('y', d3.mouse(this)[1] + 10);
                 })
                 .on('mouseout', function () {
                     svg.select('#label-tooltip').style('display', 'none');
