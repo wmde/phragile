@@ -71,6 +71,52 @@
   .graph-area {
     fill: fadeout(@burndown-actual, 80);
   }
+
+  .data-point(@stroke) {
+    stroke-width: 2px;
+    fill: #fff;
+    stroke: @stroke;
+
+    &.selected {
+      fill: @stroke;
+    }
+  }
+  #actual-data-points .data-point {
+    .data-point(@burndown-actual)
+  }
+  #ideal-data-points .data-point {
+    .data-point(@burndown-ideal)
+  }
+}
+
+#burndown-overlay {
+  fill: none;
+  pointer-events: all;
+}
+
+#graph-labels {
+  background: fadeOut(#fff, 30%);
+  display: none;
+  position: absolute;
+  z-index: 10;
+  width: 140px;
+  color: #fff;
+  border-radius: 5px;
+
+  .graph-value {
+    color: #000;
+    font-weight: bold;
+  }
+
+  .ideal {
+    color: @burndown-ideal;
+  }
+  .actual {
+    color: @burndown-actual;
+    td {
+      border-top: 0px;
+    }
+  }
 }
 
 .status-table {

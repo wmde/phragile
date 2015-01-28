@@ -62,12 +62,19 @@
                     .x(xOfDay)
                     .y0(y(0))
                     .y1(yOfPoints));
+
+            addDataPoints('actual-data-points', pastSprintDays);
+            addHoverEffects(pastSprintDays);
         };
 
         var addIdealProgressLine = function () {
+            var graphData = sprintData.getIdealGraphData();
+
             svg.append('path')
                 .attr('class', 'graph ideal')
-                .attr('d', line(sprintData.getIdealGraphData()));
+                .attr('d', line(graphData));
+
+            addDataPoints('ideal-data-points', graphData);
         };
 
         var xOfDay = function (d) { return x(d.day); },
@@ -81,11 +88,64 @@
             svg.selectAll('.daily-points')
                 .data(sprintData.getPointsClosedPerDay())
                 .enter().append('line')
-                .attr('class', 'daily-points')
-                .attr('x1', xOfDay)
-                .attr('y1', y(0))
-                .attr('x2', xOfDay)
-                .attr('y2', yOfPoints);
+                    .attr('class', 'daily-points')
+                    .attr('x1', xOfDay)
+                    .attr('y1', y(0))
+                    .attr('x2', xOfDay)
+                    .attr('y2', yOfPoints);
+        };
+
+        var addDataPoints = function (id, graphData) {
+            svg.append('g')
+                .attr('id', id)
+                .selectAll('.data-point')
+                    .data(graphData)
+                    .enter()
+                    .append('circle')
+                        .attr('class', 'data-point')
+                        .attr('r', 4)
+                        .attr('cx', xOfDay)
+                        .attr('cy', yOfPoints);
+        };
+
+        var resetHoverEffects = function () {
+            svg.selectAll('.data-point')
+                .attr('class', 'data-point');
+            $('#graph-labels').hide();
+        };
+
+        var addHoverOverlay = function () {
+            return svg.append('rect')
+                .attr('id', 'burndown-overlay')
+                .attr('width', dimensions.width)
+                .attr('height', dimensions.height)
+                .on('mouseout', resetHoverEffects);
+        };
+
+        var addHoverEffects = function () {
+            var bisect = d3.bisector(function(d) { return d.day; }).left,
+                idealGraphData = sprintData.getIdealGraphData(),
+                actualGraphData = sprintData.getBurndownData(),
+                overlay = addHoverOverlay();
+
+            overlay.on('mousemove', function () {
+                var mouse = d3.mouse(this),
+                    xNearMouse = x.invert(mouse[0] - (dimensions.width / actualGraphData.length) / 2),
+                    indexOfDate = bisect(idealGraphData, xNearMouse);
+
+                resetHoverEffects();
+
+                $('#graph-labels').show().css({
+                    left: mouse[0] + 20,
+                    top: mouse[1] + 30
+                });
+                $('#ideal-progress').text(Math.round(idealGraphData[indexOfDate].points));
+                $('#actual-progress').text(actualGraphData[indexOfDate].points);
+                svg.selectAll('.data-point:nth-child(' + (indexOfDate + 1) + ')')
+                    .attr('class', 'data-point selected');
+            });
+
+            svg.on('mouseout', resetHoverEffects);
         };
 
         var setDomain = function () {
@@ -115,9 +175,9 @@
                 setDomain();
 
                 addAxes();
+                addIdealProgressLine();
                 addActualProgressLine();
                 addClosedTasksPerDayBars();
-                addIdealProgressLine();
             }
         };
     })();
