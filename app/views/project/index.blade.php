@@ -13,7 +13,7 @@
 		@endforeach
 	</ul>
 
-	@if(Auth::check() && Auth::user()->isAdmin())
+	@if(Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
 		@include('project.partials.create')
 	@endif
 @stop

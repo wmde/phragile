@@ -321,7 +321,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iAmAPhragileAdmin()
 	{
-		if (!User::where('username', $this->params['phabricator_username'])->first()->isAdmin())
+		if (!User::where('username', $this->params['phabricator_username'])->first()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
 		{
 			throw new Exception($this->params['phabricator_username'] . ' is not a Phragile admin.');
 		}

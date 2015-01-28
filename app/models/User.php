@@ -12,15 +12,25 @@ class User extends Eloquent implements UserInterface {
 
 	protected $fillable = ['phid', 'username'];
 
+	private $phabricatorURL;
+
 	public function setRememberToken($token) {
 		// Workaround: Auth::logout breaks with the default behavior since we're using OAuth.
+	}
+
+	/**
+	 * @param string $url
+	 */
+	public function setPhabricatorURL($url)
+	{
+		$this->phabricatorURL = $url;
 	}
 
 	public function certificateValid($certificate = null)
 	{
 		try
 		{
-			$phabricator = new PhabricatorAPI(new ConduitClient($_ENV['PHABRICATOR_URL']));
+			$phabricator = new PhabricatorAPI(new ConduitClient($this->phabricatorURL));
 			$phabricator->connect($this->username, $certificate ?: $this->conduit_certificate);
 		} catch (ConduitClientException $e)
 		{
@@ -30,11 +40,15 @@ class User extends Eloquent implements UserInterface {
 		return true;
 	}
 
-	public function isAdmin()
+	/**
+	 * @param string $admins - Comma separated Phabricator user names
+	 * @return bool
+	 */
+	public function isInAdminList($admins)
 	{
 		return in_array(
 			strtolower($this->username),
-			array_map('trim', explode(',', $_ENV['PHRAGILE_ADMINS']))
+			array_map('trim', explode(',', $admins))
 		);
 	}
 }

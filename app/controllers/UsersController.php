@@ -5,6 +5,7 @@ class UsersController extends BaseController {
 	public function updateCertificate()
 	{
 		$user = Auth::user();
+		$user->setPhabricatorURL($_ENV['PHABRICAOTR_URL']);
 		$certificate = Input::get('conduit_certificate');
 
 		if ($user->certificateValid($certificate))
