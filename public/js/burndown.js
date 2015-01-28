@@ -111,6 +111,8 @@
         var resetHoverEffects = function () {
             svg.selectAll('.data-point')
                 .attr('class', 'data-point');
+            svg.selectAll('.x.axis .tick text')
+                .style('font-weight', 'normal');
             $('#graph-labels').hide();
         };
 
@@ -143,6 +145,8 @@
                 $('#actual-progress').text(actualGraphData[indexOfDate].points);
                 svg.selectAll('.data-point:nth-child(' + (indexOfDate + 1) + ')')
                     .attr('class', 'data-point selected');
+                svg.select('.x.axis .tick:nth-child(' + (indexOfDate + 1) + ') text')
+                    .style('font-weight', 'bold');
             });
 
             svg.on('mouseout', resetHoverEffects);
