@@ -52,6 +52,12 @@ Route::get('/projects/{project}', [
 	'uses' => 'ProjectsController@show'
 ]);
 
+Route::post('projects/store', [
+	'before' => 'auth',
+	'as' => 'create_project_path',
+	'uses' => 'ProjectsController@store'
+]);
+
 Route::get('/projects/{project}/sprints/create', [
 	'as' => 'create_sprint_path',
 	'uses' => 'SprintsController@create'

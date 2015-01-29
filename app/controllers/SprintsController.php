@@ -28,7 +28,10 @@ class SprintsController extends BaseController {
 
 	public function create(Project $project)
 	{
-		if (!Auth::user()->certificateValid())
+		$user = Auth::user();
+		$user->setPhabricatorURL($_ENV['PHABRICATOR_URL']);
+
+		if (!$user->certificateValid())
 		{
 			Flash::warning('Please set a valid Conduit certificate before trying to create a new sprint.');
 			return Redirect::back();
