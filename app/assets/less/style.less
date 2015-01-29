@@ -102,6 +102,7 @@
 @resolved: @brand-success;
 @wontfix: lighten(@resolved, 10%);
 @open: @brand-warning;
+@doing: lighten(@open, 10%);
 @patch: @brand-info;
 
 .status-table, .sprint-backlog {
@@ -127,6 +128,9 @@
   .patch {
     background-color: @patch;
   }
+  .doing {
+    background-color: @doing;
+  }
 }
 
 .fillAndHighlightOnHover(@bg-color) {
@@ -151,6 +155,9 @@
   }
   .patch {
     .fillAndHighlightOnHover(@patch);
+  }
+  .doing {
+    .fillAndHighlightOnHover(@doing);
   }
 
   #label-tooltip {
