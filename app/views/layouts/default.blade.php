@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Phragile</title>
+<title>@yield('title', 'Phragile')</title>
 {{ HTML::style('/css/style.css') }}
 @yield('optional_styles')
 </head>

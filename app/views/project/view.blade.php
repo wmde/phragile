@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', "Phragile - {$project->title}")
+
 @section('content')
 	<h1>{{ $project->title }}</h1>
 	<p>

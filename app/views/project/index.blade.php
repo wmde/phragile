@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', 'Phragile - Projects')
+
 @section('content')
 	<ul id="projects">
 		@foreach($projects as $project)

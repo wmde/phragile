@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', 'Phragile - Create a new sprint')
+
 @section('content')
 	<h1>Create sprint for <span id="project-title">{{ $project->title }}</span></h1>
 

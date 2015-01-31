@@ -1,5 +1,7 @@
 @extends('layouts.default')
 
+@section('title', 'Phragile - ' . (isset($snapshot) ? "Snapshot of {$sprint->title}" : $sprint->title))
+
 @section('content')
 	<h1 class="sprint-overview-title">
 		{{ $sprint->project->title }}
