@@ -124,13 +124,10 @@
                 .on('mouseout', resetHoverEffects);
         };
 
-        var addHoverEffects = function () {
-            var bisect = d3.bisector(function(d) { return d.day; }).left,
-                idealGraphData = sprintData.getIdealGraphData(),
-                actualGraphData = sprintData.getBurndownData(),
-                overlay = addHoverOverlay();
+        var bisect = d3.bisector(function(d) { return d.day; }).left;
 
-            overlay.on('mousemove', function () {
+        var highlightDataAtX = function (actualGraphData, idealGraphData) {
+            return function () {
                 var mouse = d3.mouse(this),
                     xNearMouse = x.invert(mouse[0] - (dimensions.width / actualGraphData.length) / 2),
                     indexOfDate = bisect(idealGraphData, xNearMouse);
@@ -147,9 +144,16 @@
                     .attr('class', 'data-point selected');
                 svg.select('.x.axis .tick:nth-child(' + (indexOfDate + 1) + ') text')
                     .style('font-weight', 'bold');
-            });
+            };
+        };
 
-            svg.on('mouseout', resetHoverEffects);
+        var addHoverEffects = function () {
+            var idealGraphData = sprintData.getIdealGraphData(),
+                actualGraphData = sprintData.getBurndownData(),
+                overlay = addHoverOverlay();
+
+            overlay.on('mousemove', highlightDataAtX(actualGraphData, idealGraphData));
+            overlay.on('mouseout', resetHoverEffects);
         };
 
         var setDomain = function () {
