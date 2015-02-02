@@ -20,16 +20,6 @@ class PhabricatorAPI {
 		);
 	}
 
-	public function authenticate($accessToken)
-	{
-		$response = $this->client->callMethodSynchronous(
-			"user.whoami?access_token=$accessToken",
-			[]
-		);
-
-		return isset($response['phid']) ? $response : null;
-	}
-
 	public function createProject($title)
 	{
 		$response = $this->client->callMethodSynchronous(

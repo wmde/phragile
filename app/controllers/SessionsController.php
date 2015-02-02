@@ -3,6 +3,12 @@
 use Phragile\PhabricatorOAuth;
 
 class SessionsController extends BaseController {
+	private $phabricatorOAuth;
+
+	public function __construct()
+	{
+		$this->phabricatorOAuth = new PhabricatorOAuth($_ENV['PHABRICATOR_URL']);
+	}
 
 	public function login()
 	{
@@ -30,13 +36,13 @@ class SessionsController extends BaseController {
 
 	private function obtainAccessToken()
 	{
-		$response = (new PhabricatorOAuth)->requestAccessToken(Input::get('code'));
+		$response = $this->phabricatorOAuth->requestAccessToken(Input::get('code'));
 		return isset($response['access_token']) ? $response['access_token'] : null;
 	}
 
 	private function authenticate($accessToken)
 	{
-		$user = App::make('phabricator')->authenticate($accessToken);
+		$user = $this->phabricatorOAuth->authenticate($accessToken);
 		if ($user)
 		{
 			return $this->loginAndRedirect($user);
