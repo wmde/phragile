@@ -126,24 +126,35 @@
 
         var bisect = d3.bisector(function(d) { return d.day; }).left;
 
-        var highlightDataAtX = function (actualGraphData, idealGraphData) {
+        var highlightDataPoints = function (index) {
+            svg.selectAll('.data-point:nth-child(' + (index + 1) + ')')
+                .attr('class', 'data-point selected');
+            svg.select('.x.axis .tick:nth-child(' + (index + 1) + ') text')
+                .style('font-weight', 'bold');
+        };
+
+        var showDataPointsLabel = function (idealPoints, actualPoints, position) {
+            $('#ideal-progress').text(idealPoints);
+            $('#actual-progress').text(actualPoints);
+            $('#graph-labels').show().css({
+                left: position[0] + 20,
+                top: position[1] + 30
+            });
+        };
+
+        var highlightAtMouse = function (actualGraphData, idealGraphData) {
             return function () {
                 var mouse = d3.mouse(this),
                     xNearMouse = x.invert(mouse[0] - (dimensions.width / actualGraphData.length) / 2),
-                    indexOfDate = bisect(idealGraphData, xNearMouse);
+                    indexAtX = bisect(idealGraphData, xNearMouse);
 
                 resetHoverEffects();
-
-                $('#graph-labels').show().css({
-                    left: mouse[0] + 20,
-                    top: mouse[1] + 30
-                });
-                $('#ideal-progress').text(Math.round(idealGraphData[indexOfDate].points));
-                $('#actual-progress').text(actualGraphData[indexOfDate].points);
-                svg.selectAll('.data-point:nth-child(' + (indexOfDate + 1) + ')')
-                    .attr('class', 'data-point selected');
-                svg.select('.x.axis .tick:nth-child(' + (indexOfDate + 1) + ') text')
-                    .style('font-weight', 'bold');
+                highlightDataPoints(indexAtX, xNearMouse);
+                showDataPointsLabel(
+                    Math.round(idealGraphData[indexAtX].points),
+                    actualGraphData[indexAtX].points,
+                    mouse
+                );
             };
         };
 
@@ -152,7 +163,7 @@
                 actualGraphData = sprintData.getBurndownData(),
                 overlay = addHoverOverlay();
 
-            overlay.on('mousemove', highlightDataAtX(actualGraphData, idealGraphData));
+            overlay.on('mousemove', highlightAtMouse(actualGraphData, idealGraphData));
             overlay.on('mouseout', resetHoverEffects);
         };
 
