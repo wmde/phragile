@@ -20,13 +20,13 @@ class PhabricatorAPI {
 		);
 	}
 
-	public function createProject($title)
+	public function createProject($title, array $members = [])
 	{
 		$response = $this->client->callMethodSynchronous(
 			'project.create',
 			[
 				'name' => $title,
-				'members' => []
+				'members' => $members
 			]
 		);
 

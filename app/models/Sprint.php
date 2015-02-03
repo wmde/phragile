@@ -92,7 +92,7 @@ class Sprint extends Eloquent {
 		try
 		{
 			$phabricator->connect($user->username, $user->conduit_certificate);
-			$response = $phabricator->createProject($this->title);
+			$response = $phabricator->createProject($this->title, [$user->phid]);
 		} catch (ConduitClientException $e)
 		{
 			$this->phabricatorError = 'Failed to create a Phabricator for the sprint: ' . $e->getMessage();
