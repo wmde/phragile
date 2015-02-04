@@ -15,7 +15,7 @@
 				@foreach($sprint->project->sprints as $s)
 					<li class="{{ $s->id === $sprint->id ? 'active' : '' }}">
 						<a href="{{ route('sprint_path', $s->phabricator_id) }}">
-							@if($currentSprint && $currentSprint->id === $s->id)
+							@if($currentSprint && $currentSprint->id === $s->id && $currentSprint->isActive())
 								Current sprint ({{ $s->title }})
 							@else
 								{{ $s->title }}
