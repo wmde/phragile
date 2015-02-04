@@ -7,6 +7,7 @@ An application to bring the agile needs of WMDE software development department 
 A product backlog with user stories can be found on [the backlog wiki page](https://github.com/wmde/phragile/wiki/Backlog).
 
 ## Installation
+* requires PHP >= 5.4 and MySQL, SQLite or PostgreSQL
 * [Install Phabricator](https://secure.phabricator.com/book/phabricator/article/installation_guide/)
 * [Activate Phabricator OAuth](https://github.com/wmde/phragile/wiki/Activating-Phabricator-OAuth)
 * Clone this repository
