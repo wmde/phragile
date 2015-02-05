@@ -40,6 +40,19 @@
 				 data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">
 				{{ json_encode($burndown->getPointsClosedPerDay()) }}
 			</div>
+
+			<table class="table table-condensed" id="graph-labels">
+				<tbody>
+					<tr class="actual">
+						<td>Actual points</td>
+						<td class="graph-value" id="actual-progress"></td>
+					</tr>
+					<tr class="ideal">
+						<td>Ideal points</td>
+						<td class="graph-value" id="ideal-progress"></td>
+					</tr>
+				</tbody>
+			</table>
 			<div id="burndown"></div>
 		</div>
 

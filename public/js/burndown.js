@@ -62,12 +62,19 @@
                     .x(xOfDay)
                     .y0(y(0))
                     .y1(yOfPoints));
+
+            addDataPoints('actual-data-points', pastSprintDays);
+            addHoverEffects(pastSprintDays);
         };
 
         var addIdealProgressLine = function () {
+            var graphData = sprintData.getIdealGraphData();
+
             svg.append('path')
                 .attr('class', 'graph ideal')
-                .attr('d', line(sprintData.getIdealGraphData()));
+                .attr('d', line(graphData));
+
+            addDataPoints('ideal-data-points', graphData);
         };
 
         var xOfDay = function (d) { return x(d.day); },
@@ -81,11 +88,83 @@
             svg.selectAll('.daily-points')
                 .data(sprintData.getPointsClosedPerDay())
                 .enter().append('line')
-                .attr('class', 'daily-points')
-                .attr('x1', xOfDay)
-                .attr('y1', y(0))
-                .attr('x2', xOfDay)
-                .attr('y2', yOfPoints);
+                    .attr('class', 'daily-points')
+                    .attr('x1', xOfDay)
+                    .attr('y1', y(0))
+                    .attr('x2', xOfDay)
+                    .attr('y2', yOfPoints);
+        };
+
+        var addDataPoints = function (id, graphData) {
+            svg.append('g')
+                .attr('id', id)
+                .selectAll('.data-point')
+                    .data(graphData)
+                    .enter()
+                    .append('circle')
+                        .attr('class', 'data-point')
+                        .attr('r', 4)
+                        .attr('cx', xOfDay)
+                        .attr('cy', yOfPoints);
+        };
+
+        var resetHoverEffects = function () {
+            svg.selectAll('.data-point')
+                .attr('class', 'data-point');
+            svg.selectAll('.x.axis .tick text')
+                .style('font-weight', 'normal');
+            $('#graph-labels').hide();
+        };
+
+        var addHoverOverlay = function () {
+            return svg.append('rect')
+                .attr('id', 'burndown-overlay')
+                .attr('width', dimensions.width)
+                .attr('height', dimensions.height)
+                .on('mouseout', resetHoverEffects);
+        };
+
+        var bisect = d3.bisector(function(d) { return d.day; }).left;
+
+        var highlightDataPoints = function (index) {
+            svg.selectAll('.data-point:nth-child(' + (index + 1) + ')')
+                .attr('class', 'data-point selected');
+            svg.select('.x.axis .tick:nth-child(' + (index + 1) + ') text')
+                .style('font-weight', 'bold');
+        };
+
+        var showDataPointsLabel = function (idealPoints, actualPoints, position) {
+            $('#ideal-progress').text(idealPoints);
+            $('#actual-progress').text(actualPoints);
+            $('#graph-labels').show().css({
+                left: position[0] + 20,
+                top: position[1] + 30
+            });
+        };
+
+        var highlightAtMouse = function (actualGraphData, idealGraphData) {
+            return function () {
+                var mouse = d3.mouse(this),
+                    xNearMouse = x.invert(mouse[0] - (dimensions.width / actualGraphData.length) / 2),
+                    indexAtX = bisect(idealGraphData, xNearMouse);
+
+                resetHoverEffects();
+                highlightDataPoints(indexAtX, xNearMouse);
+                showDataPointsLabel(
+                    Math.round(idealGraphData[indexAtX].points),
+                    actualGraphData[indexAtX].points,
+                    mouse
+                );
+            };
+        };
+
+        var addHoverEffects = function () {
+            var idealGraphData = sprintData.getIdealGraphData(),
+                actualGraphData = sprintData.getBurndownData(),
+                overlay = addHoverOverlay();
+
+            overlay.on('mousemove', highlightAtMouse(actualGraphData, idealGraphData));
+            overlay.on('mouseout', resetHoverEffects);
         };
 
         var setDomain = function () {
@@ -115,9 +194,9 @@
                 setDomain();
 
                 addAxes();
+                addIdealProgressLine();
                 addActualProgressLine();
                 addClosedTasksPerDayBars();
-                addIdealProgressLine();
             }
         };
     })();
