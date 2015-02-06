@@ -137,7 +137,7 @@
 						) !!}
 					</td>
 
-					<?php $priorityValue = $_ENV['MANIPHEST_PRIORITY_MAPPING.' . strtolower($task['priority'])] ?>
+					<?php $priorityValue = Config::get('phabricator.MANIPHEST_PRIORITIES')[strtolower($task['priority'])] ?>
 					<td class="filter-backlog" data-column="priority" data-value="{{ $priorityValue }}">
 						<span class="priority hidden">{{ $priorityValue }}</span>
 						{{ $task['priority'] }}

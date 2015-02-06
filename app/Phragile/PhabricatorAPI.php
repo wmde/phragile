@@ -2,9 +2,13 @@
 namespace Phragile;
 
 class PhabricatorAPI {
+	private $client;
+	private $priorities;
+
 	public function __construct(\ConduitClient $client)
 	{
 		$this->client = $client;
+		$this->priorities = \Config::get('phabricator.MANIPHEST_PRIORITIES', []);
 	}
 
 	public function connect($user, $certificate)
@@ -60,7 +64,7 @@ class PhabricatorAPI {
 			[
 				'title' => $task['title'],
 				'projectPHIDs' => [$projectPHID],
-				'priority' => $_ENV['MANIPHEST_PRIORITY_MAPPING.' . $task['priority']],
+				'priority' => $this->priorities[$task['priority']],
 				'auxiliary' => [
 					$_ENV['MANIPHEST_STORY_POINTS_FIELD'] => $task['points']
 				]
