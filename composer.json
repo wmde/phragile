@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"type": "project",
 	"repositories": [
-		{
+  		{
 			"packagist": false,
 			"type": "package",
 			"package": {
@@ -25,7 +25,8 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"laravel/framework": "4.2.*",
+		"laravel/framework": "5.0.*",
+		"illuminate/html": "~5.0",
 		"laracasts/flash": "~1.0",
 		"guzzlehttp/guzzle": "~4.2",
 		"doctrine/dbal": "~2.4",
@@ -36,20 +37,24 @@
 		"behat/mink": "~1.6",
 		"behat/mink-extension": "~2.0",
 		"behat/mink-goutte-driver": "~1.1",
-		"phpunit/phpunit": "~4.4"
+		"phpunit/phpunit": "~4.4",
+		"laracasts/behat-laravel-extension": "@dev"
 	},
 	"autoload": {
 		"classmap": [
-			"app/commands",
-			"app/controllers",
-			"app/models",
-			"app/database/migrations",
-			"app/database/seeds",
-			"app/tests/TestCase.php"
+			"database",
+			"app/Http/Controllers",
+			"app/Models"
 		],
 		"psr-4": {
+			"App\\": "app/",
 			"Phragile\\": "app/Phragile"
 		}
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/TestCase.php"
+		]
 	},
 	"scripts": {
 		"post-install-cmd": [
@@ -61,11 +66,11 @@
 			"php artisan optimize"
 		],
 		"post-create-project-cmd": [
+			"php -r \"copy('.env.example', '.env');\"",
 			"php artisan key:generate"
 		]
 	},
 	"config": {
 		"preferred-install": "dist"
-	},
-	"minimum-stability": "stable"
+	}
 }

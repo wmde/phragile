@@ -1,7 +1,7 @@
 /bootstrap/compiled.php
 .idea/
 /node_modules
-/app/assets/bower_components
+/resources/assets/bower_components
 /vendor
 composer.phar
 .env.*.php
@@ -10,3 +10,4 @@ composer.phar
 Thumbs.db
 behat_custom.yml
 _ide_helper.php
+.env
