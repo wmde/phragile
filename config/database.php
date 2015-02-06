@@ -1,5 +1,19 @@
 <?php
 
+if (app()->environment('heroku'))
+{
+	$db = parse_url(env('CLEARDB_DATABASE_URL'));
+	$db['db'] = substr($db['path'], 1);
+} else
+{
+	$db = [
+		'host' => env('DB_HOST'),
+		'db' => env('DB_DATABASE'),
+		'user' => env('DB_USERNAME'),
+		'pass' => env('DB_PASSWORD'),
+	];
+}
+
 return [
 
 	/*
@@ -54,10 +68,10 @@ return [
 
 		'mysql' => [
 			'driver'    => 'mysql',
-			'host'      => env('DB_HOST', 'localhost'),
-			'database'  => env('DB_DATABASE', 'forge'),
-			'username'  => env('DB_USERNAME', 'forge'),
-			'password'  => env('DB_PASSWORD', ''),
+			'host'      => $db['host'],
+			'database'  => $db['db'],
+			'username'  => $db['user'],
+			'password'  => $db['pass'],
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
