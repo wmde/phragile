@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>@yield('title', 'Phragile')</title>
-{!! HTML::style(elixir('css/style.css')) !!}
+{!! HTML::style('css/style.css') !!}
 @yield('optional_styles')
 </head>
 <body>

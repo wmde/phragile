@@ -1,7 +1,7 @@
 var elixir = require('laravel-elixir');
 
 elixir(function(mix) {
-    mix.less('style.less').version('css/style.css');
+    mix.less('style.less');
 
     mix.scripts([
         '../assets/bower_components/d3/d3.js',

@@ -11,6 +11,3 @@ Thumbs.db
 behat_custom.yml
 _ide_helper.php
 .env
-public/build
-public/js
-public/css
