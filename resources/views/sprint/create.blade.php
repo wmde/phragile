@@ -26,7 +26,7 @@
 @stop
 
 @section('optional_scripts')
-	{!! HTML::script('js/bootstrap-datepicker.js') !!}
+	{!! HTML::script('js/datepicker.js') !!}
 
 	<script type="text/javascript">
 		var settings = {

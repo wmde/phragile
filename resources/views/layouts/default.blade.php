@@ -15,8 +15,7 @@
     @yield('content')
 </div>
 
-{!! HTML::script('js/jquery.min.js') !!}
-{!! HTML::script('js/bootstrap.min.js') !!}
+{!! HTML::script('js/main.js') !!}
 @yield('optional_scripts')
 
 </body>

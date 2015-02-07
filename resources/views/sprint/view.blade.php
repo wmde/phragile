@@ -153,9 +153,5 @@
 @stop
 
 @section('optional_scripts')
-	{!! HTML::script('js/d3.min.js') !!}
-	{!! HTML::script('js/burndown.js') !!}
-	{!! HTML::script('js/pie_charts.js') !!}
-	{!! HTML::script('js/list.min.js') !!}
-	{!! HTML::script('js/sprint_backlog.js') !!}
+	{!! HTML::script('js/sprint_overview.js') !!}
 @stop
