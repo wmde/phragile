@@ -7,7 +7,7 @@
 
 .navbar {
   border-top: 0;
-  background-color: darken(@burndown-actual, 30%);
+  background-color: darken(@burndown-actual, 27%);
   border-bottom: 3px solid @burndown-actual;
   border-radius: 0;
 
@@ -16,10 +16,12 @@
   }
 }
 
-
 .jumbotron.front {
-  padding-top: 30px;
-  margin-top: -30px;
+  padding-top: 20px;
+  position: relative;
+  padding-bottom: 0;
+  margin-top: -20px;
+  margin-bottom: 10px;
   background: lighten(@burndown-actual, 80%);
 
   .btn.create-project, .dropdown {
