@@ -48,7 +48,7 @@
 	<footer class="container">
 		<hr/>
 		<p>
-			Built by <a href="http://github.com/jakobw">Jakob Warkotsch</a> as a thesis project at <a href="http://fu-berlin.de">Freie Universität Berlin</a> in cooperation with <a href="http://wikimedia.de">Wikimedia Deutschland</a>
+			Built by <a href="http://github.com/jakobw">Jakob Warkotsch</a> as a thesis project at <a href="http://fu-berlin.de">Freie Universität Berlin</a> in cooperation with <a href="http://wikimedia.de">Wikimedia Deutschland</a>.
 		</p>
 	</footer>
 @stop
