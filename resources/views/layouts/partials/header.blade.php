@@ -32,9 +32,10 @@
 			@else
 				{!! link_to(
 					$_ENV['PHABRICATOR_URL'] . 'oauthserver/auth/?' . http_build_query([
-						 'response_type' => 'code',
-						 'client_id' => $_ENV['OAUTH_CLIENT_ID'],
-						 'redirect_uri' => route('login_path'),
+						'response_type' => 'code',
+						'client_id' => $_ENV['OAUTH_CLIENT_ID'],
+						'redirect_uri' => route('login_path'),
+						'scope' => 'whoami',
 					]),
 					'Log in using Phabricator',
 					['class' => 'btn btn-default navbar-btn btn-sm']
