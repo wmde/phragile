@@ -15,7 +15,7 @@
 			</p>
 
 			<p>
-				Log in using your Phabricator account to create sprints for your projects on Phabricator. Phragile will then automatically generate burndown charts, status pie charts and a sortable and filterable sprint backlog for you.
+				Log in using your Phabricator account to create sprints for your projects on Phabricator. Phragile will then automatically generate burndown charts, pie charts and a sortable and filterable sprint backlog for you.
 			</p>
 
 			<p>
