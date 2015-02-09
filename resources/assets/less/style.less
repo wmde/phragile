@@ -1,5 +1,33 @@
 @import "../bower_components/bootstrap/less/bootstrap";
 
+@burndown-actual: #00a8c6;
+@brand-primary: @burndown-actual;
+@burndown-ideal: #aee239;
+@burndown-daily-points: #8fbe00;
+
+.navbar {
+  border-top: 0;
+  background-color: darken(@burndown-actual, 30%);
+  border-bottom: 3px solid @burndown-actual;
+  border-radius: 0;
+
+  .navbar-brand {
+    color: #fff;
+  }
+}
+
+
+.jumbotron.front {
+  padding-top: 30px;
+  margin-top: -30px;
+  background: lighten(@burndown-actual, 80%);
+
+  .btn.create-project, .dropdown {
+    float: left;
+    margin-right: 10px;
+  }
+}
+
 .phragile-dropdown {
   background: #fff;
   border: 1px solid lighten(@gray-light, 20%);
@@ -24,10 +52,6 @@
 
    margin-bottom: 15px;
 }
-
-@burndown-actual: #00a8c6;
-@burndown-ideal: #aee239;
-@burndown-daily-points: #8fbe00;
 
 #burndown {
   .graph {

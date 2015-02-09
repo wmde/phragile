@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-inverse" role="navigation">
 	<div class="container">
 		{!! link_to(URL::to('/'), 'Phragile', ['class' => 'navbar-brand']) !!}
 

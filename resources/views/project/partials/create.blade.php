@@ -1,5 +1,5 @@
-<button class="btn btn-primary" data-toggle="modal" data-target="#create-project-form">
-    Create new project
+<button class="btn btn-default btn-lg create-project" data-toggle="modal" data-target="#create-project-form">
+    Create a New Project
 </button>
 
 <div class="modal fade" id="create-project-form">
