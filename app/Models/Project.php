@@ -19,7 +19,8 @@ class Project extends Eloquent {
 	{
 		return Validator::make(
 			$this->getAttributes(),
-			['title' => 'required|unique:projects']
+			['title' => 'required|unique:projects'],
+			['unique' => 'A project with this title already exists.']
 		);
 	}
 
