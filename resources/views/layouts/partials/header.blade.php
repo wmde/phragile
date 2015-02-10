@@ -1,5 +1,5 @@
 <nav class="navbar navbar-inverse" role="navigation">
-	<div class="container-fluid">
+	<div class="container">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="/">
 				<img src="/images/phragile_logo_white.svg" alt="Phragile logo"/>
