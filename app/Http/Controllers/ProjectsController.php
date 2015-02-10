@@ -26,7 +26,10 @@ class ProjectsController extends Controller {
 
 		if ($validation->fails())
 		{
-			Flash::error(HTML::ul($validation->messages()->all()));
+			foreach ($validation->messages()->all() as $error)
+			{
+				Flash::error($error);
+			}
 		} elseif ($project->save())
 		{
 			Flash::success('Successfully created the new project');

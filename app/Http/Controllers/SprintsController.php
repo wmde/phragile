@@ -50,7 +50,10 @@ class SprintsController extends Controller {
 		$validation = $sprint->validate();
 		if ($validation->fails())
 		{
-			Flash::error(HTML::ul($validation->messages()->all()));
+			foreach ($validation->messages()->all() as $error)
+			{
+				Flash::error($error);
+			}
 			return Redirect::back();
 		}
 
