@@ -4,8 +4,7 @@
 Sprint overviews for your Phabricator projects!
 
 ## About
-A product backlog with user stories can be found on [the backlog wiki page](https://github.com/wmde/phragile/wiki/Backlog).
-Log in using your Phabricator account to create sprints for your projects on Phabricator. Phragile will then automatically generate burndown charts, pie charts and a sortable and filterable sprint backlog for you.
+With Phragile you can log in using your Phabricator account to create sprints for your projects on Phabricator. Phragile will then automatically generate burndown charts, pie charts and a sortable and filterable sprint backlog for you.
 
 Built by [Jakob Warkotsch](https://github.com/jakobw) as a thesis project at [Freie Universität Berlin](http://fu-berlin.de) in cooperation with [Wikimedia Deutschland](http://wikimedia.de).
 
