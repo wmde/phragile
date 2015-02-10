@@ -31,4 +31,4 @@ Feature: Projects
     And the "Foobar" project exists
     When I fill in "title" with "Foobar"
     And I press "Create"
-    Then I should see "The title has already been taken"
+    Then I should see "A project with this title already exists."
