@@ -1,18 +1,28 @@
 @import "../bower_components/bootstrap/less/bootstrap";
 
-@burndown-actual: #00a8c6;
-@brand-primary: darken(@burndown-actual, 5%);
-@burndown-ideal: #aee239;
-@burndown-daily-points: #8fbe00;
+@phragile-saturated-blue: #3f92ff;
+@phragile-dark-blue: #0d54b2;
+@phragile-bright-yellow: #ffb426;
+@phragile-green: #97b223;
+@phragile-light-green: #aacc1e;
+
+@brand-primary: @phragile-dark-blue;
+@burndown-actual: @phragile-saturated-blue;
+@burndown-ideal: @phragile-light-green;
+@burndown-daily-points: @phragile-green;
 
 .navbar {
   border-top: 0;
-  background-color: darken(@burndown-actual, 27%);
-  border-bottom: 3px solid @burndown-actual;
+  background-color: @phragile-saturated-blue;
+  border-bottom: 3px solid @phragile-dark-blue;
   border-radius: 0;
 
   .navbar-brand {
-    color: #fff;
+    padding-top: 13px;
+
+    img {
+      height: 25px;
+    }
   }
 }
 
@@ -20,9 +30,10 @@
   padding-top: 20px;
   position: relative;
   padding-bottom: 0;
+  padding-top: 0;
   margin-top: -20px;
   margin-bottom: 10px;
-  background: lighten(@burndown-actual, 80%);
+  background: #fff;
 
   .btn.create-project, .dropdown {
     float: left;
@@ -172,11 +183,11 @@
   cursor: pointer;
 }
 
-@resolved: @brand-success;
+@resolved: @phragile-light-green;
 @wontfix: lighten(@resolved, 10%);
-@open: @brand-warning;
+@open: @phragile-bright-yellow;
 @doing: lighten(@open, 10%);
-@patch: @brand-info;
+@patch: lighten(@phragile-saturated-blue, 10%);
 
 .status-table, .sprint-backlog {
   .status-label {
