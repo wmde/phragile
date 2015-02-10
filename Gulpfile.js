@@ -5,10 +5,10 @@ elixir(function(mix) {
 
     mix.scripts([
         '../assets/bower_components/d3/d3.js',
-        '../assets/bower_components/list.js/dist/list.js',
-        'sprint_backlog.js',
         'burndown.js',
-        'pie_charts.js'
+        'pie_charts.js',
+        '../assets/bower_components/list.js/dist/list.js',
+        'sprint_backlog.js'
     ], 'public/js/sprint_overview.js');
 
     mix.scripts([
