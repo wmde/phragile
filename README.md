@@ -30,5 +30,6 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 ### Acceptance tests
 1. Copy `behat_custom.yml.example` to `behat_custom.yml` and edit the file according to the instructions
 2. Run `vendor/bin/behat`
+
 ### Unit tests
 Run `phpunit`
