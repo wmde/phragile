@@ -1,4 +1,4 @@
-PHRAGILE
+![Phragile](https://raw.githubusercontent.com/wmde/phragile/master/public/images/phragile.png)
 ========
 
 Sprint overviews for your Phabricator projects!
