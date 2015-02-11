@@ -2,7 +2,7 @@
 
 namespace Phragile;
 
-class AssigneeCollection {
+class AssigneeRepository {
 
 	private $assignees;
 
