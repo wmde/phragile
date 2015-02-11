@@ -36,10 +36,10 @@ class AssigneeRepository {
 
 	/**
 	 * @param string $phid
-	 * @return string
+	 * @return string|null
 	 */
 	public function getName($phid)
 	{
-		return isset($this->assignees[$phid]['userName']) ? $this->assignees[$phid]['userName'] : '-';
+		return isset($this->assignees[$phid]['userName']) ? $this->assignees[$phid]['userName'] : null;
 	}
 }

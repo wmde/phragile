@@ -145,9 +145,9 @@
 					</td>
 					<td class="points">{{ $task['story_points'] }}</td>
 
-					<?php $assignee = $assignees->getName($task['assignee']) ?>
-					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $assignee }}">
-						{{ $assignee }}
+					<?php $assigneeName = $assignees->getName($task['assignee']) ?: '-' ?>
+					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $assigneeName }}">
+						{{ $assigneeName }}
 					</td>
 					<td class="status filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
 						<span class="status-label {{ $task['status'] }}">{{ $task['status'] }}</span>
