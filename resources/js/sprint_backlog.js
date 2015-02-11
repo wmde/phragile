@@ -1,6 +1,6 @@
 (function () {
     var backlog = new List('backlog', {
-            valueNames: ['title', 'points', 'status', 'priority']
+            valueNames: ['title', 'points', 'status', 'priority', 'assignee']
         }),
         $resetBtn = $('#reset-filter');
 

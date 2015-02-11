@@ -1,6 +1,7 @@
 <?php
 
 use Phragile\TaskList;
+use Phragile\AssigneeCollection;
 use Phragile\BurndownChart;
 
 class SprintsController extends Controller {
@@ -20,10 +21,12 @@ class SprintsController extends Controller {
 	{
 		$phabricator = App::make('phabricator');
 		$currentSprint = $sprint->project->currentSprint();
-		$taskList = new TaskList($phabricator->queryTasksByProject($sprint->phid));
+		$tasks = $phabricator->queryTasksByProject($sprint->phid);
+		$taskList = new TaskList($tasks);
+		$assignees = new AssigneeCollection($phabricator, $tasks);
 		$burndown = new BurndownChart($sprint, $taskList, $phabricator->getTaskTransactions($taskList->getClosedTaskIDs()));
 
-		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown'));
+		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown', 'assignees'));
 	}
 
 	public function create(Project $project)

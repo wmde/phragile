@@ -120,6 +120,7 @@
 				<th class="sort" data-sort="priority">Priority</th>
 				<th class="sort" data-sort="points">Story Points</th>
 				<th class="sort" data-sort="status">Status</th>
+				<th class="sort" data-sort="assignee">Assignee</th>
 			</tr>
 		</thead>
 
@@ -145,6 +146,11 @@
 					<td class="points">{{ $task['story_points'] }}</td>
 					<td class="status filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
 						<span class="status-label {{ $task['status'] }}">{{ $task['status'] }}</span>
+					</td>
+
+					<?php $assignee = $assignees->getName($task['assignee']) ?>
+					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $assignee }}">
+						{{ $assignee }}
 					</td>
 				</tr>
 			@endforeach

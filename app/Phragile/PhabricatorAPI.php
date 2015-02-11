@@ -92,4 +92,12 @@ class PhabricatorAPI {
 			]
 		);
 	}
+
+	public function getUserData(array $users)
+	{
+		return $this->client->callMethodSynchronous(
+			'user.query',
+			$users
+		);
+	}
 }
