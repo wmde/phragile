@@ -16,10 +16,10 @@ class AssigneeCollection {
 
 	private function extractUniqueAssignees(array $tasks)
 	{
-		return array_map(function($task)
+		return array_unique(array_map(function($task)
 		{
 			return $task['ownerPHID'];
-		}, $tasks);
+		}, $tasks));
 	}
 
 	private function processAssignees(array $assigneeData)
