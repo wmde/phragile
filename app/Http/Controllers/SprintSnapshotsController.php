@@ -1,6 +1,7 @@
 <?php
 
 use Phragile\TaskList;
+use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
 
 class SprintSnapshotsController extends Controller {
@@ -11,9 +12,10 @@ class SprintSnapshotsController extends Controller {
 		$currentSprint = $sprint->project->currentSprint();
 		$sprintData = json_decode($snapshot->data, true);
 		$taskList = new TaskList($sprintData['tasks']);
+		$assignees = new AssigneeRepository(App::make('phabricator'), $sprintData['tasks']);
 		$burndown = new BurndownChart($sprint, $taskList, $sprintData['transactions']);
 
-		return View::make('sprint.view', compact('snapshot', 'sprint', 'currentSprint', 'taskList', 'burndown'));
+		return View::make('sprint.view', compact('snapshot', 'sprint', 'currentSprint', 'taskList', 'burndown', 'assignees'));
 	}
 
 	public function store(Sprint $sprint)

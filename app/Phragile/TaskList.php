@@ -21,6 +21,7 @@ class TaskList {
 				'story_points' => $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
 				'closed' => $task['isClosed'],
 				'id' => $task['id'],
+				'assignee' => $task['ownerPHID'],
 			];
 		}, array_values($taskData));
 	}
