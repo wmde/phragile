@@ -12,7 +12,9 @@
 
             svg,
 
-            x, y;
+            x, y,
+
+            MAX_TICKS = 35;
 
         var setSVG = function (svgElementID) {
             svg = d3.select(svgElementID)
@@ -26,7 +28,9 @@
         var addAxes = function () {
             var xAxis = d3.svg.axis().scale(x)
                 .orient('bottom')
-                .ticks(sprintData.getBurndownData().length)
+                .ticks(
+                    Math.min(sprintData.getBurndownData().length, MAX_TICKS)
+                )
                 .tickFormat(d3.time.format('%b %e'));
 
             var yAxis = d3.svg.axis().scale(y)
