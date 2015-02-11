@@ -4,8 +4,15 @@ namespace Phragile;
 
 class AssigneeRepository {
 
+	/**
+	 * @var array[]
+	 */
 	private $assignees;
 
+	/**
+	 * @param PhabricatorAPI $phabricator
+	 * @param array[] $tasks
+	 */
 	public function __construct(PhabricatorAPI $phabricator, array $tasks)
 	{
 		$assigneePHIDs = $this->extractUniqueAssignees($tasks);
