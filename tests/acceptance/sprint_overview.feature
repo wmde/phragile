@@ -17,6 +17,13 @@ Feature: Sprint Overview
     And I should see "13"
     And I should see "8"
 
+  Scenario: Assignees in Sprint Backlog
+    Given a sprint "Sprint 42" exists for the "Wikidata" project
+    And "Sprint 42" contains task "113"
+    When I am assigned to task "113"
+    And I go to the "Sprint 42" sprint overview
+    Then I should see my name in the task "113" row of the sprint backlog
+
   Scenario: Sprint duration
     Given a sprint "Sprint 42" exists for the "Wikidata" project
     And the sprint "Sprint 42" starts on "2014-11-25" and ends on "2014-12-08"

@@ -126,7 +126,7 @@
 
 		<tbody class="list">
 			@foreach($taskList->getTasks() as $task)
-				<tr>
+				<tr id="t{{ $task['id'] }}">
 					<td>
 						{!! link_to(
 							$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
