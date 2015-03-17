@@ -1,4 +1,11 @@
 (function () {
+    var dayBefore = function (date) {
+        var previous = new Date(date);
+        previous.setDate(date.getDate() - 1);
+
+        return previous;
+    };
+
     var dayAfter = function (date) {
         var next = new Date(date);
         next.setDate(date.getDate() + 1);
@@ -52,7 +59,7 @@
 
         var addActualProgressLine = function () {
             var pastSprintDays = sprintData.getBurndownData().filter(function (data) {
-                return data.day <= dayAfter(new Date());
+                return data.day <= new Date();
             });
 
             svg.append('path')
@@ -227,17 +234,17 @@
         var calculateActualProgressData = function (closedPerDay) {
             var remaining = totalPoints - pointsClosedBeforeSprint;
 
-            return closedPerDay.map(function (day) {
+            return [{ // adding another "day" so that the progress of the first day is not hidden
+                day: dayBefore(closedPerDay[0].day),
+                points: remaining
+            }].concat(closedPerDay.map(function (day) {
                 remaining -= day.points;
 
                 return {
                     day: day.day,
-                    points: remaining + day.points // adding the points again so the progress will not show for the previous day
+                    points: remaining
                 };
-            }).concat([{ // adding another "day" so that the progress of the last day is not hidden
-                day: dayAfter(closedPerDay[closedPerDay.length - 1].day),
-                points: remaining
-            }]);
+            }));
         };
 
         var isWeekend = function (date) {
@@ -261,7 +268,7 @@
 
             actualProgress.forEach(function (day) {
                 idealData.push({ day: day.day, points: remaining });
-                if (!isWeekend(day.day)) remaining -= averagePointsPerDay;
+                if (!isWeekend(dayAfter(day.day))) remaining -= averagePointsPerDay;
             });
 
             return idealData;
