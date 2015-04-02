@@ -45,6 +45,7 @@ class ProjectsController extends Controller {
 	{
 		$project->update(Input::all());
 
+		Flash::success('The project settings have been updated');
 		return Redirect::back();
 	}
 }
