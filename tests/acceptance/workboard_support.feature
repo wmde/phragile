@@ -6,8 +6,8 @@ Feature: Workboard Support
   Scenario: Edit project settings
     Given I am logged in
     And I am on the "Wikidata" project page
-    When I check "Workboard mode"
-    And I fill in "Closed Statuses" with "Done, Deployed"
+    When I check "workboard_mode"
+    And I fill in "closed_statuses" with "Done, Deployed"
     And I press "Save"
-    Then the "Workboard mode" checkbox should be checked
-    And I should see "Done, Deployed" in the "Closed Statuses" element
+    Then the "workboard_mode" checkbox should be checked
+    And the "closed_statuses" field should contain "Done, Deployed"
