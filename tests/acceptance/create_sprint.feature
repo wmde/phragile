@@ -5,7 +5,7 @@ Feature: Create Sprint
 
   Scenario: Create new sprint
     Given I am logged in
-    And I am on "/projects/wikidata"
+    And I am on the "Wikidata" project page
     And the sprint "Wikidata Sprint 42" does not exist
     When I click "New sprint"
     And I fill in "title" with "Wikidata Sprint 42"
@@ -18,7 +18,7 @@ Feature: Create Sprint
 
   Scenario: Sprint with invalid data
     Given I am logged in
-    And I am on "/projects/wikidata"
+    And I am on the "Wikidata" project page
     When I click "New sprint"
     And I fill in "sprint_end" with "01.01.2014"
     And I press "Create new sprint"
@@ -28,7 +28,7 @@ Feature: Create Sprint
 
   Scenario: Sprint with start date after end date
     Given I am logged in
-    And I am on "/projects/wikidata"
+    And I am on the "Wikidata" project page
     When I click "New sprint"
     And I fill in "sprint_end" with "2014-12-01"
     And I fill in "sprint_start" with "2014-12-01"

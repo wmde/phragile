@@ -342,4 +342,13 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		$this->assertElementContains("#t$task", $this->params['phabricator_username']);
 	}
+
+	/**
+	 * @Given I am on the :project project page
+	 */
+	public function iAmOnTheProjectPage($project)
+	{
+		$this->theProjectExists($project);
+		$this->visit("/projects/" . Project::where('title', $project)->first()->slug);
+	}
 }

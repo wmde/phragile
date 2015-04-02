@@ -5,7 +5,7 @@ Feature: Projects
 
   Scenario: Project page
     Given the "Wikidata" project exists
-    When I am on "/projects/wikidata"
+    When I am on the "Wikidata" project page
     Then I should see "Wikidata"
 
   Scenario: Project List
