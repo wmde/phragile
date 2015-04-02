@@ -40,4 +40,11 @@ class ProjectsController extends Controller {
 
 		return Redirect::back();
 	}
+
+	public function update(Project $project)
+	{
+		$project->update(Input::all());
+
+		return Redirect::back();
+	}
 }

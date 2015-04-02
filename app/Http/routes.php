@@ -95,3 +95,9 @@ Route::get('snapshots/{snapshot}', [
 	'as' => 'snapshot_path',
 	'uses' => 'SprintSnapshotsController@show'
 ]);
+
+Route::put('projects/{project}', [
+	'as' => 'project_settings_path',
+	'middleware' => 'auth',
+	'uses' => 'ProjectsController@update'
+]);
