@@ -2,7 +2,7 @@
 
 class Project extends Eloquent {
 
-	protected $fillable = ['title', 'slug'];
+	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode'];
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Collection
