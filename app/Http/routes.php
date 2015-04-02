@@ -99,5 +99,5 @@ Route::get('snapshots/{snapshot}', [
 Route::put('projects/{project}', [
 	'as' => 'project_settings_path',
 	'middleware' => 'auth',
-	'uses' => 'ProjectsController@update'
+	'uses' => 'ProjectsController@updateSettings'
 ]);

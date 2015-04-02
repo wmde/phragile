@@ -41,9 +41,9 @@ class ProjectsController extends Controller {
 		return Redirect::back();
 	}
 
-	public function update(Project $project)
+	public function updateSettings(Project $project)
 	{
-		$project->update(Input::all());
+		$project->update(Input::only('closed_statuses', 'workboard_mode'));
 
 		Flash::success('The project settings have been updated');
 		return Redirect::back();
