@@ -3,6 +3,8 @@
 @section('title', 'Phragile - ' . (isset($snapshot) ? "Snapshot of {$sprint->title}" : $sprint->title))
 
 @section('content')
+    @include('project.partials.settings_form')
+
 	<h1 class="sprint-overview-title">
 		{{ $sprint->project->title }}
 		{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Sprint Overview' }}
