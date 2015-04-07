@@ -3,6 +3,7 @@
 use Phragile\TaskList;
 use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
+use Phragile\StatusByStatusFieldDispatcher;
 
 class SprintSnapshotsController extends Controller {
 
@@ -11,7 +12,7 @@ class SprintSnapshotsController extends Controller {
 		$sprint = $snapshot->sprint;
 		$currentSprint = $sprint->project->currentSprint();
 		$sprintData = json_decode($snapshot->data, true);
-		$taskList = new TaskList($sprintData['tasks']);
+		$taskList = new TaskList($sprintData['tasks'], new StatusByStatusFieldDispatcher());
 		$assignees = new AssigneeRepository(App::make('phabricator'), $sprintData['tasks']);
 		$burndown = new BurndownChart($sprint, $taskList, $sprintData['transactions']);
 

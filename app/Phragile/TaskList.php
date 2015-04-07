@@ -4,9 +4,11 @@ namespace Phragile;
 
 class TaskList {
 	private $tasks = null;
+	private $statusDispatcher = null;
 
-	public function __construct(array $phabricatorTaskData)
+	public function __construct(array $phabricatorTaskData, StatusDispatcher $statusDispatcher)
 	{
+		$this->statusDispatcher = $statusDispatcher;
 		$this->tasks = $this->processTasks($phabricatorTaskData);
 	}
 
@@ -17,7 +19,7 @@ class TaskList {
 			return [
 				'title' => $task['title'],
 				'priority' => $task['priority'],
-				'status' => $this->taskStatus($task),
+				'status' => $this->statusDispatcher->getStatus($task),
 				'story_points' => $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
 				'closed' => $task['isClosed'],
 				'id' => $task['id'],
@@ -32,23 +34,6 @@ class TaskList {
 	public function getTasks()
 	{
 		return $this->tasks;
-	}
-
-	private function isTaskInReview(array $task)
-	{
-		return !$task['isClosed'] && in_array($_ENV['REVIEW_TAG_PHID'], $task['projectPHIDs']);
-	}
-
-	private function isTaskBeingDone(array $task)
-	{
-		return !$task['isClosed'] && !is_null($task['ownerPHID']);
-	}
-
-	private function taskStatus(array $task)
-	{
-		if ($this->isTaskInReview($task)) return 'patch to review';
-		elseif ($this->isTaskBeingDone($task)) return 'doing';
-		else return $task['status'];
 	}
 
 	/**
