@@ -2,7 +2,7 @@
 
 use Phragile\PhabricatorAPI;
 use Phragile\TaskList;
-use Phragile\StatusByStatusFieldDispatcher;
+use Phragile\StatusDispatcherFactory;
 
 class Sprint extends Eloquent {
 
@@ -124,7 +124,12 @@ class Sprint extends Eloquent {
 
 		return [
 			'tasks' => $tasks,
-			'transactions' => $phabricator->getTaskTransactions((new TaskList($tasks, new StatusByStatusFieldDispatcher()))->getClosedTaskIDs())
+			'transactions' => $phabricator->getTaskTransactions(
+				(new TaskList(
+					$tasks,
+					(new StatusByStatusFieldDispatcher($this->project->workboard_mode))->createInstance()
+				))->getClosedTaskIDs()
+			)
 		];
 	}
 
