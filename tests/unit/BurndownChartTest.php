@@ -1,6 +1,7 @@
 <?php
 
 use Phragile\BurndownChart;
+use Phragile\ClosedTimeByStatusFieldDispatcher;
 
 class BurndownChartTest extends TestCase {
 
@@ -18,7 +19,8 @@ class BurndownChartTest extends TestCase {
 		return new BurndownChart(
 			new Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
 			$taskListMock,
-			$transactions
+			$transactions,
+			new ClosedTimeByStatusFieldDispatcher()
 		);
 	}
 
