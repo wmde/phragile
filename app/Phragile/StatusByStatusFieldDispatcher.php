@@ -1,7 +1,6 @@
 <?php
 namespace Phragile;
 
-
 class StatusByStatusFieldDispatcher implements StatusDispatcher {
 	private function isTaskInReview(array $task)
 	{
