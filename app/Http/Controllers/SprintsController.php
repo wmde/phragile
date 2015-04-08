@@ -4,6 +4,7 @@ use Phragile\TaskList;
 use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
 use Phragile\StatusDispatcherFactory;
+use Phragile\ClosedTimeDispatcherFactory;
 
 class SprintsController extends Controller {
 
@@ -25,7 +26,12 @@ class SprintsController extends Controller {
 		$tasks = $phabricator->queryTasksByProject($sprint->phid);
 		$taskList = new TaskList($tasks, (new StatusDispatcherFactory($sprint->project->workboard_mode))->createInstance());
 		$assignees = new AssigneeRepository($phabricator, $tasks);
-		$burndown = new BurndownChart($sprint, $taskList, $phabricator->getTaskTransactions($taskList->getClosedTaskIDs()));
+		$burndown = new BurndownChart(
+			$sprint,
+			$taskList,
+			$phabricator->getTaskTransactions($taskList->getClosedTaskIDs()),
+			(new ClosedTimeDispatcherFactory($sprint->project->workboard_mode))->createInstance()
+		);
 
 		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown', 'assignees'));
 	}

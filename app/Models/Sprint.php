@@ -127,7 +127,7 @@ class Sprint extends Eloquent {
 			'transactions' => $phabricator->getTaskTransactions(
 				(new TaskList(
 					$tasks,
-					(new StatusByStatusFieldDispatcher($this->project->workboard_mode))->createInstance()
+					(new StatusDispatcherFactory($this->project->workboard_mode))->createInstance()
 				))->getClosedTaskIDs()
 			)
 		];
