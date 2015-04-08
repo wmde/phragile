@@ -14,7 +14,8 @@ class StatusDispatcherFactory {
 	 */
 	public function createInstance()
 	{
-		if ($this->workboardMode) return new StatusByWorkboardDispatcher();
-		else return new StatusByStatusFieldDispatcher();
+		return $this->workboardMode
+			? new StatusByWorkboardDispatcher()
+			: new StatusByStatusFieldDispatcher();
 	}
 }
