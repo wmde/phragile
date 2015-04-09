@@ -4,6 +4,9 @@ namespace Phragile;
 class StatusDispatcherFactory {
 	private $workboardMode = false;
 
+	/**
+	 * @param bool $workboardMode
+	 */
 	public function __construct($workboardMode)
 	{
 		$this->workboardMode = $workboardMode;
