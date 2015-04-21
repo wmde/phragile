@@ -1,13 +1,5 @@
 <?php
 
-use Phragile\TaskList;
-use Phragile\AssigneeRepository;
-use Phragile\BurndownChart;
-use Phragile\StatusByStatusFieldDispatcher;
-use Phragile\StatusByWorkboardDispatcher;
-use Phragile\ClosedTimeDispatcherFactory;
-use Phragile\ProjectColumnRepository;
-
 class SprintsController extends Controller {
 
 	public function show(Sprint $sprint)
@@ -23,28 +15,10 @@ class SprintsController extends Controller {
 
 	public function showWithLiveData(Sprint $sprint)
 	{
-		$phabricator = App::make('phabricator');
-		$currentSprint = $sprint->project->currentSprint();
-		$tasks = $phabricator->queryTasksByProject($sprint->phid);
-		$transactions = $phabricator->getTaskTransactions(array_map(function($task)
-		{
-			return $task['id'];
-		}, $tasks));
-
-		$columns = new ProjectColumnRepository($transactions, $phabricator);
-		$taskList = new TaskList(
-			$tasks,
-			$sprint->project->workboard_mode ? new StatusByWorkboardDispatcher($transactions, $columns) : new StatusByStatusFieldDispatcher()
+		return View::make(
+			'sprint.view',
+			App::make('phragile')->newSprintLiveDataActionHandler()->getViewData($sprint)
 		);
-		$assignees = new AssigneeRepository($phabricator, $tasks);
-		$burndown = new BurndownChart(
-			$sprint,
-			$taskList,
-			$transactions,
-			(new ClosedTimeDispatcherFactory($sprint->project->workboard_mode))->createInstance()
-		);
-
-		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown', 'assignees'));
 	}
 
 	public function create(Project $project)
