@@ -19,7 +19,7 @@ class BurndownChart {
 	{
 		$this->sprint = $sprint;
 		$this->tasks = $tasks;
-		$this->transactions = $transactions;
+		$this->transactions = $this->filterOutOpenTaskTransactions($transactions);
 		$this->closedTimeDispatcher = $closedTimeDispatcher;
 	}
 
@@ -94,5 +94,19 @@ class BurndownChart {
 		}
 
 		return $this->pointsClosedPerDay;
+	}
+
+	private function filterOutOpenTaskTransactions(array $transactions)
+	{
+		$closedTaskTransactions = [];
+		foreach ($transactions as $taskID => $taskTransactions)
+		{
+			if ($this->tasks->findTaskByID($taskID)['closed'])
+			{
+				$closedTaskTransactions[$taskID] = $taskTransactions;
+			}
+		}
+
+		return $closedTaskTransactions;
 	}
 }
