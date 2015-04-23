@@ -4,6 +4,7 @@
 Sprint overviews for your Phabricator projects!
 
 [![Build Status](https://travis-ci.org/wmde/phragile.svg)](https://travis-ci.org/wmde/phragile)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/wmde/phragile/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/wmde/phragile/?branch=master)
 
 ## About
 With Phragile you can log in using your Phabricator account to create sprints for your projects on Phabricator. Phragile will then automatically generate burndown charts, pie charts and a sortable and filterable sprint backlog for you.
