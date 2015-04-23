@@ -2,6 +2,9 @@
 namespace Phragile;
 
 class ProjectColumnRepository {
+	/**
+	 * @var maps workboard column PHIDs to a map of column data
+	 */
 	private $projectColumns;
 	private $phabricator;
 
@@ -14,6 +17,14 @@ class ProjectColumnRepository {
 	public function getColumnName($phid)
 	{
 		return $phid ? $this->projectColumns[$phid]['name'] : null;
+	}
+
+	public function getColumnPHID($name)
+	{
+		foreach ($this->projectColumns as $phid => $column)
+		{
+			if ($column['name'] === $name) return $phid;
+		}
 	}
 
 	private function fetchColumnData(array $transactions)

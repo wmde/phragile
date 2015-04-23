@@ -4,6 +4,8 @@ namespace Phragile\ActionHandler;
 
 use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
+use Phragile\ClosedTimeByStatusFieldDispatcher;
+use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\ClosedTimeDispatcherFactory;
 use Phragile\PhabricatorAPI;
 use Phragile\ProjectColumnRepository;
@@ -30,18 +32,26 @@ class SprintLiveDataActionHandler {
 		}, $tasks));
 
 		$columns = new ProjectColumnRepository($transactions, $this->phabricatorAPI);
+		$closedColumns = $sprint->project->getClosedColumns();
 		$taskList = new TaskList(
 			$tasks,
 			$sprint->project->workboard_mode
-				? new StatusByWorkboardDispatcher($transactions, $columns, $sprint->project->getClosedColumns())
+				? new StatusByWorkboardDispatcher($transactions, $columns, $closedColumns)
 				: new StatusByStatusFieldDispatcher()
 		);
 		$assignees = new AssigneeRepository($this->phabricatorAPI, $tasks);
+		$closedColumnPHIDs = array_map(function($columnName) use($columns)
+		{
+			return $columns->getColumnPHID($columnName);
+		}, $closedColumns);
+
 		$burndown = new BurndownChart(
 			$sprint,
 			$taskList,
 			$transactions,
-			(new ClosedTimeDispatcherFactory($sprint->project->workboard_mode))->createInstance()
+			$sprint->project->workboard_mode
+				? new ClosedTimeByWorkboardDispatcher($closedColumnPHIDs)
+				: new ClosedTimeByStatusFieldDispatcher()
 		);
 
 		return compact('sprint', 'currentSprint', 'taskList', 'burndown', 'assignees');

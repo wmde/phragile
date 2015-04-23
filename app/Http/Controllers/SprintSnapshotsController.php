@@ -5,7 +5,8 @@ use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\StatusByWorkboardDispatcher;
-use Phragile\ClosedTimeDispatcherFactory;
+use Phragile\ClosedTimeByStatusFieldDispatcher;
+use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\ProjectColumnRepository;
 
 class SprintSnapshotsController extends Controller {
@@ -16,18 +17,25 @@ class SprintSnapshotsController extends Controller {
 		$currentSprint = $sprint->project->currentSprint();
 		$sprintData = json_decode($snapshot->data, true);
 		$columns = new ProjectColumnRepository($sprintData['transactions'], App::make('phabricator'));
+		$closedColumnNames = $sprint->project->getClosedColumns();
 		$taskList = new TaskList(
 			$sprintData['tasks'],
 			$sprint->project->workboard_mode
-				? new StatusByWorkboardDispatcher($sprintData['transactions'], $columns, $sprint->project->getClosedColumns())
+				? new StatusByWorkboardDispatcher($sprintData['transactions'], $columns, $closedColumnNames)
 				: new StatusByStatusFieldDispatcher()
 		);
 		$assignees = new AssigneeRepository(App::make('phabricator'), $sprintData['tasks']);
+		$closedColumnPHIDs = array_map(function($columnName) use($columns)
+		{
+			return $columns->getColumnPHID($columnName);
+		}, $closedColumnNames);
 		$burndown = new BurndownChart(
 			$sprint,
 			$taskList,
 			$sprintData['transactions'],
-			(new ClosedTimeDispatcherFactory($sprint->project->workboard_mode))->createInstance()
+			$sprint->project->workboard_mode
+				? new ClosedTimeByWorkboardDispatcher($closedColumnPHIDs)
+				: new ClosedTimeByStatusFieldDispatcher()
 		);
 
 		return View::make('sprint.view', compact('snapshot', 'sprint', 'currentSprint', 'taskList', 'burndown', 'assignees'));
