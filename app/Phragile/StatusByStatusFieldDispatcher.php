@@ -18,4 +18,9 @@ class StatusByStatusFieldDispatcher implements StatusDispatcher {
 		elseif ($this->isTaskBeingDone($task)) return 'doing';
 		else return $task['status'];
 	}
+
+	public function isClosed(array $task)
+	{
+		return $task['isClosed'];
+	}
 }

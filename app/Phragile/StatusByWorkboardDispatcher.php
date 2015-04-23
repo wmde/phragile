@@ -10,11 +10,17 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	 */
 	private $taskColumnPHIDs = [];
 
-	public function __construct(array $transactions, ProjectColumnRepository $columns)
+	/**
+	 * @var array - names of columns indicating that a task is closed
+	 */
+	private $closedColumnNames = [];
+
+	public function __construct(array $transactions, ProjectColumnRepository $columns, array $closedColumnNames)
 	{
 		$this->transactions = $transactions;
 		$this->taskColumnPHIDs = $this->extractColumnIDs($transactions);
 		$this->columns = $columns;
+		$this->closedColumnNames = $closedColumnNames;
 	}
 
 	public function getStatus(array $task)
@@ -35,5 +41,13 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 				? $transaction['newValue']['columnPHIDs'][0]
 				: $column;
 		});
+	}
+
+	public function isClosed(array $task)
+	{
+		return in_array(
+			$this->columns->getColumnName($this->taskColumnPHIDs[$task['id']]),
+			$this->closedColumnNames
+		);
 	}
 }

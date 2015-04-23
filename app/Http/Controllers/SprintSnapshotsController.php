@@ -18,7 +18,9 @@ class SprintSnapshotsController extends Controller {
 		$columns = new ProjectColumnRepository($sprintData['transactions'], App::make('phabricator'));
 		$taskList = new TaskList(
 			$sprintData['tasks'],
-			$sprint->project->workboard_mode ? new StatusByWorkboardDispatcher($sprintData['transactions'], $columns) : new StatusByStatusFieldDispatcher()
+			$sprint->project->workboard_mode
+				? new StatusByWorkboardDispatcher($sprintData['transactions'], $columns, $sprint->project->getClosedColumns())
+				: new StatusByStatusFieldDispatcher()
 		);
 		$assignees = new AssigneeRepository(App::make('phabricator'), $sprintData['tasks']);
 		$burndown = new BurndownChart(

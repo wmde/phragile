@@ -21,7 +21,7 @@ class TaskList {
 				'priority' => $task['priority'],
 				'status' => $this->statusDispatcher->getStatus($task),
 				'story_points' => $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
-				'closed' => $task['isClosed'],
+				'closed' => $this->statusDispatcher->isClosed($task),
 				'id' => $task['id'],
 				'assignee' => $task['ownerPHID'],
 			];

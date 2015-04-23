@@ -32,7 +32,9 @@ class SprintLiveDataActionHandler {
 		$columns = new ProjectColumnRepository($transactions, $this->phabricatorAPI);
 		$taskList = new TaskList(
 			$tasks,
-			$sprint->project->workboard_mode ? new StatusByWorkboardDispatcher($transactions, $columns) : new StatusByStatusFieldDispatcher()
+			$sprint->project->workboard_mode
+				? new StatusByWorkboardDispatcher($transactions, $columns, $sprint->project->getClosedColumns())
+				: new StatusByStatusFieldDispatcher()
 		);
 		$assignees = new AssigneeRepository($this->phabricatorAPI, $tasks);
 		$burndown = new BurndownChart(
