@@ -38,7 +38,9 @@
 		"behat/mink-extension": "~2.0",
 		"behat/mink-goutte-driver": "~1.1",
 		"phpunit/phpunit": "~4.4",
-		"laracasts/behat-laravel-extension": "@dev"
+		"laracasts/behat-laravel-extension": "@dev",
+		"squizlabs/php_codesniffer": "~2.1",
+		"phpmd/phpmd": "~2.1"
 	},
 	"autoload": {
 		"classmap": [
@@ -70,7 +72,14 @@
 			"php artisan key:generate"
 		],
 		"ci": [
+			"composer validate --no-interaction",
 			"vendor/bin/phpunit"
+		],
+		"phpcs": [
+			"vendor/bin/phpcs app/* tests/* --standard=phpcs.xml --extensions=php -sp"
+		],
+		"phpmd": [
+			"vendor/bin/phpmd app/ text phpmd.xml"
 		]
 	},
 	"config": {
