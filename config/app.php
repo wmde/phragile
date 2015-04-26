@@ -148,6 +148,7 @@ return [
 
 		'Laracasts\Flash\FlashServiceProvider',
 		'Phragile\Providers\PhabricatorAPIServiceProvider',
+		'Phragile\Providers\PhragileProvider',
 	],
 
 	/*

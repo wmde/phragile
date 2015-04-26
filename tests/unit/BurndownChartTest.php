@@ -134,4 +134,23 @@ class BurndownChartTest extends TestCase {
 		$this->assertSame(0, $closed['2014-12-08']);
 		$this->assertSame(8, $closed['2014-12-09']);
 	}
+
+	public function testOpenTaskTransactionsAreIgnored()
+	{
+		$burndown = $this->mockWithTransactions(
+			['500' => [
+				'id' => 500,
+				'closed' => false,
+				'story_points' => 5,
+			]],
+			['500' => [[ // this transaction's task is not closed and should be ignored
+				'transactionType' => 'status',
+				'oldValue' => 'open',
+				'newValue' => 'resolved',
+				'dateCreated' => '1415664000', // Nov 11
+			]]]
+		);
+
+		$this->assertNull($burndown->getPointsClosedBeforeSprint());
+	}
 }

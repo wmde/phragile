@@ -29,6 +29,11 @@ class Project extends Eloquent {
 		return $this->newestPastSprint() ?: $this->closestFutureSprint();
 	}
 
+	public function getClosedColumns()
+	{
+		return preg_split('/\s*,\s*/', $this->closed_statuses);
+	}
+
 	private function newestPastSprint()
 	{
 		return Sprint::where('sprint_start', '<=', date('Y-m-d'))

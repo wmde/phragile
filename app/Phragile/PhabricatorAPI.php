@@ -100,4 +100,12 @@ class PhabricatorAPI {
 			$users
 		);
 	}
+
+	public function queryPHIDs(array $phids)
+	{
+		return $this->client->callMethodSynchronous(
+			'phid.query',
+			['phids' => $phids]
+		);
+	}
 }

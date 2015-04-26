@@ -1,28 +1,27 @@
 <?php
 
-use Phragile\TaskList;
-use Phragile\AssigneeRepository;
-use Phragile\BurndownChart;
-use Phragile\StatusDispatcherFactory;
-use Phragile\ClosedTimeDispatcherFactory;
+use Phragile\Factory\SprintDataFactory;
 
 class SprintSnapshotsController extends Controller {
 
 	public function show(SprintSnapshot $snapshot)
 	{
-		$sprint = $snapshot->sprint;
-		$currentSprint = $sprint->project->currentSprint();
 		$sprintData = json_decode($snapshot->data, true);
-		$taskList = new TaskList($sprintData['tasks'], (new StatusDispatcherFactory($sprint->project->workboard_mode))->createInstance());
-		$assignees = new AssigneeRepository(App::make('phabricator'), $sprintData['tasks']);
-		$burndown = new BurndownChart(
-			$sprint,
-			$taskList,
+		$factory = new SprintDataFactory(
+			$snapshot->sprint,
+			$sprintData['tasks'],
 			$sprintData['transactions'],
-			(new ClosedTimeDispatcherFactory($sprint->project->workboard_mode))->createInstance()
+			App::make('phabricator')
 		);
 
-		return View::make('sprint.view', compact('snapshot', 'sprint', 'currentSprint', 'taskList', 'burndown', 'assignees'));
+		return View::make('sprint.view', [
+			'snapshot' => $snapshot,
+			'sprint' => $snapshot->sprint,
+			'currentSprint' => $factory->getCurrentSprint(),
+			'taskList' => $factory->getTaskList(),
+			'burndown' => $factory->getBurndownChart(),
+			'assignees' => $factory->getAssignees()
+		]);
 	}
 
 	public function store(Sprint $sprint)

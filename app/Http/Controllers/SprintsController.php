@@ -1,11 +1,5 @@
 <?php
 
-use Phragile\TaskList;
-use Phragile\AssigneeRepository;
-use Phragile\BurndownChart;
-use Phragile\StatusDispatcherFactory;
-use Phragile\ClosedTimeDispatcherFactory;
-
 class SprintsController extends Controller {
 
 	public function show(Sprint $sprint)
@@ -21,19 +15,10 @@ class SprintsController extends Controller {
 
 	public function showWithLiveData(Sprint $sprint)
 	{
-		$phabricator = App::make('phabricator');
-		$currentSprint = $sprint->project->currentSprint();
-		$tasks = $phabricator->queryTasksByProject($sprint->phid);
-		$taskList = new TaskList($tasks, (new StatusDispatcherFactory($sprint->project->workboard_mode))->createInstance());
-		$assignees = new AssigneeRepository($phabricator, $tasks);
-		$burndown = new BurndownChart(
-			$sprint,
-			$taskList,
-			$phabricator->getTaskTransactions($taskList->getClosedTaskIDs()),
-			(new ClosedTimeDispatcherFactory($sprint->project->workboard_mode))->createInstance()
+		return View::make(
+			'sprint.view',
+			App::make('phragile')->newSprintLiveDataActionHandler()->getViewData($sprint)
 		);
-
-		return View::make('sprint.view', compact('sprint', 'currentSprint', 'taskList', 'burndown', 'assignees'));
 	}
 
 	public function create(Project $project)
