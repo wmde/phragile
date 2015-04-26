@@ -17,7 +17,7 @@ class SprintsController extends Controller {
 	{
 		return View::make(
 			'sprint.view',
-			App::make('phragile')->newSprintLiveDataActionHandler()->getViewData($sprint)
+			\Phragile\Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getViewData($sprint)
 		);
 	}
 
