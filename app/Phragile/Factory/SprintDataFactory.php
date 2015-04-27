@@ -41,11 +41,6 @@ class SprintDataFactory {
 		return $this->sprint->project->currentSprint();
 	}
 
-	public function getTaskList()
-	{
-		return $this->taskList;
-	}
-
 	public function getBurndownChart()
 	{
 		return new BurndownChart(
@@ -58,9 +53,36 @@ class SprintDataFactory {
 		);
 	}
 
-	public function getAssignees()
+	public function getPieChartData()
 	{
-		return new AssigneeRepository($this->phabricatorAPI, $this->tasks);
+		$pieChartData = [];
+
+		foreach ($this->taskList->getTasksPerStatus() as $status => $task)
+		{
+			$pieChartData[$status] = array_merge($task, ['cssClass' => $this->getStatusCssClass($status)]);
+		}
+
+		return $pieChartData;
+	}
+
+	public function getSprintBacklog()
+	{
+		$assignees = new AssigneeRepository($this->phabricatorAPI, $this->tasks);
+
+		return array_map(function($task) use($assignees)
+		{
+			return array_merge($task, [
+				'assignee' => $assignees->getName($task['assignee']) ?: '-',
+				'cssClass' => $this->getStatusCssClass($task['status']),
+			]);
+		}, $this->taskList->getTasks());
+	}
+
+	private function getStatusCssClass($status)
+	{
+		if ($this->sprint->project->workboard_mode && $status !== 'total')
+			return in_array($status, $this->getClosedColumns()) ? 'closed' : 'open';
+		else return $status;
 	}
 
 	private function isWorkboardMode()

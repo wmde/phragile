@@ -18,9 +18,9 @@ class SprintSnapshotsController extends Controller {
 			'snapshot' => $snapshot,
 			'sprint' => $snapshot->sprint,
 			'currentSprint' => $factory->getCurrentSprint(),
-			'taskList' => $factory->getTaskList(),
+			'pieChartData' => $factory->getPieChartData(),
 			'burndown' => $factory->getBurndownChart(),
-			'assignees' => $factory->getAssignees()
+			'sprintBacklog' => $factory->getSprintBacklog()
 		]);
 	}
 

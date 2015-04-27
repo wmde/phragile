@@ -32,9 +32,9 @@ class SprintLiveDataActionHandler {
 		return [
 			'sprint' => $sprint,
 			'currentSprint' => $factory->getCurrentSprint(),
-			'taskList' => $factory->getTaskList(),
 			'burndown' => $factory->getBurndownChart(),
-			'assignees' => $factory->getAssignees()
+			'pieChartData' => $factory->getPieChartData(),
+			'sprintBacklog' => $factory->getSprintBacklog()
 		];
 	}
 
