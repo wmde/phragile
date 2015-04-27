@@ -4,7 +4,7 @@
             statusData = $.parseJSON($('#status-data').text());
 
         for (var status in statusData) {
-            data.push({ status: status, points: statusData[status].points });
+            data.push({ status: status, points: statusData[status].points, cssClass: statusData[status].cssClass });
         }
 
         return data;
@@ -37,7 +37,7 @@
                 .attr('class', 'arc')
                 .append('path')
                     .attr('d', arc)
-                    .attr('class', function (d) { return 'status filter-backlog ' + d.data.status; })
+                    .attr('class', function (d) { return 'status filter-backlog ' + d.data.cssClass; })
                     .attr('data-column', 'status')
                     .attr('data-value', function (d) { return d.data.status; });
         };
