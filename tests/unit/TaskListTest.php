@@ -97,7 +97,7 @@ class TaskListTest extends TestCase {
 
 	private function createTaskListWithStatusFieldDispatcher(array $tasks)
 	{
-		return new TaskList($tasks, new StatusByStatusFieldDispatcher());
+		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'));
 	}
 
 	private function createTaskListWithWorkboardDispatcher(array $tasks, $transactions)

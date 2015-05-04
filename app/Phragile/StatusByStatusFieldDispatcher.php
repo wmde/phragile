@@ -2,9 +2,16 @@
 namespace Phragile;
 
 class StatusByStatusFieldDispatcher implements StatusDispatcher {
+	private $reviewTagPHID = null;
+
+	public function __construct($reviewTagPHID)
+	{
+		$this->reviewTagPHID = $reviewTagPHID;
+	}
+
 	private function isTaskInReview(array $task)
 	{
-		return !$task['isClosed'] && in_array($_ENV['REVIEW_TAG_PHID'], $task['projectPHIDs']);
+		return !$task['isClosed'] && in_array($this->reviewTagPHID, $task['projectPHIDs']);
 	}
 
 	private function isTaskBeingDone(array $task)

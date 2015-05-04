@@ -32,7 +32,7 @@ class SprintDataFactory {
 			$tasks,
 			$sprint->project->workboard_mode
 				? new StatusByWorkboardDispatcher($this->transactions, $this->columns, $this->getClosedColumns())
-				: new StatusByStatusFieldDispatcher()
+				: new StatusByStatusFieldDispatcher(env('REVIEW_TAG_PHID'))
 		);
 	}
 
