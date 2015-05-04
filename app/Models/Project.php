@@ -2,7 +2,7 @@
 
 class Project extends Eloquent {
 
-	protected $fillable = ['title', 'slug'];
+	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode'];
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Collection
@@ -27,6 +27,11 @@ class Project extends Eloquent {
 	public function currentSprint()
 	{
 		return $this->newestPastSprint() ?: $this->closestFutureSprint();
+	}
+
+	public function getClosedColumns()
+	{
+		return preg_split('/\s*,\s*/', $this->closed_statuses);
 	}
 
 	private function newestPastSprint()

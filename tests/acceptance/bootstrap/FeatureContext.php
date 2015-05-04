@@ -324,22 +324,31 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		Project::where('title', $project)->delete();
 	}
 
-    /**
-     * @When I am assigned to task :task
-     */
-    public function iAmAssignedToTask($task)
-    {
+	/**
+	 * @When I am assigned to task :task
+	 */
+	public function iAmAssignedToTask($task)
+	{
 		App::make('phabricator')->updateTask(
 			$task,
 			['ownerPHID' => User::where('username', $this->params['phabricator_username'])->first()->phid]
 		);
-    }
+	}
 
-    /**
-     * @Then I should see my name in the task :task row of the sprint backlog
-     */
-    public function iShouldSeeMyNameInTheTaskRowOfTheSprintBacklog($task)
-    {
-        $this->assertElementContains("#t$task", $this->params['phabricator_username']);
-    }
+	/**
+	 * @Then I should see my name in the task :task row of the sprint backlog
+	 */
+	public function iShouldSeeMyNameInTheTaskRowOfTheSprintBacklog($task)
+	{
+		$this->assertElementContains("#t$task", $this->params['phabricator_username']);
+	}
+
+	/**
+	 * @Given I am on the :project project page
+	 */
+	public function iAmOnTheProjectPage($project)
+	{
+		$this->theProjectExists($project);
+		$this->visit("/projects/" . Project::where('title', $project)->first()->slug);
+	}
 }

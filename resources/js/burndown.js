@@ -254,8 +254,8 @@
         var countWeekendDays = function (data) {
             var count = 0;
 
-            data.forEach(function (data) {
-                if (isWeekend(data.day)) count++;
+            data.forEach(function (data, i) {
+                if (isWeekend(data.day) && i !== 0) count++;
             });
 
             return count;

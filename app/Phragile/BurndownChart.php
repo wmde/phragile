@@ -2,25 +2,25 @@
 namespace Phragile;
 
 class BurndownChart {
-	// TODO: ideally these should come from a cached call to maniphest.querystatuses
-	private static $STATUS_OPEN = ['stalled', 'open'];
-
 	private $pointsClosedBeforeSprint = null;
 	private $pointsClosedPerDay = null;
 	private $sprint = null;
 	private $tasks = null;
 	private $transactions = null;
+	private $closedTimeDispatcher = null;
 
 	/**
 	 * @param \Sprint $sprint
 	 * @param TaskList $tasks
 	 * @param array $transactions - an associative array that maps an array of transactions to task IDs
+	 * @param ClosedTimeDispatcher $closedTimeDispatcher - an associative array that maps an array of transactions to task IDs
 	 */
-	public function __construct(\Sprint $sprint, TaskList $tasks, array $transactions)
+	public function __construct(\Sprint $sprint, TaskList $tasks, array $transactions, ClosedTimeDispatcher $closedTimeDispatcher)
 	{
 		$this->sprint = $sprint;
 		$this->tasks = $tasks;
-		$this->transactions = $transactions;
+		$this->transactions = $this->filterOutOpenTaskTransactions($transactions);
+		$this->closedTimeDispatcher = $closedTimeDispatcher;
 	}
 
 	private function calculatePointsClosedPerDay()
@@ -57,7 +57,7 @@ class BurndownChart {
 			$transactions,
 			function($time, $transaction)
 			{
-				if ($this->statusChangedFromOpen($transaction))
+				if ($this->closedTimeDispatcher->isClosingTransaction($transaction))
 				{
 					return $transaction['dateCreated'];
 				} else
@@ -66,13 +66,6 @@ class BurndownChart {
 				}
 			}
 		);
-	}
-
-	private function statusChangedFromOpen(array $transaction)
-	{
-		return $transaction['transactionType'] === 'status'
-			&& in_array($transaction['oldValue'], self::$STATUS_OPEN)
-			&& !in_array($transaction['newValue'], self::$STATUS_OPEN);
 	}
 
 	/**
@@ -101,5 +94,19 @@ class BurndownChart {
 		}
 
 		return $this->pointsClosedPerDay;
+	}
+
+	private function filterOutOpenTaskTransactions(array $transactions)
+	{
+		$closedTaskTransactions = [];
+		foreach ($transactions as $taskID => $taskTransactions)
+		{
+			if ($this->tasks->findTaskByID($taskID)['closed'])
+			{
+				$closedTaskTransactions[$taskID] = $taskTransactions;
+			}
+		}
+
+		return $closedTaskTransactions;
 	}
 }

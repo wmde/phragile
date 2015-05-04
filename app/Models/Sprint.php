@@ -1,7 +1,6 @@
 <?php
 
 use Phragile\PhabricatorAPI;
-use Phragile\TaskList;
 
 class Sprint extends Eloquent {
 
@@ -120,10 +119,14 @@ class Sprint extends Eloquent {
 	{
 		$phabricator = App::make('phabricator');
 		$tasks = $phabricator->queryTasksByProject($this->phid);
+		$taskIDs = array_map(function($task)
+		{
+			return $task['id'];
+		}, $tasks);
 
 		return [
 			'tasks' => $tasks,
-			'transactions' => $phabricator->getTaskTransactions((new TaskList($tasks))->getClosedTaskIDs())
+			'transactions' => $phabricator->getTaskTransactions($taskIDs),
 		];
 	}
 

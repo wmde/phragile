@@ -1,10 +1,18 @@
 <?php
 
 use Phragile\BurndownChart;
+use Phragile\ClosedTimeByStatusFieldDispatcher;
+use Phragile\ClosedTimeByWorkboardDispatcher;
+use Phragile\ClosedTimeDispatcher;
 
 class BurndownChartTest extends TestCase {
 
 	private function mockWithTransactions(array $tasks, array $transactions)
+	{
+		return $this->mockWithTransactionsAndClosedTimeDispatcher($tasks, $transactions, new ClosedTimeByStatusFieldDispatcher());
+	}
+
+	private function mockWithTransactionsAndClosedTimeDispatcher(array $tasks, array $transactions, ClosedTimeDispatcher $dispatcher)
 	{
 		$taskListMock = $this->getMockBuilder('Phragile\TaskList')
 			->disableOriginalConstructor()
@@ -18,7 +26,17 @@ class BurndownChartTest extends TestCase {
 		return new BurndownChart(
 			new Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
 			$taskListMock,
-			$transactions
+			$transactions,
+			$dispatcher
+		);
+	}
+
+	private function mockWithTransactionsInWorkboardMode(array $tasks, array $transactions)
+	{
+		return $this->mockWithTransactionsAndClosedTimeDispatcher(
+			$tasks,
+			$transactions,
+			new ClosedTimeByWorkboardDispatcher($this->closedColumnPHIDs)
 		);
 	}
 
@@ -34,6 +52,8 @@ class BurndownChartTest extends TestCase {
 			'story_points' => 2
 		]
 	];
+
+	private $closedColumnPHIDs = ['123abc', 'abc123'];
 
 	public function testClosedPerDayAddsStoryPoints()
 	{
@@ -131,5 +151,78 @@ class BurndownChartTest extends TestCase {
 		$closed = $burndown->getPointsClosedPerDay();
 		$this->assertSame(0, $closed['2014-12-08']);
 		$this->assertSame(8, $closed['2014-12-09']);
+	}
+
+	public function testClosedPerDayIgnoresStatusChangeInWorkboardMode()
+	{
+		$burndown = $this->mockWithTransactionsInWorkboardMode(
+			$this->tasks,
+			[
+				'1' => [[
+					'transactionType' => 'projectcolumn',
+					'oldValue' => [
+						'columnPHIDs' => ['anyNotClosed'],
+					],
+					'newValue' => [
+						'columnPHIDs' => [$this->closedColumnPHIDs[1]],
+					],
+					'dateCreated' => '1418040000', // Dec 8
+				]],
+				'2' => [[
+					'transactionType' => 'projectcolumn',
+					'oldValue' => [
+						'columnPHIDs' => ['anyNotClosed'],
+					],
+					'newValue' => [
+						'columnPHIDs' => [$this->closedColumnPHIDs[0]],
+					],
+					'dateCreated' => '1418050000', // Dec 8
+				]]
+			]
+		);
+
+		$this->assertSame(10, $burndown->getPointsClosedPerDay()['2014-12-08']);
+	}
+
+	public function testClosedPerDayAddsStoryPointsInWorkboardMode()
+	{
+		$burndown = $this->mockWithTransactionsInWorkboardMode(
+			$this->tasks,
+			[
+				'1' => [[
+					'transactionType' => 'status',
+					'oldValue' => 'open',
+					'newValue' => 'resolved',
+					'dateCreated' => '1418040000', // Dec 8
+				]],
+				'2' => [[
+					'transactionType' => 'status',
+					'oldValue' => 'open',
+					'newValue' => 'resolved',
+					'dateCreated' => '1418050000', // Dec 8
+				]]
+			]
+		);
+
+		$this->assertSame(0, $burndown->getPointsClosedPerDay()['2014-12-08']);
+	}
+
+	public function testOpenTaskTransactionsAreIgnored()
+	{
+		$burndown = $this->mockWithTransactions(
+			['500' => [
+				'id' => 500,
+				'closed' => false,
+				'story_points' => 5,
+			]],
+			['500' => [[ // this transaction's task is not closed and should be ignored
+				'transactionType' => 'status',
+				'oldValue' => 'open',
+				'newValue' => 'resolved',
+				'dateCreated' => '1415664000', // Nov 11
+			]]]
+		);
+
+		$this->assertNull($burndown->getPointsClosedBeforeSprint());
 	}
 }

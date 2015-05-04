@@ -3,6 +3,8 @@
 @section('title', 'Phragile - ' . (isset($snapshot) ? "Snapshot of {$sprint->title}" : $sprint->title))
 
 @section('content')
+    @include('project.partials.settings_form')
+
 	<h1 class="sprint-overview-title">
 		{{ $sprint->project->title }}
 		{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Sprint Overview' }}
@@ -36,7 +38,7 @@
 		<div class="col-md-8">
 			<div id="burndown-data"
 				 class="hidden"
-				 data-total="{{ $taskList->getTasksPerStatus()['total']['points'] }}"
+				 data-total="{{ $pieChartData['total']['points'] }}"
 				 data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">
 				{{ json_encode($burndown->getPointsClosedPerDay()) }}
 			</div>
@@ -96,18 +98,16 @@
 				@endif
 			</div>
 
-
-			<?php $tasksPerStatus = $taskList->getTasksPerStatus() ?>
 			<table class="table status-table">
-				@foreach($tasksPerStatus as $status => $numbers)
+				@foreach($pieChartData as $status => $statusMeta)
 					<tr class="filter-backlog" data-column="status" data-value="{{ $status === 'total' ? '' : $status }}">
-						<th><span class="status-label {{ $status }}">{{ $status }}</span></th>
-						<td>{{ $numbers['tasks'] }} ({{ $numbers['points'] }} story points)</td>
+						<th><span class="status-label {{ $statusMeta['cssClass'] }}">{{ $status }}</span></th>
+						<td>{{ $statusMeta['tasks'] }} ({{ $statusMeta['points'] }} story points)</td>
 					</tr>
 				@endforeach
 			</table>
 
-			<div id="status-data" class="hidden">{{ json_encode(array_diff_key($tasksPerStatus, ['total' => false])) }}</div>
+			<div id="status-data" class="hidden">{{ json_encode(array_diff_key($pieChartData, ['total' => false])) }}</div>
 			<div id="pie"></div>
 		</div>
 	</div>
@@ -125,7 +125,7 @@
 		</thead>
 
 		<tbody class="list">
-			@foreach($taskList->getTasks() as $task)
+			@foreach($sprintBacklog as $task)
 				<tr id="t{{ $task['id'] }}">
 					<td>
 						{!! link_to(
@@ -145,12 +145,11 @@
 					</td>
 					<td class="points">{{ $task['story_points'] }}</td>
 
-					<?php $assigneeName = $assignees->getName($task['assignee']) ?: '-' ?>
-					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $assigneeName }}">
-						{{ $assigneeName }}
+					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $task['assignee'] }}">
+						{{ $task['assignee']}}
 					</td>
 					<td class="status filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
-						<span class="status-label {{ $task['status'] }}">{{ $task['status'] }}</span>
+						<span class="status-label {{ $task['cssClass'] }}">{{ $task['status'] }}</span>
 					</td>
 				</tr>
 			@endforeach

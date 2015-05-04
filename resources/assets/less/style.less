@@ -205,12 +205,13 @@
     color: #fff;
     font-weight: normal;
     padding: 2px 3px;
+    background-color: @open;
   }
 
   .total {
     background-color: #000;
   }
-  .resolved {
+  .resolved, .closed {
     background-color: @resolved;
   }
   .wontfix {
@@ -237,8 +238,9 @@
   .status {
     stroke: #fff;
     stroke-width: 2px;
+    .fillAndHighlightOnHover(@open);
   }
-  .resolved {
+  .resolved, .closed {
     .fillAndHighlightOnHover(@resolved);
   }
   .open {
