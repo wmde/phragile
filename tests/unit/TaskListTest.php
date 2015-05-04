@@ -31,19 +31,19 @@ class TaskListTest extends TestCase {
 	private $tasks = [
 		[
 			'status' => 'open',
-			'auxiliary' => ['std:maniphest:WMDE:story_points' => 8]
+			'points' => 8
 		],
 		[
 			'status' => 'resolved',
-			'auxiliary' => ['std:maniphest:WMDE:story_points' => 5]
+			'points' => 5
 		],
 		[
 			'status' => 'resolved',
-			'auxiliary' => ['std:maniphest:WMDE:story_points' => 8]
+			'points' => 8
 		],
 		[
 			'status' => 'wontfix',
-			'auxiliary' => ['std:maniphest:WMDE:story_points' => 2]
+			'points' => 2
 		]
 	];
 
@@ -106,7 +106,7 @@ class TaskListTest extends TestCase {
 			->disableOriginalConstructor()
 			->getMock();
 
-		$phabricatorAPI->method('queryPHIDs')->will($this->returnCallback(function($phids)
+		$phabricatorAPI->method('queryPHIDs')->will($this->returnCallback(function()
 		{
 			return array_map(function($column)
 			{
@@ -133,6 +133,7 @@ class TaskListTest extends TestCase {
 				'projectPHIDs' => ['x'],
 				'ownerPHID' => null,
 				'id' => ++$i,
+				'auxiliary' => [env('MANIPHEST_STORY_POINTS_FIELD') => $task['points']],
 			]);
 		}, $this->tasks);
 	}
