@@ -2,7 +2,6 @@
 
 namespace Phragile\ActionHandler;
 
-use Phragile\ClosedTimeDispatcherFactory;
 use Phragile\PhabricatorAPI;
 use Sprint;
 use Phragile\Factory\SprintDataFactory;
