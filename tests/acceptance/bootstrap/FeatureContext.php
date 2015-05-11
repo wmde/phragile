@@ -351,4 +351,21 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->theProjectExists($project);
 		$this->visit("/projects/" . Project::where('title', $project)->first()->slug);
 	}
+
+	/**
+	 * @Given a sprint :sprintTitle exists for the :projectTitle project in Phabricator but not in Phragile
+	 */
+	public function aSprintExistsForTheProjectInPhabricatorButNotInPhragile($sprintTitle, $projectTitle)
+	{
+		$project = Project::where('title', $projectTitle)->first();
+		try
+		{
+			$this->aSprintExistsForTheProject($sprintTitle, $projectTitle);
+		} catch(Exception $e)
+		{
+			if (!str_contains($e->getMessage(), 'Project name is already used')) throw $e;
+		}
+
+		Sprint::where('title', $sprintTitle)->where('project_id', $project->id)->delete();
+	}
 }

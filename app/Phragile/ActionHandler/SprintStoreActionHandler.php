@@ -6,14 +6,16 @@ use \Flash;
 use Illuminate\Support\Facades\Redirect;
 
 class SprintStoreActionHandler {
-	private $phabricatorAPI;
+	private $userPhabricatorAPI;
+	private $botPhabricatorAPI;
 	private $redirect;
 	private $sprint;
 	private $user;
 
-	public function __construct(PhabricatorAPI $phabricatorAPI)
+	public function __construct(PhabricatorAPI $userPhabricatorAPI, PhabricatorAPI $botPhabricatorAPI)
 	{
-		$this->phabricatorAPI = $phabricatorAPI;
+		$this->userPhabricatorAPI = $userPhabricatorAPI;
+		$this->botPhabricatorAPI = $botPhabricatorAPI;
 	}
 
 	public function performAction(\Sprint $sprint, \User $user)
@@ -22,7 +24,7 @@ class SprintStoreActionHandler {
 		$this->user = $user;
 
 		$this->validate();
-		$this->connectToPhabricator();
+		$this->connectUserToPhabricator();
 		$this->createCorrespondingPhabricatorProject();
 		$this->save();
 	}
@@ -39,13 +41,13 @@ class SprintStoreActionHandler {
 		}
 	}
 
-	private function connectToPhabricator()
+	private function connectUserToPhabricator()
 	{
 		if ($this->previousActionFailed()) null;
 
 		try
 		{
-			$this->phabricatorAPI->connect($this->user->username, $this->user->conduit_certificate);
+			$this->userPhabricatorAPI->connect($this->user->username, $this->user->conduit_certificate);
 		} catch(\ConduitClientException $e)
 		{
 			$this->redirectBackWithError($e->getMessage());
@@ -58,12 +60,32 @@ class SprintStoreActionHandler {
 
 		try
 		{
-			$phabricatorProject = $this->phabricatorAPI->createProject($this->sprint->title, [$this->user->phid]);
+			$phabricatorProject = $this->userPhabricatorAPI->createProject($this->sprint->title, [$this->user->phid]);
 			$this->sprint->connectWithPhabricatorProject($phabricatorProject);
 		} catch(\ConduitClientException $e)
 		{
-			$this->redirectBackWithError($e->getMessage());
+			$this->connectIfPhabricatorProjectExists($e->getMessage());
 		}
+	}
+
+	private function connectIfPhabricatorProjectExists($errorMessage)
+	{
+		if (str_contains($errorMessage, 'Project name is already used'))
+		{
+			$this->connectWithPhabricatorProject();
+		} else $this->redirectBackWithError('Could not create a Phabricator project for this sprint.');
+	}
+
+	private function connectWithPhabricatorProject()
+	{
+		$this->sprint->connectWithPhabricatorProject($this->fetchPhabricatorProject());
+		$this->sprint->save(); // TODO: recover somehow if this fails
+		$this->redirectWithSuccessMessage('Connected "' . $this->sprint->title . '" with an existing Phabricator project');
+	}
+
+	private function fetchPhabricatorProject()
+	{
+		return $this->botPhabricatorAPI->queryProjectByTitle($this->sprint->title);
 	}
 
 	private function save()
@@ -75,8 +97,7 @@ class SprintStoreActionHandler {
 			$this->redirectBackWithError('A problem occurred saving the sprint record in Phragile.');
 		} else
 		{
-			Flash::success('Successfully created "' . $this->sprint->title . '"');
-			$this->redirect = Redirect::route('sprint_path', ['sprint' => $this->sprint->phabricator_id]);
+			$this->redirectWithSuccessMessage('Successfully created "' . $this->sprint->title . '"');
 		}
 	}
 
@@ -84,6 +105,12 @@ class SprintStoreActionHandler {
 	{
 		Flash::error($msg);
 		$this->redirect = Redirect::back();
+	}
+
+	private function redirectWithSuccessMessage($msg)
+	{
+		Flash::success($msg);
+		$this->redirect = Redirect::route('sprint_path', ['sprint' => $this->sprint->phabricator_id]);
 	}
 
 	private function previousActionFailed()
