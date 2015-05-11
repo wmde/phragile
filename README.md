@@ -21,7 +21,12 @@ Built by [Jakob Warkotsch](https://github.com/jakobw) as a thesis project at [Fr
 For more information see the [product backlog](https://github.com/wmde/phragile/wiki/Backlog)
 
 ## Installation
-* requires PHP >= 5.4 and MySQL, SQLite or PostgreSQL
+
+**Requirements**
+
+* PHP 5.5 or later
+* MySQL, SQLite or PostgreSQL
+
 * [Install Phabricator](https://secure.phabricator.com/book/phabricator/article/installation_guide/)
 * [Activate Phabricator OAuth](https://github.com/wmde/phragile/wiki/Activating-Phabricator-OAuth)
 * Clone this repository
