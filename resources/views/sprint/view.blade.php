@@ -130,7 +130,7 @@
 					<td>
 						{!! link_to(
 							$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
-							$task['title'],
+							"#${task['id']} " . $task['title'],
 							[
 								'class' => 'title',
 								'target' => '_blank'
