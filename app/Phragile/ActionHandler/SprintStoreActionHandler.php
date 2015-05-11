@@ -79,8 +79,8 @@ class SprintStoreActionHandler {
 	private function connectWithPhabricatorProject()
 	{
 		$this->sprint->connectWithPhabricatorProject($this->fetchPhabricatorProject());
-		$this->sprint->save(); // TODO: recover somehow if this fails
-		$this->redirectWithSuccessMessage('Connected "' . $this->sprint->title . '" with an existing Phabricator project');
+		if ($this->sprint->save()) $this->redirectWithSuccessMessage('Connected "' . $this->sprint->title . '" with an existing Phabricator project');
+		else $this->redirectBackWithError('Could not create the sprint or connect it with an existing Phabricator project.');
 	}
 
 	private function fetchPhabricatorProject()
