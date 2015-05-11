@@ -27,6 +27,8 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 * PHP 5.5 or later
 * MySQL, SQLite or PostgreSQL
 
+**Installation**
+
 * [Install Phabricator](https://secure.phabricator.com/book/phabricator/article/installation_guide/)
 * [Activate Phabricator OAuth](https://github.com/wmde/phragile/wiki/Activating-Phabricator-OAuth)
 * Clone this repository
