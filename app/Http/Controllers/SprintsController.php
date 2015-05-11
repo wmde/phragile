@@ -41,21 +41,9 @@ class SprintsController extends Controller {
 			array_map('trim', Input::all()),
 			['project_id' => $project->id]
 		));
+		$actionHandler = \Phragile\Phragile::getGlobalInstance()->newSprintStoreActionHandler();
+		$actionHandler->performAction($sprint, Auth::user());
 
-		$validation = $sprint->validate();
-		if ($validation->fails())
-		{
-			Flash::error(implode(' ', $validation->messages()->all()));
-			return Redirect::back();
-		}
-
-		if (!$sprint->save())
-		{
-			Flash::error($sprint->getPhabricatorError() ?: 'A problem occurred saving the sprint record in Phragile.');
-			return Redirect::back();
-		}
-
-		Flash::success("Successfully created \"$sprint->title\"");
-		return Redirect::route('sprint_path', ['sprint' => $sprint->phabricator_id]);
+		return $actionHandler->getRedirect();
 	}
 }

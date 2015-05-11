@@ -1,7 +1,5 @@
 <?php
 
-use Phragile\PhabricatorAPI;
-
 class Sprint extends Eloquent {
 
 	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end'];
@@ -39,11 +37,6 @@ class Sprint extends Eloquent {
 		);
 	}
 
-	public function save(array $options = [])
-	{
-		return $this->createPhabricatorProject() && parent::save($options);
-	}
-
 	public function getPhabricatorError()
 	{
 		return $this->phabricatorError;
@@ -70,6 +63,12 @@ class Sprint extends Eloquent {
 		return $this->days;
 	}
 
+	public function connectWithPhabricatorProject(array $project)
+	{
+		$this->phid = $project['phid'];
+		$this->phabricator_id = $project['id'];
+	}
+
 	private function computeDays()
 	{
 		$days = [];
@@ -82,26 +81,6 @@ class Sprint extends Eloquent {
 		}
 
 		return $days;
-	}
-
-	private function createPhabricatorProject()
-	{
-		$phabricator = new PhabricatorAPI(new ConduitClient($_ENV['PHABRICATOR_URL']));
-		$user = Auth::user();
-		try
-		{
-			$phabricator->connect($user->username, $user->conduit_certificate);
-			$response = $phabricator->createProject($this->title, [$user->phid]);
-		} catch (ConduitClientException $e)
-		{
-			$this->phabricatorError = 'Failed to create a Phabricator project for the sprint: ' . $e->getMessage();
-			return false;
-		}
-
-		$this->phid = $response['phid'];
-		$this->phabricator_id = $response['id'];
-
-		return true;
 	}
 
 	/**
