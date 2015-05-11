@@ -48,7 +48,7 @@ class User extends Eloquent implements AuthenticatableContract {
 	{
 		return in_array(
 			strtolower($this->username),
-			array_map('trim', explode(',', $admins))
+			array_map('strtolower', array_map('trim', explode(',', $admins)))
 		);
 	}
 }
