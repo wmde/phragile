@@ -43,7 +43,7 @@ class SprintStoreActionHandler {
 
 	private function connectUserToPhabricator()
 	{
-		if ($this->previousActionFailed()) null;
+		if ($this->previousActionFailed()) return;
 
 		try
 		{
