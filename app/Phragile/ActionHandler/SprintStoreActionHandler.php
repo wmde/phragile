@@ -3,6 +3,7 @@ namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
 use \Flash;
+use \Sprint;
 use Illuminate\Support\Facades\Redirect;
 
 class SprintStoreActionHandler {
@@ -18,15 +19,19 @@ class SprintStoreActionHandler {
 		$this->botPhabricatorAPI = $botPhabricatorAPI;
 	}
 
-	public function performAction(\Sprint $sprint, \User $user)
+	public function performAction(Sprint $sprint, \User $user)
 	{
 		$this->sprint = $sprint;
 		$this->user = $user;
 
 		$this->validate();
+		$this->trySprintCreationFromPhabricatorID();
 		$this->connectUserToPhabricator();
 		$this->createCorrespondingPhabricatorProject();
-		$this->save();
+		$this->save(
+			'Successfully created "' . $this->sprint->title . '"',
+			'A problem occurred saving the sprint record in Phragile.'
+		);
 	}
 
 	private function validate()
@@ -39,6 +44,34 @@ class SprintStoreActionHandler {
 			Flash::error(implode(' ', $validation->messages()->all()));
 			$this->redirect = Redirect::back();
 		}
+	}
+
+	private function trySprintCreationFromPhabricatorID()
+	{
+		if ($this->previousActionFailed()
+			|| !is_numeric($this->sprint->title)
+			|| !is_int($this->sprint->title + 0)) return;
+
+		if ($this->sprintWithPhabricatorIDExists())
+		{
+			$this->redirectBackWithError('The sprint with this Phabricator ID already exists in Phragile.');
+			return;
+		}
+
+		$phabricatorProject = $this->botPhabricatorAPI->queryProjectByID($this->sprint->title);
+		if ($phabricatorProject)
+		{
+			$this->sprint->connectWithPhabricatorProject($phabricatorProject);
+			$this->saveConnectedSprint();
+		} else
+		{
+			$this->redirectBackWithError('A Phabricator project with this ID does not exist.');
+		}
+	}
+
+	private function sprintWithPhabricatorIDExists()
+	{
+		return !Sprint::where('phabricator_id', $this->sprint->title)->get()->isEmpty();
 	}
 
 	private function connectUserToPhabricator()
@@ -79,13 +112,15 @@ class SprintStoreActionHandler {
 	private function connectWithPhabricatorProject()
 	{
 		$this->sprint->connectWithPhabricatorProject($this->fetchPhabricatorProject());
-		if ($this->sprint->save())
-		{
-			$this->redirectWithSuccessMessage('Connected "' . $this->sprint->title . '" with an existing Phabricator project');
-		} else
-		{
-			$this->redirectBackWithError('Could not create the sprint or connect it with an existing Phabricator project.');
-		}
+		$this->saveConnectedSprint();
+	}
+
+	private function saveConnectedSprint()
+	{
+		$this->save(
+			'Connected "' . $this->sprint->title . '" with an existing Phabricator project',
+			'Could not create the sprint or connect it with an existing Phabricator project.'
+		);
 	}
 
 	private function fetchPhabricatorProject()
@@ -93,16 +128,16 @@ class SprintStoreActionHandler {
 		return $this->botPhabricatorAPI->queryProjectByTitle($this->sprint->title);
 	}
 
-	private function save()
+	private function save($successMsg, $errorMsg)
 	{
 		if ($this->previousActionFailed()) return;
 
-		if (!$this->sprint->save())
+		if ($this->sprint->save())
 		{
-			$this->redirectBackWithError('A problem occurred saving the sprint record in Phragile.');
+			$this->redirectWithSuccessMessage($successMsg);
 		} else
 		{
-			$this->redirectWithSuccessMessage('Successfully created "' . $this->sprint->title . '"');
+			$this->redirectBackWithError($errorMsg);
 		}
 	}
 
