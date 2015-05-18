@@ -39,11 +39,19 @@ class PhabricatorAPI {
 
 	public function queryProjectByTitle($title)
 	{
+		return $this->queryProject(['names' => [$title]]);
+	}
+
+	public function queryProjectByID($id)
+	{
+		return $this->queryProject(['ids' => [$id]]);
+	}
+
+	private function queryProject($fields)
+	{
 		return head($this->client->callMethodSynchronous(
 			'project.query',
-			[
-				'names' => [$title]
-			]
+			$fields
 		)['data']);
 	}
 

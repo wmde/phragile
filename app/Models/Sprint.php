@@ -65,6 +65,7 @@ class Sprint extends Eloquent {
 
 	public function connectWithPhabricatorProject(array $project)
 	{
+		$this->title = $project['name'];
 		$this->phid = $project['phid'];
 		$this->phabricator_id = $project['id'];
 	}

@@ -11,6 +11,7 @@ use Behat\MinkExtension\Context\MinkContext;
 class FeatureContext extends MinkContext implements Context, SnippetAcceptingContext
 {
 	private $params;
+	private $phabricatorProjectID;
 
 	public function __construct(array $params)
 	{
@@ -367,5 +368,25 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		}
 
 		Sprint::where('title', $sprintTitle)->where('project_id', $project->id)->delete();
+	}
+
+	/**
+	 * @Given I copied the :project :sprint Phabricator ID
+	 */
+	public function iCopiedThePhabricatorId($project, $sprint)
+	{
+		$this->phabricatorProjectID = Sprint::where(
+			'title', $sprint
+		)->where(
+			'project_id', Project::where('title', $project)->first()->id
+		)->first()->phabricator_id;
+	}
+
+	/**
+	 * @When I paste the copied Phabricator ID
+	 */
+	public function iPasteTheCopiedPhabricatorId()
+	{
+		$this->fillField('title', $this->phabricatorProjectID);
 	}
 }
