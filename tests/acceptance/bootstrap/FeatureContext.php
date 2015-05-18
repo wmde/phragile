@@ -11,6 +11,7 @@ use Behat\MinkExtension\Context\MinkContext;
 class FeatureContext extends MinkContext implements Context, SnippetAcceptingContext
 {
 	private $params;
+	private $phabricatorProjectID;
 
 	public function __construct(array $params)
 	{
@@ -350,5 +351,42 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		$this->theProjectExists($project);
 		$this->visit("/projects/" . Project::where('title', $project)->first()->slug);
+	}
+
+	/**
+	 * @Given a sprint :sprintTitle exists for the :projectTitle project in Phabricator but not in Phragile
+	 */
+	public function aSprintExistsForTheProjectInPhabricatorButNotInPhragile($sprintTitle, $projectTitle)
+	{
+		$project = Project::where('title', $projectTitle)->first();
+		try
+		{
+			$this->aSprintExistsForTheProject($sprintTitle, $projectTitle);
+		} catch(Exception $e)
+		{
+			if (!str_contains($e->getMessage(), 'Project name is already used')) throw $e;
+		}
+
+		Sprint::where('title', $sprintTitle)->where('project_id', $project->id)->delete();
+	}
+
+	/**
+	 * @Given I copied the :project :sprint Phabricator ID
+	 */
+	public function iCopiedThePhabricatorId($project, $sprint)
+	{
+		$this->phabricatorProjectID = Sprint::where(
+			'title', $sprint
+		)->where(
+			'project_id', Project::where('title', $project)->first()->id
+		)->first()->phabricator_id;
+	}
+
+	/**
+	 * @When I paste the copied Phabricator ID
+	 */
+	public function iPasteTheCopiedPhabricatorId()
+	{
+		$this->fillField('title', $this->phabricatorProjectID);
 	}
 }

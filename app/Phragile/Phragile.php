@@ -3,6 +3,8 @@ namespace Phragile;
 
 use App;
 use Phragile\ActionHandler\SprintLiveDataActionHandler;
+use Phragile\ActionHandler\SprintStoreActionHandler;
+use \ConduitClient;
 
 class Phragile {
 
@@ -19,4 +21,11 @@ class Phragile {
 		return new SprintLiveDataActionHandler(App::make('phabricator'));
 	}
 
+	public function newSprintStoreActionHandler()
+	{
+		return new SprintStoreActionHandler(
+			new PhabricatorAPI(new ConduitClient($_ENV['PHABRICATOR_URL'])),
+			App::make('phabricator')
+		);
+	}
 }
