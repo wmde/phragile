@@ -25,7 +25,7 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 
 	public function getStatus(array $task)
 	{
-		return $this->columns->getColumnName($this->taskColumnPHIDs[$task['id']]);
+		return $this->columns->getColumnName($this->taskColumnPHIDs[$task['id']]) ?: 'Backlog';
 	}
 
 	private function extractColumnIDs(array $transactions)

@@ -29,7 +29,7 @@
         var addPie = function () {
             var pie = d3.layout.pie()
                 .value(function (d) { return d.points; })
-                .sort(function (a, b) { return d3.ascending(a.status, b.status); });
+                .sort(function (a, b) { return d3.ascending(a.cssClass, b.cssClass); });
 
             svg.selectAll('.arc')
                 .data(pie(pieData))
