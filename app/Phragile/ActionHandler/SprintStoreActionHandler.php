@@ -48,9 +48,7 @@ class SprintStoreActionHandler {
 
 	private function trySprintCreationFromPhabricatorID()
 	{
-		if ($this->previousActionFailed()
-			|| !is_numeric($this->sprint->title)
-			|| !is_int($this->sprint->title + 0)) return;
+		if ($this->previousActionFailed() || !ctype_digit($this->sprint->title)) return;
 
 		if ($this->sprintWithPhabricatorIDExists())
 		{
