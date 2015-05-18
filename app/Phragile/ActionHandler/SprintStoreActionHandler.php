@@ -2,8 +2,8 @@
 namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
-use \Flash;
-use \Sprint;
+use Flash;
+use Sprint;
 use Illuminate\Support\Facades\Redirect;
 
 class SprintStoreActionHandler {
