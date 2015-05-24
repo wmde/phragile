@@ -11,6 +11,9 @@ With Phragile you can log in using your Phabricator account to create sprints fo
 
 Built by [Jakob Warkotsch](https://github.com/jakobw) as a thesis project at [Freie Universität Berlin](http://fu-berlin.de) in cooperation with [Wikimedia Deutschland](http://wikimedia.de).
 
+## Issue Tracker
+Bugs and feature requests are tracked on [Phabricator](https://phabricator.wikimedia.org/project/profile/1266).
+
 ## Features
 1. Phabricator OAuth Login
 2. Create projects
