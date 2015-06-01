@@ -4,6 +4,7 @@ use Phragile\TaskList;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\StatusByWorkboardDispatcher;
 use Phragile\ProjectColumnRepository;
+use Phragile\TransactionList;
 
 class TaskListTest extends TestCase {
 
@@ -148,7 +149,7 @@ class TaskListTest extends TestCase {
 
 		return new TaskList($tasks, new StatusByWorkboardDispatcher(
 			$this->testProjectPHID,
-			$transactions,
+			new TransactionList($transactions),
 			new ProjectColumnRepository($transactions, $phabricatorAPI),
 			array_values($this->workboardColumns)
 		));

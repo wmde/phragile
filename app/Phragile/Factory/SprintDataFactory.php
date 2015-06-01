@@ -10,6 +10,7 @@ use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
+use Phragile\TransactionList;
 
 class SprintDataFactory {
 	private $sprint = null;
@@ -31,7 +32,7 @@ class SprintDataFactory {
 		$this->taskList = new TaskList(
 			$tasks,
 			$sprint->project->workboard_mode
-				? new StatusByWorkboardDispatcher($this->sprint->phid, $this->transactions, $this->columns, $this->getClosedColumns())
+				? new StatusByWorkboardDispatcher($this->sprint->phid, new TransactionList($this->transactions), $this->columns, $this->getClosedColumns())
 				: new StatusByStatusFieldDispatcher(env('REVIEW_TAG_PHID'))
 		);
 	}

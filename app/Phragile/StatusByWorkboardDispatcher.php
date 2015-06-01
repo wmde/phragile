@@ -16,11 +16,11 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	 */
 	private $closedColumnNames = [];
 
-	public function __construct($phid, array $transactions, ProjectColumnRepository $columns, array $closedColumnNames)
+	public function __construct($phid, TransactionList $transactions, ProjectColumnRepository $columns, array $closedColumnNames)
 	{
 		$this->phid = $phid;
-		$this->transactions = $transactions;
-		$this->taskColumnPHIDs = $this->extractColumnIDs($transactions);
+		$this->transactions = $transactions->getChronologicallySorted();
+		$this->taskColumnPHIDs = $this->extractColumnIDs($this->transactions);
 		$this->columns = $columns;
 		$this->closedColumnNames = $closedColumnNames;
 	}
