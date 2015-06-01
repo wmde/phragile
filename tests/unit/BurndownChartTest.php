@@ -36,9 +36,11 @@ class BurndownChartTest extends TestCase {
 		return $this->mockWithTransactionsAndClosedTimeDispatcher(
 			$tasks,
 			$transactions,
-			new ClosedTimeByWorkboardDispatcher($this->closedColumnPHIDs)
+			new ClosedTimeByWorkboardDispatcher($this->testProjectPHID, $this->closedColumnPHIDs)
 		);
 	}
+
+	private $testProjectPHID = 'PHID-123';
 
 	private $tasks = [
 		'1' => [
@@ -162,6 +164,7 @@ class BurndownChartTest extends TestCase {
 					'transactionType' => 'projectcolumn',
 					'oldValue' => [
 						'columnPHIDs' => ['anyNotClosed'],
+						'projectPHID' => $this->testProjectPHID,
 					],
 					'newValue' => [
 						'columnPHIDs' => [$this->closedColumnPHIDs[1]],
@@ -172,6 +175,7 @@ class BurndownChartTest extends TestCase {
 					'transactionType' => 'projectcolumn',
 					'oldValue' => [
 						'columnPHIDs' => ['anyNotClosed'],
+						'projectPHID' => $this->testProjectPHID,
 					],
 					'newValue' => [
 						'columnPHIDs' => [$this->closedColumnPHIDs[0]],

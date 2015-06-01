@@ -31,7 +31,7 @@ class SprintDataFactory {
 		$this->taskList = new TaskList(
 			$tasks,
 			$sprint->project->workboard_mode
-				? new StatusByWorkboardDispatcher($this->transactions, $this->columns, $this->getClosedColumns())
+				? new StatusByWorkboardDispatcher($this->sprint->phid, $this->transactions, $this->columns, $this->getClosedColumns())
 				: new StatusByStatusFieldDispatcher(env('REVIEW_TAG_PHID'))
 		);
 	}
@@ -48,7 +48,7 @@ class SprintDataFactory {
 			$this->taskList,
 			$this->transactions,
 			$this->isWorkboardMode()
-				? new ClosedTimeByWorkboardDispatcher($this->getClosedColumnPHIDs())
+				? new ClosedTimeByWorkboardDispatcher($this->sprint->phid, $this->getClosedColumnPHIDs())
 				: new ClosedTimeByStatusFieldDispatcher()
 		);
 	}

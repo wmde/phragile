@@ -4,6 +4,7 @@ namespace Phragile;
 class StatusByWorkboardDispatcher implements StatusDispatcher {
 	private $transactions = [];
 	private $columns = null;
+	private $phid = null;
 
 	/**
 	 * @var array - Maps tasks to the columnPHIDs of their current workboard column
@@ -15,8 +16,9 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	 */
 	private $closedColumnNames = [];
 
-	public function __construct(array $transactions, ProjectColumnRepository $columns, array $closedColumnNames)
+	public function __construct($phid, array $transactions, ProjectColumnRepository $columns, array $closedColumnNames)
 	{
+		$this->phid = $phid;
 		$this->transactions = $transactions;
 		$this->taskColumnPHIDs = $this->extractColumnIDs($transactions);
 		$this->columns = $columns;
@@ -38,6 +40,7 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 		return array_reduce($taskTransactions, function($column, $transaction)
 		{
 			return $transaction['transactionType'] === 'projectcolumn'
+				&& $transaction['oldValue']['projectPHID'] === $this->phid
 				? $transaction['newValue']['columnPHIDs'][0]
 				: $column;
 		});

@@ -28,6 +28,29 @@ class TaskListTest extends TestCase {
 		$this->assertSame(10, $taskList->getTasksPerStatus()['to do']['points']);
 	}
 
+	public function testOtherProjectTransactionsShouldBeIgnored()
+	{
+		$transactions = $this->getProjectColumnTransactions();
+		$transactions['5'] = [[
+			'transactionType' => 'projectcolumn',
+			'oldValue' => [
+				'columnPHIDs' => [],
+				'projectPHID' => 'PHID-456', // not identical to $this->testProjectPHID and should be ignored
+			],
+			'newValue' => [
+				'columnPHIDs' => [array_keys($this->workboardColumns)[2]],
+			]
+		]];
+		$taskList = $this->createTaskListWithWorkboardDispatcher(
+			$this->tasks,
+			$transactions
+		);
+
+		$this->assertSame(10, $taskList->getTasksPerStatus()['to do']['points']);
+	}
+
+	private $testProjectPHID = 'PHID-123';
+
 	private $tasks = [
 		[
 			'status' => 'open',
@@ -44,6 +67,10 @@ class TaskListTest extends TestCase {
 		[
 			'status' => 'wontfix',
 			'points' => 2
+		],
+		[
+			'status' => 'wontfix',
+			'points' => 7
 		]
 	];
 
@@ -54,6 +81,7 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => ['anyNotClosed'],
+					'projectPHID' => $this->testProjectPHID,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[0]],
@@ -63,6 +91,7 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => ['anyNotClosed'],
+					'projectPHID' => $this->testProjectPHID,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[1]],
@@ -72,6 +101,7 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => [],
+					'projectPHID' => $this->testProjectPHID,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[2]],
@@ -81,11 +111,13 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => [],
+					'projectPHID' => $this->testProjectPHID,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[2]],
 				]
-			]]
+			]],
+			'5' => []
 		];
 	}
 
@@ -115,6 +147,7 @@ class TaskListTest extends TestCase {
 		}));
 
 		return new TaskList($tasks, new StatusByWorkboardDispatcher(
+			$this->testProjectPHID,
 			$transactions,
 			new ProjectColumnRepository($transactions, $phabricatorAPI),
 			array_values($this->workboardColumns)
