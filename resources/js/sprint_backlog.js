@@ -2,7 +2,7 @@
     var backlog = new List('backlog', {
             valueNames: ['title', 'points', 'status', 'priority', 'assignee']
         }),
-        $resetBtn = $('#reset-filter'),
+        $resetBtn = $('.reset-filter'),
         currentFilters = {};
 
     $('.filter-backlog').on('click', function () {

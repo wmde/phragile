@@ -100,7 +100,7 @@
 
 			<table class="table status-table">
 				@foreach($pieChartData as $status => $statusMeta)
-					<tr class="filter-backlog" data-column="status" data-value="{{ $status === 'total' ? '' : $status }}">
+					<tr class="{{ $status === 'total' ? 'reset-filter' : 'filter-backlog' }}" data-column="status" data-value="{{ $status === 'total' ? '' : $status }}">
 						<th><span class="status-label {{ $statusMeta['cssClass'] }}">{{ $status }}</span></th>
 						<td>{{ $statusMeta['tasks'] }} ({{ $statusMeta['points'] }} story points)</td>
 					</tr>
@@ -112,7 +112,7 @@
 		</div>
 	</div>
 
-	<button id="reset-filter" class="btn btn-default" disabled="disabled">Show all tasks</button>
+	<button class="btn btn-default reset-filter" disabled="disabled">Show all tasks</button>
 	<table id="backlog" class="table table-striped sprint-backlog">
 		<thead>
 			<tr>
