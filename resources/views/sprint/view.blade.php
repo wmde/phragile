@@ -148,8 +148,8 @@
 					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $task['assignee'] }}">
 						{{ $task['assignee']}}
 					</td>
-					<td class="status filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
-						<span class="status-label {{ $task['cssClass'] }}">{{ $task['status'] }}</span>
+					<td class="filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
+						<span class="status status-label {{ $task['cssClass'] }}">{{ $task['status'] }}</span>
 					</td>
 				</tr>
 			@endforeach
