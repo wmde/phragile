@@ -4,6 +4,7 @@ use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
+use PHPUnit_Framework_Assert as PHPUnit;
 
 /**
  * Defines application features from the specific context.
@@ -388,5 +389,33 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function iPasteTheCopiedPhabricatorId()
 	{
 		$this->fillField('title', $this->phabricatorProjectID);
+	}
+
+	/**
+	 * @Given I know the number of snapshots
+	 */
+	public function iKnowTheNumberOfSnapshots()
+	{
+		$this->numberOfSnapshots = SprintSnapshot::count();
+	}
+
+	/**
+	 * @When I execute artisan :command
+	 */
+	public function iExecuteArtisan($command)
+	{
+		Artisan::call($command);
+	}
+
+	/**
+	 * @Then I should have created one snapshot for each sprint
+	 */
+	public function iShouldHaveCreatedOneSnapshotForEachSprint()
+	{
+		$numberOfSprints = Sprint::count();
+
+		PHPUnit::assertSame($this->numberOfSnapshots + $numberOfSprints, SprintSnapshot::count());
+
+		SprintSnapshot::take($numberOfSprints)->delete(); // cleaning up
 	}
 }

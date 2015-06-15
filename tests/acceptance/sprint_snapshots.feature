@@ -33,3 +33,8 @@ Feature: Sprint Snapshots
     When I go to the latest snapshot page of "Sprint 42"
     And I click "Delete snapshot"
     Then "Sprint 42" should not have any snapshots
+
+  Scenario: Automated snapshots
+    Given I know the number of snapshots
+    When I execute artisan "snapshots:create"
+    Then I should have created one snapshot for each sprint
