@@ -26,13 +26,13 @@ class ScopeLineTest extends TestCase {
 	public function testShouldAlwaysUseLastSnapshot()
 	{
 		$snapshot1 = new SprintSnapshot([
-			'created_at' => '2015-01-01 00:00:00',
 			'total_points' => 42,
 		]);
+		$snapshot1->setCreatedAt('2015-01-01 00:00:00');
 		$snapshot2 = new SprintSnapshot([
-			'created_at' => '2015-01-01 02:00:00',
 			'total_points' => 41,
 		]);
+		$snapshot2->setCreatedAt('2015-01-01 02:00:00');
 		$scopeLine = new ScopeLine([$snapshot1, $snapshot2], 43, ['2015-01-01']);
 
 		$data = $scopeLine->getData();
@@ -42,9 +42,9 @@ class ScopeLineTest extends TestCase {
 	public function testShouldFillTotalPointsBackwardsFromFirstSnapshot()
 	{
 		$snapshot = new SprintSnapshot([
-			'created_at' => '2015-01-02 00:00:00',
 			'total_points' => 42,
 		]);
+		$snapshot->setCreatedAt('2015-01-02 00:00:00');
 		$duration = ['2015-01-01', '2015-01-02'];
 		$scopeLine = new ScopeLine([$snapshot], 40, $duration);
 

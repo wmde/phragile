@@ -55,7 +55,7 @@ class ScopeLine {
 
 		foreach ($snapshots as $snapshot)
 		{
-			$dateCreatedAt = date('Y-m-d', strtotime($snapshot->created_at));
+			$dateCreatedAt = date('Y-m-d', strtotime($snapshot->getCreatedAt()));
 			$snapshotsMap[$dateCreatedAt] = $snapshot;
 		}
 
