@@ -6,7 +6,7 @@ class BurnupChart {
 
 	public function __construct(array $closedPerDay, ScopeLine $scopeLine)
 	{
-		$this->data = $this->calculateBurnupData($scopeLine->getData(), $burndownChart->getPointsClosedPerDay());
+		$this->data = $this->calculateBurnupData($scopeLine->getData(), $closedPerDay);
 	}
 
 	private function calculateBurnupData(array $scopeLine, array $closedPerDay)

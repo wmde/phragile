@@ -1,6 +1,7 @@
 <?php
 namespace Phragile\Factory;
 
+use Phragile\BurnupChart;
 use Phragile\ProjectColumnRepository;
 use Phragile\PhabricatorAPI;
 use Phragile\TaskList;
@@ -11,6 +12,7 @@ use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
 use Phragile\TransactionList;
+use Phragile\ScopeLine;
 
 class SprintDataFactory {
 	private $sprint = null;
@@ -20,6 +22,7 @@ class SprintDataFactory {
 
 	private $taskList = null;
 	private $columns = null;
+	private $burndownChart = null;
 
 	public function __construct(\Sprint $sprint, array $tasks, array $transactions, PhabricatorAPI $phabricatorAPI)
 	{
@@ -35,6 +38,8 @@ class SprintDataFactory {
 				? new StatusByWorkboardDispatcher($this->sprint->phid, new TransactionList($this->transactions), $this->columns, $this->getClosedColumns())
 				: new StatusByStatusFieldDispatcher(env('REVIEW_TAG_PHID'))
 		);
+
+		$this->burndownChart = $this->generateBurndownData();
 	}
 
 	public function getCurrentSprint()
@@ -44,13 +49,18 @@ class SprintDataFactory {
 
 	public function getBurndownChart()
 	{
-		return new BurndownChart(
-			$this->sprint,
-			$this->taskList,
-			$this->transactions,
-			$this->isWorkboardMode()
-				? new ClosedTimeByWorkboardDispatcher($this->sprint->phid, $this->getClosedColumnPHIDs())
-				: new ClosedTimeByStatusFieldDispatcher()
+		return $this->burndownChart;
+	}
+
+	public function getBurnupChart()
+	{
+		return new BurnupChart(
+			$this->burndownChart->getPointsClosedPerDay(),
+			new ScopeLine(
+				$this->sprint->snapshots ?: [],
+				$this->taskList->getTasksPerStatus()['total']['points'],
+				$this->sprint->getFormattedDays('Y-m-d')
+			)
 		);
 	}
 
@@ -77,6 +87,18 @@ class SprintDataFactory {
 				'cssClass' => $this->getStatusCssClass($task['status']),
 			]);
 		}, $this->taskList->getTasks());
+	}
+
+	private function generateBurndownData()
+	{
+		return new BurndownChart(
+			$this->sprint,
+			$this->taskList,
+			$this->transactions,
+			$this->isWorkboardMode()
+				? new ClosedTimeByWorkboardDispatcher($this->sprint->phid, $this->getClosedColumnPHIDs())
+				: new ClosedTimeByStatusFieldDispatcher()
+		);
 	}
 
 	private function getStatusCssClass($status)

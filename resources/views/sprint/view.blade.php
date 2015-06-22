@@ -3,7 +3,7 @@
 @section('title', 'Phragile - ' . (isset($snapshot) ? "Snapshot of {$sprint->title}" : $sprint->title))
 
 @section('content')
-    @include('project.partials.settings_form')
+	@include('project.partials.settings_form')
 
 	<h1 class="sprint-overview-title">
 		{{ $sprint->project->title }}
@@ -11,7 +11,7 @@
 		<span class="dropdown">
 			<button class="btn btn-lg dropdown-toggle" type="button" data-toggle="dropdown">
 				{{ $sprint->title }}
-                <span class="caret"></span>
+				<span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu">
 				@foreach($sprint->project->sprints as $s)
@@ -56,6 +56,7 @@
 				</tbody>
 			</table>
 			<div id="burndown"></div>
+			<div id="burnup-data" class="hidden">{{ json_encode($burnup->getData()) }}</div>
 		</div>
 
 		<div class="col-md-4">
