@@ -13,9 +13,32 @@ class ScopeLine {
 	 */
 	public function __construct(array $snapshots, $pointsNumber, array $dateRange)
 	{
-		$this->snapshots = $snapshots;
+		$this->snapshots = $this->groupSnapshotsByDay($snapshots);
 		$this->pointsNumber = $pointsNumber;
-		$this->data = array_fill_keys($dateRange, $pointsNumber);
+		$this->data = $this->calculateScopeLine(array_fill_keys($dateRange, $pointsNumber));
+	}
+
+	private function calculateScopeLine(array $days)
+	{
+		foreach ($days as $day => $points)
+		{
+			if (isset($this->snapshots[$day])) $days[$day] = $this->snapshots[$day]->total_points;
+		}
+
+		return $days;
+	}
+
+	private function groupSnapshotsByDay(array $snapshots)
+	{
+		$snapshotsMap = [];
+
+		foreach ($snapshots as $snapshot)
+		{
+			$dateCreatedAt = date('Y-m-d', strtotime($snapshot->created_at));
+			$snapshotsMap[$dateCreatedAt] = $snapshot;
+		}
+
+		return $snapshotsMap;
 	}
 
 	public function getData()

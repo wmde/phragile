@@ -22,4 +22,20 @@ class ScopeLineTest extends TestCase {
 		foreach ($scopeLine->getData() as $date => $points)
 			$this->assertSame($points, $numberOfPoints);
 	}
+
+	public function testShouldAlwaysUseLastSnapshot()
+	{
+		$snapshot1 = new SprintSnapshot([
+			'created_at' => '2015-01-01 00:00:00',
+			'total_points' => 42,
+		]);
+		$snapshot2 = new SprintSnapshot([
+			'created_at' => '2015-01-01 02:00:00',
+			'total_points' => 41,
+		]);
+		$scopeLine = new ScopeLine([$snapshot1, $snapshot2], 43, ['2015-01-01']);
+
+		$data = $scopeLine->getData();
+		$this->assertSame($data['2015-01-01'], 41);
+	}
 }
