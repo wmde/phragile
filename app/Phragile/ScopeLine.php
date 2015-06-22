@@ -4,6 +4,7 @@ namespace Phragile;
 class ScopeLine {
 	private $snapshots = [];
 	private $pointsNumber;
+	private $dateRange = [];
 	private $data = [];
 
 	/**
@@ -15,17 +16,37 @@ class ScopeLine {
 	{
 		$this->snapshots = $this->groupSnapshotsByDay($snapshots);
 		$this->pointsNumber = $pointsNumber;
+		$this->dateRange = $dateRange;
 		$this->data = $this->calculateScopeLine(array_fill_keys($dateRange, $pointsNumber));
 	}
 
 	private function calculateScopeLine(array $days)
 	{
+		$currentPoints = $this->findInitialPointsNumber();
+
 		foreach ($days as $day => $points)
 		{
-			if (isset($this->snapshots[$day])) $days[$day] = $this->snapshots[$day]->total_points;
+			if (isset($this->snapshots[$day]))
+			{
+				$days[$day] = $this->snapshots[$day]->total_points;
+				$currentPoints = $this->snapshots[$day]->total_points;
+			} else
+			{
+				$days[$day] = $currentPoints;
+			}
 		}
 
 		return $days;
+	}
+
+	private function findInitialPointsNumber()
+	{
+		foreach ($this->dateRange as $date)
+		{
+			if (isset($this->snapshots[$date])) return $this->snapshots[$date]->total_points;
+		}
+
+		return $this->pointsNumber;
 	}
 
 	private function groupSnapshotsByDay(array $snapshots)

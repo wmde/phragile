@@ -38,4 +38,18 @@ class ScopeLineTest extends TestCase {
 		$data = $scopeLine->getData();
 		$this->assertSame($data['2015-01-01'], 41);
 	}
+
+	public function testShouldFillTotalPointsBackwardsFromFirstSnapshot()
+	{
+		$snapshot = new SprintSnapshot([
+			'created_at' => '2015-01-02 00:00:00',
+			'total_points' => 42,
+		]);
+		$duration = ['2015-01-01', '2015-01-02'];
+		$scopeLine = new ScopeLine([$snapshot], 40, $duration);
+
+		$data = $scopeLine->getData();
+		$this->assertSame($data[$duration[0]], 42);
+		$this->assertSame($data[$duration[1]], 42);
+	}
 }
