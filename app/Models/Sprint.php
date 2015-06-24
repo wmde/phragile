@@ -89,16 +89,35 @@ class Sprint extends Eloquent {
 	 */
 	public function createSnapshot()
 	{
+		$tasks = $this->fetchTasks();
+
 		return SprintSnapshot::create([
 			'sprint_id' => $this->id,
-			'data' => json_encode($this->fetchSnapshotData())
+			'data' => json_encode($this->fetchSnapshotData($tasks)),
+			'total_points' => $this->calculateTotalPoints($tasks),
 		]);
 	}
 
-	private function fetchSnapshotData()
+	private function calculateTotalPoints(array $tasks)
+	{
+		return array_reduce(
+			$tasks,
+			function($sum, $task)
+			{
+				return $sum + $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')];
+			},
+			0
+		);
+	}
+
+	private function fetchTasks()
+	{
+		return App::make('phabricator')->queryTasksByProject($this->phid);
+	}
+
+	private function fetchSnapshotData(array $tasks)
 	{
 		$phabricator = App::make('phabricator');
-		$tasks = $phabricator->queryTasksByProject($this->phid);
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];

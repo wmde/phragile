@@ -20,6 +20,7 @@ class SprintSnapshotsController extends Controller {
 			'currentSprint' => $factory->getCurrentSprint(),
 			'pieChartData' => $factory->getPieChartData(),
 			'burndown' => $factory->getBurndownChart(),
+			'burnup' => $factory->getBurnupChart(),
 			'sprintBacklog' => $factory->getSprintBacklog()
 		]);
 	}
