@@ -13,9 +13,16 @@
         return next;
     };
 
-    var burndownChart = (function () {
-        var sprintData,
-            dimensions,
+    var xOfDay = function (d) { return chartBasis.getX()(d.day); },
+        yOfPoints = function (d) { return chartBasis.getY()(d.points);},
+        id = function (val) { return val;},
+        formatDate = d3.time.format('%Y-%m-%d').parse;
+
+    var chartBasis = (function () {
+        var dimensions,
+            graphs = {},
+            sprintDays,
+            maxPoints,
 
             svg,
 
@@ -26,17 +33,18 @@
         var setSVG = function (svgElementID) {
             svg = d3.select(svgElementID)
                 .append('svg')
-                .attr('width', dimensions.width + dimensions.margin.left + dimensions.margin.right)
-                .attr('height', dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
+                    .attr('width', dimensions.width + dimensions.margin.left + dimensions.margin.right)
+                    .attr('height', dimensions.height + dimensions.margin.top + dimensions.margin.bottom)
                 .append('g')
-                .attr('transform', 'translate(' + dimensions.margin.left + ',' + dimensions.margin.top + ')');
+                    .attr('id', 'graphs')
+                    .attr('transform', 'translate(' + dimensions.margin.left + ',' + dimensions.margin.top + ')');
         };
 
         var addAxes = function () {
             var xAxis = d3.svg.axis().scale(x)
                 .orient('bottom')
                 .ticks(
-                    Math.min(sprintData.getBurndownData().length, MAX_TICKS)
+                    Math.min(sprintDays.length, MAX_TICKS)
                 )
                 .tickFormat(d3.time.format('%b %e'));
 
@@ -57,69 +65,20 @@
                 .call(yAxis);
         };
 
-        var addActualProgressLine = function () {
-            var pastSprintDays = sprintData.getBurndownData().filter(function (data) {
-                var $snapshotDate = $('#snapshot-date'),
-                    filterDate = $snapshotDate.length > 0 ? Date.parse($snapshotDate.text()) : new Date();
+        var loadLabels = function (index) {
+            var $labelsTable = $('#graph-labels tbody');
 
-                return data.day <= filterDate;
+            for (var name in graphs) {
+                $labelsTable.append(graphs[name].getLabelHTML(index));
+            }
+        }
+
+        var showDataPointsLabel = function (position, index) {
+            $('#graph-labels').show().css({
+                left: position[0] + 20,
+                top: position[1] + 30
             });
-
-            svg.append('path')
-                .attr('class', 'graph actual')
-                .attr('d', line(pastSprintDays));
-
-            svg.append('path')
-                .datum(pastSprintDays)
-                .attr('class', 'graph-area')
-                .attr('d', d3.svg.area()
-                    .x(xOfDay)
-                    .y0(y(0))
-                    .y1(yOfPoints));
-
-            addDataPoints('actual-data-points', pastSprintDays);
-            addHoverEffects(pastSprintDays);
-        };
-
-        var addIdealProgressLine = function () {
-            var graphData = sprintData.getIdealGraphData();
-
-            svg.append('path')
-                .attr('class', 'graph ideal')
-                .attr('d', line(graphData));
-
-            addDataPoints('ideal-data-points', graphData);
-        };
-
-        var xOfDay = function (d) { return x(d.day); },
-            yOfPoints = function (d) { return y(d.points); };
-
-        var line = d3.svg.line()
-            .x(xOfDay)
-            .y(yOfPoints);
-
-        var addClosedTasksPerDayBars = function () {
-            svg.selectAll('.daily-points')
-                .data(sprintData.getPointsClosedPerDay())
-                .enter().append('line')
-                    .attr('class', 'daily-points')
-                    .attr('x1', xOfDay)
-                    .attr('y1', y(0))
-                    .attr('x2', xOfDay)
-                    .attr('y2', yOfPoints);
-        };
-
-        var addDataPoints = function (id, graphData) {
-            svg.append('g')
-                .attr('id', id)
-                .selectAll('.data-point')
-                    .data(graphData)
-                    .enter()
-                    .append('circle')
-                        .attr('class', 'data-point')
-                        .attr('r', 4)
-                        .attr('cx', xOfDay)
-                        .attr('cy', yOfPoints);
+            loadLabels(index);
         };
 
         var resetHoverEffects = function () {
@@ -127,7 +86,28 @@
                 .attr('class', 'data-point');
             svg.selectAll('.x.axis .tick text')
                 .style('font-weight', 'normal');
-            $('#graph-labels').hide();
+            $('#graph-labels').hide().find('tbody').html('');
+        };
+
+        var bisect = d3.bisector(id).left;
+
+        var highlightDataPoints = function (index) {
+            svg.selectAll('.data-point:nth-child(' + (index + 1) + ')')
+                .attr('class', 'data-point selected');
+            svg.select('.x.axis .tick:nth-child(' + (index + 1) + ') text')
+                .style('font-weight', 'bold');
+        };
+
+        var highlightAtMouse = function () {
+            return function () {
+                var mouse = d3.mouse(this),
+                    xNearMouse = x.invert(mouse[0] - (dimensions.width / sprintDays.length) / 2),
+                    indexAtX = bisect(sprintDays, xNearMouse);
+
+                resetHoverEffects();
+                highlightDataPoints(indexAtX, xNearMouse);
+                showDataPointsLabel(mouse, indexAtX);
+            };
         };
 
         var addHoverOverlay = function () {
@@ -138,46 +118,10 @@
                 .on('mouseout', resetHoverEffects);
         };
 
-        var bisect = d3.bisector(function(d) { return d.day; }).left;
-
-        var highlightDataPoints = function (index) {
-            svg.selectAll('.data-point:nth-child(' + (index + 1) + ')')
-                .attr('class', 'data-point selected');
-            svg.select('.x.axis .tick:nth-child(' + (index + 1) + ') text')
-                .style('font-weight', 'bold');
-        };
-
-        var showDataPointsLabel = function (idealPoints, actualPoints, position) {
-            $('#ideal-progress').text(idealPoints);
-            $('#actual-progress').text(actualPoints);
-            $('#graph-labels').show().css({
-                left: position[0] + 20,
-                top: position[1] + 30
-            });
-        };
-
-        var highlightAtMouse = function (actualGraphData, idealGraphData) {
-            return function () {
-                var mouse = d3.mouse(this),
-                    xNearMouse = x.invert(mouse[0] - (dimensions.width / actualGraphData.length) / 2),
-                    indexAtX = bisect(idealGraphData, xNearMouse);
-
-                resetHoverEffects();
-                highlightDataPoints(indexAtX, xNearMouse);
-                showDataPointsLabel(
-                    Math.round(idealGraphData[indexAtX].points),
-                    actualGraphData[indexAtX].points,
-                    mouse
-                );
-            };
-        };
-
         var addHoverEffects = function () {
-            var idealGraphData = sprintData.getIdealGraphData(),
-                actualGraphData = sprintData.getBurndownData(),
-                overlay = addHoverOverlay();
+            var overlay = addHoverOverlay();
 
-            overlay.on('mousemove', highlightAtMouse(actualGraphData, idealGraphData));
+            overlay.on('mousemove', highlightAtMouse());
             overlay.on('mouseout', resetHoverEffects);
         };
 
@@ -185,16 +129,29 @@
             x = d3.time.scale().range([0, dimensions.width]);
             y = d3.scale.linear().range([dimensions.height, 0]);
 
-            x.domain(d3.extent(sprintData.getBurndownData(), function (d) { return d.day; }));
-            y.domain([0, sprintData.getTotalPoints()]);
+            x.domain(d3.extent(sprintDays, id));
+            y.domain([0, maxPoints]);
+        };
+
+        var renderGraphs = function () {
+            for (var name in graphs) {
+                graphs[name].render();
+            }
         };
 
         return {
             /**
              * @param {Object} data - A burndownData Object containing information for the graphs
              */
-            init: function (data) {
-                sprintData = data;
+            init: function (days, max) {
+                sprintDays = days;
+                maxPoints = max;
+            },
+
+            addGraphs: function (lineGraphs) {
+                for (var name in lineGraphs) {
+                    graphs[name] = lineGraphs[name];
+                }
             },
 
             /**
@@ -208,44 +165,37 @@
                 setDomain();
 
                 addAxes();
-                addIdealProgressLine();
-                addActualProgressLine();
-                addClosedTasksPerDayBars();
+                // TODO: blue background from progress graph now missing
+                // TODO: closed per day bars now missing
+                renderGraphs();
+                addHoverEffects();
+            },
+
+            getX: function () {
+                return x;
+            },
+
+            getY: function () {
+                return y;
             }
         };
     })();
 
-    var burndownData = function () {
+    var graphsData = function () {
         var pointsClosedPerDay,
             remainingPointsPerDay,
             pointsClosedBeforeSprint,
+            sprintData,
             totalPoints;
 
-        var dataToList = function (dataObject) {
-            var days = [];
-
-            for (var date in dataObject) {
-                days.push({
-                    day: d3.time.format('%Y-%m-%d').parse(date),
-                    points: dataObject[date]
-                });
-            }
-
-            return days;
-        };
-
         var calculateActualProgressData = function (closedPerDay) {
-            var remaining = totalPoints - pointsClosedBeforeSprint;
-
             return [{ // adding another "day" so that the progress of the first day is not hidden
-                day: dayBefore(closedPerDay[0].day),
-                points: remaining
+                day: dayBefore(closedPerDay[0].date),
+                points: totalPoints - pointsClosedBeforeSprint
             }].concat(closedPerDay.map(function (day) {
-                remaining -= day.points;
-
                 return {
-                    day: day.day,
-                    points: remaining
+                    day: day.date,
+                    points: totalPoints - day.points
                 };
             }));
         };
@@ -264,17 +214,12 @@
             return count;
         };
 
-        var calculateIdealGraph = function (actualProgress) {
-            var averagePointsPerDay = totalPoints / (actualProgress.length - countWeekendDays(actualProgress) - 1),
-                idealData = [],
-                remaining = totalPoints;
+        var prepareData = function (data) {
+            return data.map(function (d) {
+                d.date = formatDate(d.date);
 
-            actualProgress.forEach(function (day) {
-                idealData.push({ day: day.day, points: remaining });
-                if (!isWeekend(dayAfter(day.day))) remaining -= averagePointsPerDay;
-            });
-
-            return idealData;
+                return d;
+            })
         };
 
         return {
@@ -283,11 +228,11 @@
              * @param {number} closedBeforeSprint - Number of story points that were closed before the sprint start
              * @param {number} pointsInSprint - Total number of story points in this sprint
              */
-            init: function (closedPerDate, closedBeforeSprint, pointsInSprint) {
-                totalPoints = pointsInSprint;
+            init: function (closedPerDate, closedBeforeSprint) {
+                totalPoints = closedPerDate[closedPerDate.length - 1].scope;
                 pointsClosedBeforeSprint = closedBeforeSprint;
-                pointsClosedPerDay = dataToList(closedPerDate);
-                remainingPointsPerDay = calculateActualProgressData(pointsClosedPerDay);
+                sprintData = prepareData(closedPerDate);
+                remainingPointsPerDay = calculateActualProgressData(sprintData);
             },
 
             /**
@@ -321,21 +266,114 @@
              * @returns {Object[]}
              */
             getIdealGraphData: function () {
-                return calculateIdealGraph(remainingPointsPerDay);
+                var averagePointsPerDay = totalPoints / (remainingPointsPerDay.length - countWeekendDays(remainingPointsPerDay) - 1),
+                    idealData = [],
+                    remaining = totalPoints;
+
+                remainingPointsPerDay.forEach(function (day) {
+                    idealData.push({ day: day.day, points: remaining });
+                    if (!isWeekend(dayAfter(day.day))) remaining -= averagePointsPerDay;
+                });
+
+                return idealData;
+            },
+
+            getDaysInSprint: function () {
+                return [ // adding another "day" so that the progress of the first day is not hidden
+                    dayBefore(sprintData[0].date)
+                ].concat(sprintData.map(function (day) {
+                    return day.date;
+                }));
+            },
+
+            getMaxPoints: function () {
+                return d3.max(sprintData, function (day) { return day.scope; });
+            },
+
+            getScopeLine: function () {
+                return [{ // adding another "day" so that the progress of the first day is not hidden
+                    day: dayBefore(sprintData[0].date),
+                    points: sprintData[0].scope
+                }].concat(sprintData.map(function (day) {
+                    return {
+                        day: day.date,
+                        points: day.scope
+                    };
+                }));
+            },
+
+            getBurnupData: function () {
+                return [{ // adding another "day" so that the progress of the first day is not hidden
+                    day: dayBefore(sprintData[0].date),
+                    points: pointsClosedBeforeSprint
+                }].concat(sprintData.map(function (day) {
+                    return {
+                        day: day.date,
+                        points: pointsClosedBeforeSprint + day.points
+                    };
+                }));
             }
         };
     }();
 
-    var $burndownData = $('#burndown-data');
+    var Graph = function(data, id, label) {
+        this.data = data;
+        this.id = id;
+        this.label = label;
 
-    burndownData.init(
-        $.parseJSON($burndownData.text()),
-        +$burndownData.data('before'),
-        +$burndownData.data('total')
+        this.line = d3.svg.line()
+            .x(xOfDay)
+            .y(yOfPoints);
+
+        this.addDataPoints = function () {
+            this.plane.append('g')
+                .attr('id', id + '-data-points')
+                .selectAll('.data-point')
+                .data(data)
+                .enter()
+                .append('circle')
+                    .attr('class', 'data-point')
+                    .attr('r', 4)
+                    .attr('cx', xOfDay)
+                    .attr('cy', yOfPoints);
+        };
+    };
+
+    Graph.prototype = {
+        constructor: Graph,
+
+        getLabelHTML: function (i) {
+            return '<tr class="' + this.id + '">'
+                + '<td>' + this.label + '</td>'
+                + '<td class="graph-value">' + Math.round(this.data[i].points) + '</td>'
+                + '</tr>';
+        },
+
+        render: function () {
+            this.plane = d3.select('#graphs');
+
+            this.plane.append('path')
+                .attr('class', 'graph ' + this.id)
+                .attr('d', this.line(this.data));
+
+            this.addDataPoints()
+        }
+    };
+
+    var $chartData = $('#chart-data');
+    graphsData.init(
+        $.parseJSON($chartData.text()),
+        +$chartData.data('before')
     );
 
-    burndownChart.init(burndownData);
-    burndownChart.render(
+    chartBasis.init(graphsData.getDaysInSprint(), graphsData.getMaxPoints());
+    chartBasis.addGraphs({
+        burnup: new Graph(graphsData.getBurnupData(), 'burn-up', 'Completed'),
+        scope: new Graph(graphsData.getScopeLine(), 'scope', 'Scope'),
+        burndown: new Graph(graphsData.getBurndownData(), 'actual', 'Remaining '),
+        ideal: new Graph(graphsData.getIdealGraphData(), 'ideal', 'Ideal')
+    });
+    chartBasis.render(
         '#burndown',
         {
             height: 400,
