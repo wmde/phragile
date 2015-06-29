@@ -36,27 +36,12 @@
 	<?php $closedPerDay = $burndown->getPointsClosedPerDay() ?>
 	<div class="row">
 		<div class="col-md-8">
-			<div id="burndown-data"
-				 class="hidden"
-				 data-total="{{ $pieChartData['total']['points'] }}"
-				 data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">
-				{{ json_encode($burndown->getPointsClosedPerDay()) }}
-			</div>
-
 			<table class="table table-condensed" id="graph-labels">
 				<tbody>
-					<tr class="actual">
-						<td>Actual points</td>
-						<td class="graph-value" id="actual-progress"></td>
-					</tr>
-					<tr class="ideal">
-						<td>Ideal points</td>
-						<td class="graph-value" id="ideal-progress"></td>
-					</tr>
 				</tbody>
 			</table>
 			<div id="burndown"></div>
-			<div id="burnup-data" class="hidden">{{ json_encode($burnup->getData()) }}</div>
+			<div id="chart-data" class="hidden" data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">{!! json_encode($burnup->getData()) !!}</div>
 		</div>
 
 		<div class="col-md-4">
