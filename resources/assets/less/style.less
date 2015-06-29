@@ -10,6 +10,8 @@
 @burndown-actual: @phragile-saturated-blue;
 @burndown-ideal: @phragile-light-green;
 @burndown-daily-points: @phragile-green;
+@burnup-progress: @burndown-actual;
+@burnup-scope: @phragile-bright-yellow;
 
 .navbar {
   border-top: 0;
@@ -87,6 +89,14 @@
       stroke-dasharray: 10 5;
     }
 
+    &.burn-up {
+      stroke: @burnup-progress;
+    }
+
+    &.scope {
+      stroke: @burnup-scope;
+    }
+
     stroke-width: 3px;
     fill: none;
   }
@@ -134,6 +144,12 @@
   #ideal-data-points .data-point {
     .data-point(@burndown-ideal)
   }
+  #burn-up-data-points .data-point {
+    .data-point(@burnup-progress)
+  }
+  #scope-data-points .data-point {
+    .data-point(@burnup-scope)
+  }
 }
 
 #burndown-overlay {
@@ -155,14 +171,21 @@
     font-weight: bold;
   }
 
+  td:last-child {
+    border-bottom: 0;
+  }
+
+  .scope {
+    color: darken(@burnup-scope, 10%);
+  }
+  .burn-up {
+    color: @burnup-progress;
+  }
   .ideal {
     color: darken(@burndown-ideal, 20%);
   }
   .actual {
-    color: @burndown-actual;
-    td {
-      border-top: 0;
-    }
+    color: @burndown-actual
   }
 }
 
