@@ -149,9 +149,7 @@
             },
 
             addGraphs: function (lineGraphs) {
-                for (var name in lineGraphs) {
-                    graphs[name] = lineGraphs[name];
-                }
+                graphs = lineGraphs;
             },
 
             /**
