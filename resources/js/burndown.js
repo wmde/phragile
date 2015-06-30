@@ -165,7 +165,6 @@
                 setDomain();
 
                 addAxes();
-                // TODO: blue background from progress graph now missing
                 // TODO: closed per day bars now missing
                 renderGraphs();
                 addHoverEffects();
@@ -366,11 +365,26 @@
         +$chartData.data('before')
     );
 
+    var burndownGraph = new Graph(graphsData.getBurndownData(), 'actual', 'Remaining '),
+        burnupGraph = new Graph(graphsData.getBurnupData(), 'burn-up', 'Completed'),
+        graphShadow = function () {
+        Graph.prototype.render.call(this);
+        this.plane.append('path')
+            .datum(this.data)
+            .attr('class', 'graph-area')
+            .attr('d', d3.svg.area()
+                .x(xOfDay)
+                .y0(chartBasis.getY()(0))
+                .y1(yOfPoints));
+    }
+    burndownGraph.render = graphShadow;
+    burnupGraph.render = graphShadow;
+
     chartBasis.init(graphsData.getDaysInSprint(), graphsData.getMaxPoints());
     chartBasis.addGraphs({
-        burnup: new Graph(graphsData.getBurnupData(), 'burn-up', 'Completed'),
+        burnup: burnupGraph,
         scope: new Graph(graphsData.getScopeLine(), 'scope', 'Scope'),
-        burndown: new Graph(graphsData.getBurndownData(), 'actual', 'Remaining '),
+        burndown: burndownGraph,
         ideal: new Graph(graphsData.getIdealGraphData(), 'ideal', 'Ideal')
     });
     chartBasis.render(
