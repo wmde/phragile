@@ -21,6 +21,7 @@
     var chartBasis = (function () {
         var dimensions,
             graphs = {},
+            barCharts = {},
             sprintDays,
             maxPoints,
 
@@ -139,6 +140,13 @@
             }
         };
 
+        var renderBarCharts = function () {
+            for (var name in barCharts) {
+                console.log('meowow')
+                barCharts[name].render();
+            }
+        };
+
         return {
             /**
              * @param {Object} data - A burndownData Object containing information for the graphs
@@ -152,6 +160,10 @@
                 graphs = lineGraphs;
             },
 
+            addBarCharts: function (bars) {
+                barCharts = bars;
+            },
+
             /**
              * @param {string} id - The ID of the element where the burndown chart will be shown
              * @param {Object} chartDimensions - An object containing height, width, margin.top, margin.right, margin.bottom, margin.left
@@ -163,7 +175,7 @@
                 setDomain();
 
                 addAxes();
-                // TODO: closed per day bars now missing
+                renderBarCharts();
                 renderGraphs();
                 addHoverEffects();
             },
@@ -219,6 +231,20 @@
             })
         };
 
+        var calculatePointsClosedPerDay = function (totalPoints, remainingPointsPerDay) {
+            var previous = totalPoints;
+
+            return remainingPointsPerDay.map(function (remaining) {
+                var closedThatDay = previous - remaining.points;
+                previous = remaining.points;
+
+                return {
+                    day: remaining.day,
+                    points: closedThatDay
+                };
+            });
+        };
+
         return {
             /**
              * @param {Object} closedPerDate - An object with date strings as its keys and number of closed points as values
@@ -254,7 +280,7 @@
              * @returns {Object[]} List of Objects of the form { day: 'yyyy-mm-dd', points: numberOfClosedPoints }
              */
             getPointsClosedPerDay: function () {
-                return pointsClosedPerDay;
+                return calculatePointsClosedPerDay(totalPoints, remainingPointsPerDay);
             },
 
             /**
@@ -357,6 +383,27 @@
         }
     };
 
+    var BarChart = function (data, id, label) {
+        this.data = data;
+        this.id = id;
+        this.label = label;
+    };
+
+    BarChart.prototype = {
+        constructor: BarChart,
+
+        render: function () {
+            d3.select('#graphs').selectAll(this.id)
+                .data(this.data)
+                .enter().append('line')
+                    .attr('class', 'daily-points')
+                    .attr('x1', xOfDay)
+                    .attr('y1', chartBasis.getY()(0))
+                    .attr('x2', xOfDay)
+                    .attr('y2', yOfPoints);
+        }
+    };
+
     var $chartData = $('#chart-data');
     graphsData.init(
         $.parseJSON($chartData.text()),
@@ -384,6 +431,9 @@
         scope: new Graph(graphsData.getScopeLine(), 'scope', 'Scope'),
         burndown: burndownGraph,
         ideal: new Graph(graphsData.getIdealGraphData(), 'ideal', 'Ideal')
+    });
+    chartBasis.addBarCharts({
+        closedPerDay: new BarChart(graphsData.getPointsClosedPerDay(), 'daily-points', 'Closed')
     });
     chartBasis.render(
         '#burndown',
