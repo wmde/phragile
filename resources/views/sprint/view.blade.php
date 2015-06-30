@@ -62,7 +62,7 @@
 			<div class="dropdown" id="snapshots">
 				@if(!$sprint->sprintSnapshots->isEmpty())
 					<button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-						{{ isset($snapshot) ? "Snapshot $snapshot->created_at" : 'Live version' }}
+						{!! isset($snapshot) ? "Snapshot <span id='snapshot-date'>$snapshot->created_at</span>" : 'Live version' !!}
 						<span class="caret"></span>
 					</button>
 					<ul class="dropdown-menu">

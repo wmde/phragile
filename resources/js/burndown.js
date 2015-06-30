@@ -59,7 +59,10 @@
 
         var addActualProgressLine = function () {
             var pastSprintDays = sprintData.getBurndownData().filter(function (data) {
-                return data.day <= new Date();
+                var $snapshotDate = $('#snapshot-date'),
+                    filterDate = $snapshotDate.length > 0 ? Date.parse($snapshotDate.text()) : new Date();
+
+                return data.day <= filterDate;
             });
 
             svg.append('path')
