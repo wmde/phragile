@@ -413,15 +413,16 @@
     var burndownGraph = new Graph(graphsData.getBurndownData(), 'actual', 'Remaining '),
         burnupGraph = new Graph(graphsData.getBurnupData(), 'burn-up', 'Completed'),
         graphShadow = function () {
-        Graph.prototype.render.call(this);
-        this.plane.append('path')
-            .datum(this.data)
-            .attr('class', 'graph-area')
-            .attr('d', d3.svg.area()
-                .x(xOfDay)
-                .y0(chartBasis.getY()(0))
-                .y1(yOfPoints));
-    }
+            Graph.prototype.render.call(this);
+            this.plane.append('path')
+                .datum(this.data)
+                .attr('class', 'graph-area')
+                .attr('d', d3.svg.area()
+                    .x(xOfDay)
+                    .y0(chartBasis.getY()(0))
+                    .y1(yOfPoints));
+        };
+
     burndownGraph.render = graphShadow;
     burnupGraph.render = graphShadow;
 
