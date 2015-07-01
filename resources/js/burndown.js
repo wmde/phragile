@@ -142,7 +142,6 @@
 
         var renderBarCharts = function () {
             for (var name in barCharts) {
-                console.log('meowow')
                 barCharts[name].render();
             }
         };
