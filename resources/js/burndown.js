@@ -366,7 +366,9 @@
         getLabelHTML: function (i) {
             return '<tr class="' + this.id + '">'
                 + '<td>' + this.label + '</td>'
-                + '<td class="graph-value">' + Math.round(this.data[i].points) + '</td>'
+                + '<td class="graph-value">'
+                + Math.round(this.data[Math.min(this.data.length - 1, i)].points)
+                + '</td>'
                 + '</tr>';
         },
 
