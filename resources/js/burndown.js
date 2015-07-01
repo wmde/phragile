@@ -148,17 +148,24 @@
 
         return {
             /**
-             * @param {Object} data - A burndownData Object containing information for the graphs
+             * @param {Date[]} days - List of days in the sprint
+             * @param {int} max - The maximal total number of story points in the sprint
              */
             init: function (days, max) {
                 sprintDays = days;
                 maxPoints = max;
             },
 
+            /**
+             * @param {Graph[]} lineGraphs - Graphs to be rendered in the chart
+             */
             addGraphs: function (lineGraphs) {
                 graphs = lineGraphs;
             },
 
+            /**
+             * @param {BarChart[]} bars - BarCharts to be displayed on the bottom of the chart
+             */
             addBarCharts: function (bars) {
                 barCharts = bars;
             },
@@ -179,10 +186,16 @@
                 addHoverEffects();
             },
 
+            /**
+             * @returns Returns the d3 function which translates a date to a point in the chart
+             */
             getX: function () {
                 return x;
             },
 
+            /**
+             * @returns Returns the d3 function which translates a number of story points to a point in the chart
+             */
             getY: function () {
                 return y;
             }
@@ -247,7 +260,6 @@
             /**
              * @param {Object} closedPerDate - An object with date strings as its keys and number of closed points as values
              * @param {number} closedBeforeSprint - Number of story points that were closed before the sprint start
-             * @param {number} pointsInSprint - Total number of story points in this sprint
              */
             init: function (closedPerDate, closedBeforeSprint) {
                 totalPoints = closedPerDate[0].scope;
@@ -299,6 +311,9 @@
                 return idealData;
             },
 
+            /**
+             * @returns {Date[]}
+             */
             getDaysInSprint: function () {
                 return [ // adding another "day" so that the progress of the first day is not hidden
                     dayBefore(sprintData[0].date)
@@ -307,10 +322,16 @@
                 }));
             },
 
+            /**
+             * @returns {int} - Maximal total number of points in the sprint
+             */
             getMaxPoints: function () {
                 return d3.max(sprintData, function (day) { return day.scope; });
             },
 
+            /**
+             * @returns {Object[]} - Returns line chart data for the scope line
+             */
             getScopeLine: function () {
                 return [{ // adding another "day" so that the progress of the first day is not hidden
                     day: dayBefore(sprintData[0].date),
@@ -323,6 +344,9 @@
                 }));
             },
 
+            /**
+             * @returns {Object[]} - Returns line chart data for the burnup chart
+             */
             getBurnupData: function () {
                 return [{ // adding another "day" so that the progress of the first day is not hidden
                     day: dayBefore(sprintData[0].date),
@@ -337,6 +361,13 @@
         };
     }();
 
+    /**
+     * Objects containing data for line charts which can be rendered.
+     * @param {Object[]} data
+     * @param {string} id - Its CSS id
+     * @param {string} label - Description text for the graph which will show in the label that appears when hovering
+     * @constructor
+     */
     var Graph = function(data, id, label) {
         this.data = data;
         this.id = id;
@@ -363,6 +394,10 @@
     Graph.prototype = {
         constructor: Graph,
 
+        /**
+         * @param i - The data list index that the mouse is hovering
+         * @returns {string} - The label HTML
+         */
         getLabelHTML: function (i) {
             return '<tr class="' + this.id + '">'
                 + '<td>' + this.label + '</td>'
@@ -372,6 +407,9 @@
                 + '</tr>';
         },
 
+        /**
+         * Renders the graph on the chart
+         */
         render: function () {
             this.plane = d3.select('#graphs');
 
@@ -383,6 +421,14 @@
         }
     };
 
+    /**
+     * Same as Graph but also renders graph areas under the line.
+     * ProgressGraph will be limited to dates <= today.
+     * @param data
+     * @param id
+     * @param label
+     * @constructor
+     */
     var ProgressGraph = function (data, id, label) {
         data = data.filter(function (d) {
             return d.day <= new Date();
@@ -401,12 +447,19 @@
         }
     }
 
-    ProgressGraph.prototype = new Graph();
+    ProgressGraph.prototype = new Graph;
     ProgressGraph.prototype.render = function () {
         Graph.prototype.render.call(this);
         this.addGraphArea();
     };
 
+    /**
+     * Objects that contain data for bars that will be rendered at the bottom of the chart
+     * @param data
+     * @param id
+     * @param label
+     * @constructor
+     */
     var BarChart = function (data, id, label) {
         this.data = data;
         this.id = id;
@@ -416,6 +469,9 @@
     BarChart.prototype = {
         constructor: BarChart,
 
+        /**
+         * Renders the bar charts inside the burndown/burnup chart
+         */
         render: function () {
             d3.select('#graphs').selectAll(this.id)
                 .data(this.data)
