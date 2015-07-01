@@ -251,7 +251,7 @@
              * @param {number} pointsInSprint - Total number of story points in this sprint
              */
             init: function (closedPerDate, closedBeforeSprint) {
-                totalPoints = closedPerDate[closedPerDate.length - 1].scope;
+                totalPoints = closedPerDate[0].scope;
                 pointsClosedBeforeSprint = closedBeforeSprint;
                 sprintData = prepareData(closedPerDate);
                 remainingPointsPerDay = calculateActualProgressData(sprintData);
