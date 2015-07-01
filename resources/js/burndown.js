@@ -382,6 +382,10 @@
     };
 
     var ProgressGraph = function (data, id, label) {
+        data = data.filter(function (d) {
+            return d.day <= new Date();
+        });
+
         Graph.call(this, data, id, label);
 
         this.addGraphArea = function () {
