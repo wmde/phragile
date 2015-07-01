@@ -381,6 +381,26 @@
         }
     };
 
+    var ProgressGraph = function (data, id, label) {
+        Graph.call(this, data, id, label);
+
+        this.addGraphArea = function () {
+            this.plane.append('path')
+                .datum(this.data)
+                .attr('class', 'graph-area')
+                .attr('d', d3.svg.area()
+                    .x(xOfDay)
+                    .y0(chartBasis.getY()(0))
+                    .y1(yOfPoints));
+        }
+    }
+
+    ProgressGraph.prototype = new Graph();
+    ProgressGraph.prototype.render = function () {
+        Graph.prototype.render.call(this);
+        this.addGraphArea();
+    };
+
     var BarChart = function (data, id, label) {
         this.data = data;
         this.id = id;
@@ -408,27 +428,11 @@
         +$chartData.data('before')
     );
 
-    var burndownGraph = new Graph(graphsData.getBurndownData(), 'actual', 'Remaining '),
-        burnupGraph = new Graph(graphsData.getBurnupData(), 'burn-up', 'Completed'),
-        graphShadow = function () {
-            Graph.prototype.render.call(this);
-            this.plane.append('path')
-                .datum(this.data)
-                .attr('class', 'graph-area')
-                .attr('d', d3.svg.area()
-                    .x(xOfDay)
-                    .y0(chartBasis.getY()(0))
-                    .y1(yOfPoints));
-        };
-
-    burndownGraph.render = graphShadow;
-    burnupGraph.render = graphShadow;
-
     chartBasis.init(graphsData.getDaysInSprint(), graphsData.getMaxPoints());
     chartBasis.addGraphs({
-        burnup: burnupGraph,
+        burnup: new ProgressGraph(graphsData.getBurnupData(), 'burn-up', 'Completed'),
         scope: new Graph(graphsData.getScopeLine(), 'scope', 'Scope'),
-        burndown: burndownGraph,
+        burndown: new ProgressGraph(graphsData.getBurndownData(), 'actual', 'Remaining '),
         ideal: new Graph(graphsData.getIdealGraphData(), 'ideal', 'Ideal')
     });
     chartBasis.addBarCharts({
