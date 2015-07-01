@@ -191,8 +191,7 @@
     })();
 
     var graphsData = function () {
-        var pointsClosedPerDay,
-            remainingPointsPerDay,
+        var remainingPointsPerDay,
             pointsClosedBeforeSprint,
             sprintData,
             totalPoints;
