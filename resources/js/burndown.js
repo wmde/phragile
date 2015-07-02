@@ -431,7 +431,10 @@
      */
     var ProgressGraph = function (data, id, label) {
         data = data.filter(function (d) {
-            return d.day <= new Date();
+            var $snapshotDate = $('#snapshot-date'),
+                filterDate = $snapshotDate.length > 0 ? Date.parse($snapshotDate.text()) : new Date();
+
+            return d.day <= filterDate;
         });
 
         Graph.call(this, data, id, label);
