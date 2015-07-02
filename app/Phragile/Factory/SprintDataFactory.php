@@ -57,7 +57,7 @@ class SprintDataFactory {
 		return new BurnupChart(
 			$this->burndownChart->getPointsClosedPerDay(),
 			new ScopeLine(
-				$this->sprint->sprintSnapshots ?: [],
+				$this->sprint->snapshots ?: [],
 				$this->taskList->getTasksPerStatus()['total']['points'],
 				$this->sprint->getFormattedDays('Y-m-d')
 			)

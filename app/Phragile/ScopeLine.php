@@ -1,8 +1,6 @@
 <?php
 namespace Phragile;
 
-use Illuminate\Database\Eloquent\Collection;
-
 class ScopeLine {
 	private $snapshots = [];
 	private $pointsNumber;
@@ -10,14 +8,13 @@ class ScopeLine {
 	private $data = [];
 
 	/**
-	 * @param Collection $snapshots - Collection of snapshots for the sprint's scope line
+	 * @param array $snapshots - List of snapshots for the sprint's scope line
 	 * @param int $pointsNumber - Number of story points in the sprint at the moment
 	 * @param array $dateRange - Array of dates from sprint start to end
 	 */
-	public function __construct(Collection $snapshots, $pointsNumber, array $dateRange)
+	public function __construct(array $snapshots, $pointsNumber, array $dateRange)
 	{
 		$this->snapshots = $this->groupSnapshotsByDay($snapshots);
-
 		$this->pointsNumber = $pointsNumber;
 		$this->dateRange = $dateRange;
 		$this->data = $this->calculateScopeLine(array_fill_keys($dateRange, $pointsNumber));
@@ -52,7 +49,7 @@ class ScopeLine {
 		return $this->pointsNumber;
 	}
 
-	private function groupSnapshotsByDay(Collection $snapshots)
+	private function groupSnapshotsByDay(array $snapshots)
 	{
 		$snapshotsMap = [];
 
