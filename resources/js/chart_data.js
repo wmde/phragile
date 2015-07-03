@@ -12,11 +12,11 @@ var PHRAGILE = PHRAGILE || {};
                 day: PHRAGILE.Helpers.dayBefore(closedPerDay[0].date),
                 points: totalPoints - pointsClosedBeforeSprint
             }].concat(closedPerDay.map(function (day) {
-                    return {
-                        day: day.date,
-                        points: totalPoints - day.points
-                    };
-                }));
+                return {
+                    day: day.date,
+                    points: totalPoints - day.points
+                };
+            }));
         };
 
         var isWeekend = function (date) {
@@ -38,7 +38,7 @@ var PHRAGILE = PHRAGILE || {};
                 d.date = PHRAGILE.Helpers.formatDate(d.date);
 
                 return d;
-            })
+            });
         };
 
         var calculatePointsClosedPerDay = function (totalPoints, remainingPointsPerDay) {
@@ -117,8 +117,8 @@ var PHRAGILE = PHRAGILE || {};
                 return [ // adding another "day" so that the progress of the first day is not hidden
                     PHRAGILE.Helpers.dayBefore(sprintData[0].date)
                 ].concat(sprintData.map(function (day) {
-                        return day.date;
-                    }));
+                    return day.date;
+                }));
             },
 
             /**
@@ -136,11 +136,11 @@ var PHRAGILE = PHRAGILE || {};
                     day: PHRAGILE.Helpers.dayBefore(sprintData[0].date),
                     points: sprintData[0].scope
                 }].concat(sprintData.map(function (day) {
-                        return {
-                            day: day.date,
-                            points: day.scope
-                        };
-                    }));
+                    return {
+                        day: day.date,
+                        points: day.scope
+                    };
+                }));
             },
 
             /**
@@ -151,11 +151,11 @@ var PHRAGILE = PHRAGILE || {};
                     day: PHRAGILE.Helpers.dayBefore(sprintData[0].date),
                     points: pointsClosedBeforeSprint
                 }].concat(sprintData.map(function (day) {
-                        return {
-                            day: day.date,
-                            points: pointsClosedBeforeSprint + day.points
-                        };
-                    }));
+                    return {
+                        day: day.date,
+                        points: pointsClosedBeforeSprint + day.points
+                    };
+                }));
             }
         };
     }();

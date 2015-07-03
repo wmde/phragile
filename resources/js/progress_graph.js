@@ -28,13 +28,11 @@ var PHRAGILE = PHRAGILE || {};
                     .y0(PHRAGILE.coordinateSystem.getY()(0))
                     .y1(PHRAGILE.Helpers.yOfPoints));
         }
-    }
+    };
 
     PHRAGILE.ProgressGraph.prototype = new PHRAGILE.Graph;
     PHRAGILE.ProgressGraph.prototype.render = function () {
         PHRAGILE.Graph.prototype.render.call(this);
         this.addGraphArea();
     };
-
-
 })(PHRAGILE);
