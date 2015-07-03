@@ -5,7 +5,13 @@ elixir(function(mix) {
 
     mix.scripts([
         '../assets/bower_components/d3/d3.js',
-        'burndown.js',
+        'coordinate_system.js',
+        'helpers.js',
+        'chart_data.js',
+        'graph.js',
+        'progress_graph.js',
+        'bar_chart.js',
+        'main_chart.js',
         'pie_charts.js',
         '../assets/bower_components/list.js/dist/list.js',
         'sprint_backlog.js'
