@@ -364,13 +364,13 @@
     /**
      * Objects containing data for line charts which can be rendered.
      * @param {Object[]} data
-     * @param {string} id - Its CSS id
+     * @param {string} cssID - Its CSS identifier (used as class or id)
      * @param {string} label - Description text for the graph which will show in the label that appears when hovering
      * @constructor
      */
-    var Graph = function(data, id, label) {
+    var Graph = function(data, cssID, label) {
         this.data = data;
-        this.id = id;
+        this.cssID = cssID;
         this.label = label;
 
         this.line = d3.svg.line()
@@ -379,7 +379,7 @@
 
         this.addDataPoints = function () {
             this.plane.append('g')
-                .attr('id', id + '-data-points')
+                .attr('id', cssID + '-data-points')
                 .selectAll('.data-point')
                 .data(data)
                 .enter()
@@ -399,7 +399,7 @@
          * @returns {string} - The label HTML
          */
         getLabelHTML: function (i) {
-            return '<tr class="' + this.id + '">'
+            return '<tr class="' + this.cssID + '">'
                 + '<td>' + this.label + '</td>'
                 + '<td class="graph-value">'
                 + Math.round(this.data[Math.min(this.data.length - 1, i)].points)
@@ -414,7 +414,7 @@
             this.plane = d3.select('#graphs');
 
             this.plane.append('path')
-                .attr('class', 'graph ' + this.id)
+                .attr('class', 'graph ' + this.cssID)
                 .attr('d', this.line(this.data));
 
             this.addDataPoints()
@@ -429,7 +429,7 @@
      * @param label
      * @constructor
      */
-    var ProgressGraph = function (data, id, label) {
+    var ProgressGraph = function (data, cssID, label) {
         data = data.filter(function (d) {
             var $snapshotDate = $('#snapshot-date'),
                 filterDate = $snapshotDate.length > 0 ? Date.parse($snapshotDate.text()) : new Date();
@@ -437,7 +437,7 @@
             return d.day <= filterDate;
         });
 
-        Graph.call(this, data, id, label);
+        Graph.call(this, data, cssID, label);
 
         this.addGraphArea = function () {
             this.plane.append('path')
@@ -463,9 +463,9 @@
      * @param label
      * @constructor
      */
-    var BarChart = function (data, id, label) {
+    var BarChart = function (data, cssID, label) {
         this.data = data;
-        this.id = id;
+        this.cssID = cssID;
         this.label = label;
     };
 
@@ -476,7 +476,7 @@
          * Renders the bar charts inside the burndown/burnup chart
          */
         render: function () {
-            d3.select('#graphs').selectAll(this.id)
+            d3.select('#graphs').selectAll(this.cssID)
                 .data(this.data)
                 .enter().append('line')
                     .attr('class', 'daily-points')
