@@ -424,9 +424,9 @@
     /**
      * Same as Graph but also renders graph areas under the line.
      * ProgressGraph will be limited to dates <= today.
-     * @param data
-     * @param id
-     * @param label
+     * @param {Object[]} data
+     * @param {string} cssID - Its CSS identifier (used as class or id)
+     * @param {string} label - Description text for the graph which will show in the label that appears when hovering
      * @constructor
      */
     var ProgressGraph = function (data, cssID, label) {
@@ -458,9 +458,9 @@
 
     /**
      * Objects that contain data for bars that will be rendered at the bottom of the chart
-     * @param data
-     * @param id
-     * @param label
+     * @param {Object[]} data
+     * @param {string} cssID - Its CSS identifier (used as class or id)
+     * @param {string} label - Description text for the graph which will show in the label that appears when hovering
      * @constructor
      */
     var BarChart = function (data, cssID, label) {
