@@ -33,7 +33,7 @@ var PHRAGILE = PHRAGILE || {};
             return count;
         };
 
-        var prepareData = function (data) {
+        var dateStringsToDate = function (data) {
             return data.map(function (d) {
                 d.date = PHRAGILE.Helpers.formatDate(d.date);
 
@@ -63,7 +63,7 @@ var PHRAGILE = PHRAGILE || {};
             init: function (closedPerDate, closedBeforeSprint) {
                 totalPoints = closedPerDate[0].scope;
                 pointsClosedBeforeSprint = closedBeforeSprint;
-                sprintData = prepareData(closedPerDate);
+                sprintData = dateStringsToDate(closedPerDate);
                 remainingPointsPerDay = calculateActualProgressData(sprintData);
             },
 
