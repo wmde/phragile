@@ -33,7 +33,6 @@
 		</a>
 	</h1>
 
-	<?php $closedPerDay = $burndown->getPointsClosedPerDay() ?>
 	<div class="row">
 		<div class="col-md-8">
 			<div id="burndown-data"
