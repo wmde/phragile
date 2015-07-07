@@ -12,20 +12,7 @@ class ChangeDataTypeToLongtext extends Migration {
 	 */
 	public function up()
 	{
-		$this->dropColumn();
-
-		Schema::table('sprint_snapshots', function($t)
-		{
-			$t->longText('data');
-		});
-	}
-
-	private function dropColumn()
-	{
-		Schema::table('sprint_snapshots', function($t)
-		{
-			$t->dropColumn('data');
-		});
+		DB::statement('ALTER TABLE sprint_snapshots MODIFY COLUMN data LONGTEXT');
 	}
 
 	/**
@@ -35,12 +22,7 @@ class ChangeDataTypeToLongtext extends Migration {
 	 */
 	public function down()
 	{
-		$this->dropColumn();
-
-		Schema::table('sprint_snapshots', function($t)
-		{
-			$t->dropColumn('data');
-		});
+		DB::statement('ALTER TABLE sprint_snapshots MODIFY COLUMN data TEXT');
 	}
 
 }
