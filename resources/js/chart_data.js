@@ -125,7 +125,7 @@ var PHRAGILE = PHRAGILE || {};
              * @returns {int} - Maximal total number of points in the sprint
              */
             getMaxPoints: function () {
-                return d3.max(sprintData, function (day) { return day.scope; });
+                return d3.max(sprintData, function (day) { return parseInt(day.scope); });
             },
 
             /**
