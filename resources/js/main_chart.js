@@ -9,9 +9,9 @@ var PHRAGILE = PHRAGILE || {};
 
     PHRAGILE.coordinateSystem.init(PHRAGILE.chartData.getDaysInSprint(), PHRAGILE.chartData.getMaxPoints());
     PHRAGILE.coordinateSystem.addGraphs({
-        burnup: new PHRAGILE.ProgressGraph(PHRAGILE.chartData.getBurnupData(), 'burn-up', 'Completed'),
+        burnup: new PHRAGILE.ProgressGraph(PHRAGILE.chartData.getBurnupData(), 'burnup', 'Completed'),
         scope: new PHRAGILE.Graph(PHRAGILE.chartData.getScopeLine(), 'scope', 'Scope'),
-        burndown: new PHRAGILE.ProgressGraph(PHRAGILE.chartData.getBurndownData(), 'actual', 'Remaining '),
+        burndown: new PHRAGILE.ProgressGraph(PHRAGILE.chartData.getBurndownData(), 'burndown', 'Remaining '),
         ideal: new PHRAGILE.Graph(PHRAGILE.chartData.getIdealGraphData(), 'ideal', 'Ideal')
     });
     PHRAGILE.coordinateSystem.addBarCharts({
