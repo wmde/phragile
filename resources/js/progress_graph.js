@@ -12,7 +12,7 @@ var PHRAGILE = PHRAGILE || {};
     PHRAGILE.ProgressGraph = function (data, cssID, label) {
         data = data.filter(function (d) {
             var $snapshotDate = $('#snapshot-date'),
-                filterDate = $snapshotDate.length > 0 ? Date.parse($snapshotDate.text()) : new Date();
+                filterDate = $snapshotDate.length > 0 ? Date.parse($snapshotDate.text().replace(' ', 'T')) : new Date();
 
             return d.day <= filterDate;
         });
