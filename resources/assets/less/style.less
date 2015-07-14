@@ -79,6 +79,8 @@
 }
 
 #burndown {
+  position: relative;
+
   .graph {
     &.burndown {
       stroke: @burndown-actual;
@@ -155,6 +157,10 @@
 #burndown-overlay {
   fill: none;
   pointer-events: all;
+}
+
+#pick-chart {
+  margin-left: 30px;
 }
 
 #graph-labels {

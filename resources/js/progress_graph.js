@@ -22,7 +22,7 @@ var PHRAGILE = PHRAGILE || {};
         this.addGraphArea = function () {
             this.plane.append('path')
                 .datum(this.data)
-                .attr('class', 'graph-area')
+                .attr('class', 'graph-area ' + this.cssID)
                 .attr('d', d3.svg.area()
                     .x(PHRAGILE.Helpers.xOfDay)
                     .y0(PHRAGILE.coordinateSystem.getY()(0))

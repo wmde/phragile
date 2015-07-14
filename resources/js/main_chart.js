@@ -7,6 +7,15 @@ var PHRAGILE = PHRAGILE || {};
         +$chartData.data('before')
     );
 
+    var showGraphs = function (cssIDs) {
+        $('.graph, .graph-area, .data-point').hide();
+        cssIDs.map(function (id) {
+            $('.graph.' + id
+                + ', #' + id + '-data-points .data-point'
+                + ', .graph-area.' + id).show();
+        });
+    };
+
     PHRAGILE.coordinateSystem.init(PHRAGILE.chartData.getDaysInSprint(), PHRAGILE.chartData.getMaxPoints());
     PHRAGILE.coordinateSystem.addGraphs({
         burnup: new PHRAGILE.ProgressGraph(PHRAGILE.chartData.getBurnupData(), 'burnup', 'Completed'),
@@ -26,4 +35,16 @@ var PHRAGILE = PHRAGILE || {};
             margin: { top: 10, right: 10, bottom: 50, left: 30 }
         }
     );
+    showGraphs(['burndown', 'ideal']);
+
+    var $chartButtons = $('#pick-chart li');
+    $chartButtons.click(function (e) {
+        var $button = $(this);
+
+        $chartButtons.removeClass('active');
+        $button.addClass('active');
+        showGraphs($button.data('graphs').split(' '));
+
+        e.preventDefault();
+    });
 })(PHRAGILE);
