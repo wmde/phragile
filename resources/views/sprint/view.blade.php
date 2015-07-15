@@ -36,11 +36,16 @@
 	<?php $closedPerDay = $burndown->getPointsClosedPerDay() ?>
 	<div class="row">
 		<div class="col-md-8">
-			<table class="table table-condensed" id="graph-labels">
-				<tbody>
-				</tbody>
-			</table>
-			<div id="burndown"></div>
+			<ul class="nav nav-tabs" id="pick-chart">
+				<li role="presentation" class="active" data-graphs="ideal burndown"><a href="#">Burndown chart</a></li>
+				<li role="presentation" data-graphs="scope burnup"><a href="#">Burnup chart</a></li>
+			</ul>
+			<div id="burndown">
+				<table class="table table-condensed" id="graph-labels">
+					<tbody>
+					</tbody>
+				</table>
+			</div>
 			<div id="chart-data" class="hidden" data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">{!! json_encode($burnup->getData()) !!}</div>
 		</div>
 

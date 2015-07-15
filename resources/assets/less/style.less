@@ -79,8 +79,10 @@
 }
 
 #burndown {
+  position: relative;
+
   .graph {
-    &.actual {
+    &.burndown {
       stroke: @burndown-actual;
     }
 
@@ -89,7 +91,7 @@
       stroke-dasharray: 10 5;
     }
 
-    &.burn-up {
+    &.burnup {
       stroke: @burnup-progress;
     }
 
@@ -138,13 +140,13 @@
       fill: @stroke;
     }
   }
-  #actual-data-points .data-point {
+  #burndown-data-points .data-point {
     .data-point(@burndown-actual)
   }
   #ideal-data-points .data-point {
     .data-point(@burndown-ideal)
   }
-  #burn-up-data-points .data-point {
+  #burnup-data-points .data-point {
     .data-point(@burnup-progress)
   }
   #scope-data-points .data-point {
@@ -155,6 +157,10 @@
 #burndown-overlay {
   fill: none;
   pointer-events: all;
+}
+
+#pick-chart {
+  margin-left: 30px;
 }
 
 #graph-labels {
@@ -178,13 +184,13 @@
   .scope {
     color: darken(@burnup-scope, 10%);
   }
-  .burn-up {
+  .burnup {
     color: @burnup-progress;
   }
   .ideal {
     color: darken(@burndown-ideal, 20%);
   }
-  .actual {
+  .burndown {
     color: @burndown-actual
   }
 }
