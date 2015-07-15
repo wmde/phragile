@@ -10,6 +10,8 @@
 @burndown-actual: @phragile-saturated-blue;
 @burndown-ideal: @phragile-light-green;
 @burndown-daily-points: @phragile-green;
+@burnup-progress: @burndown-actual;
+@burnup-scope: @phragile-bright-yellow;
 
 .navbar {
   border-top: 0;
@@ -77,14 +79,24 @@
 }
 
 #burndown {
+  position: relative;
+
   .graph {
-    &.actual {
+    &.burndown {
       stroke: @burndown-actual;
     }
 
     &.ideal {
       stroke: @burndown-ideal;
       stroke-dasharray: 10 5;
+    }
+
+    &.burnup {
+      stroke: @burnup-progress;
+    }
+
+    &.scope {
+      stroke: @burnup-scope;
     }
 
     stroke-width: 3px;
@@ -128,17 +140,27 @@
       fill: @stroke;
     }
   }
-  #actual-data-points .data-point {
+  #burndown-data-points .data-point {
     .data-point(@burndown-actual)
   }
   #ideal-data-points .data-point {
     .data-point(@burndown-ideal)
+  }
+  #burnup-data-points .data-point {
+    .data-point(@burnup-progress)
+  }
+  #scope-data-points .data-point {
+    .data-point(@burnup-scope)
   }
 }
 
 #burndown-overlay {
   fill: none;
   pointer-events: all;
+}
+
+#pick-chart {
+  margin-left: 30px;
 }
 
 #graph-labels {
@@ -155,14 +177,21 @@
     font-weight: bold;
   }
 
+  td:last-child {
+    border-bottom: 0;
+  }
+
+  .scope {
+    color: darken(@burnup-scope, 10%);
+  }
+  .burnup {
+    color: @burnup-progress;
+  }
   .ideal {
     color: darken(@burndown-ideal, 20%);
   }
-  .actual {
-    color: @burndown-actual;
-    td {
-      border-top: 0;
-    }
+  .burndown {
+    color: @burndown-actual
   }
 }
 

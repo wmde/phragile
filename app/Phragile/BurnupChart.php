@@ -17,9 +17,10 @@ class BurnupChart {
 		foreach ($scopeLine as $day => $scope)
 		{
 			$points += $closedPerDay[$day];
-			$burnupData[$day] = [
+			$burnupData[] = [
 				'scope' => $scope,
 				'points' => $points,
+				'date' => $day,
 			];
 		}
 

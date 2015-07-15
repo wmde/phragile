@@ -35,27 +35,17 @@
 
 	<div class="row">
 		<div class="col-md-8">
-			<div id="burndown-data"
-				 class="hidden"
-				 data-total="{{ $pieChartData['total']['points'] }}"
-				 data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">
-				{{ json_encode($burndown->getPointsClosedPerDay()) }}
+			<ul class="nav nav-tabs" id="pick-chart">
+				<li role="presentation" class="active" data-graphs="ideal burndown"><a href="#">Burndown chart</a></li>
+				<li role="presentation" data-graphs="scope burnup"><a href="#">Burnup chart</a></li>
+			</ul>
+			<div id="burndown">
+				<table class="table table-condensed" id="graph-labels">
+					<tbody>
+					</tbody>
+				</table>
 			</div>
-
-			<table class="table table-condensed" id="graph-labels">
-				<tbody>
-					<tr class="actual">
-						<td>Actual points</td>
-						<td class="graph-value" id="actual-progress"></td>
-					</tr>
-					<tr class="ideal">
-						<td>Ideal points</td>
-						<td class="graph-value" id="ideal-progress"></td>
-					</tr>
-				</tbody>
-			</table>
-			<div id="burndown"></div>
-			<div id="burnup-data" class="hidden">{{ json_encode($burnup->getData()) }}</div>
+			<div id="chart-data" class="hidden" data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">{!! json_encode($burnup->getData()) !!}</div>
 		</div>
 
 		<div class="col-md-4">
