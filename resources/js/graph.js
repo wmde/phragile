@@ -40,7 +40,7 @@ var PHRAGILE = PHRAGILE || {};
          */
         getLabelHTML: function (i) {
             return '<tr class="' + this.cssID + '"'
-                + ' style="display: ' + $('.graph.' + this.cssID).css('display') + '">'
+                + ' style="display: ' + ($('.graph.' + this.cssID).css('display') === 'none' ? 'none' : '') + '">'
                 + '<td>' + this.label + '</td>'
                 + '<td class="graph-value">'
                 + Math.round(this.data[Math.min(this.data.length - 1, i)].points)
