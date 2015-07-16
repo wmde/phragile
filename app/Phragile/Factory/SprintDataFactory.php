@@ -47,23 +47,6 @@ class SprintDataFactory {
 		return $this->sprint->project->currentSprint();
 	}
 
-	public function getBurndownChart()
-	{
-		return $this->burndownChart;
-	}
-
-	public function getBurnupChart()
-	{
-		return new BurnupChart(
-			$this->burndownChart->getPointsClosedPerDay(),
-			new ScopeLine(
-				$this->sprint->sprintSnapshots->all() ?: [],
-				$this->taskList->getTasksPerStatus()['total']['points'],
-				$this->sprint->getFormattedDays('Y-m-d')
-			)
-		);
-	}
-
 	public function getBurnChartData()
 	{
 		$pointsClosedBeforeSprint = $this->burndownChart->getPointsClosedBeforeSprint();
