@@ -22,11 +22,7 @@ class SprintSnapshotsController extends Controller {
 	public function exportJSON(SprintSnapshot $snapshot)
 	{
 		$factory = $this->getSprintDataFactory($snapshot);
-		$pointsClosedBeforeSprint = $factory->getBurndownChart()->getPointsClosedBeforeSprint();
-		return Response::json( [
-			'pointsClosedBeforeSprint' => isset($pointsClosedBeforeSprint) ? $pointsClosedBeforeSprint : 0,
-			'sprint' => $factory->getBurnupChart()->getData()
-		] );
+		return Response::json($factory->getBurnChartData());
 	}
 
 	public function store(Sprint $sprint)

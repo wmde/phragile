@@ -31,11 +31,7 @@ class SprintLiveDataActionHandler {
 	public function getExportData(Sprint $sprint)
 	{
 		$factory = $this->getSprintDataFactory($sprint);
-		$pointsClosedBeforeSprint = $factory->getBurndownChart()->getPointsClosedBeforeSprint();
-		return [
-			'pointsClosedBeforeSprint' => isset($pointsClosedBeforeSprint) ? $pointsClosedBeforeSprint : 0,
-			'sprint' => $factory->getBurnupChart()->getData()
-		];
+		return $factory->getBurnChartData();
 	}
 
 	private function getSprintDataFactory(Sprint $sprint)

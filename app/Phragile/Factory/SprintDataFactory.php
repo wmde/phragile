@@ -64,6 +64,15 @@ class SprintDataFactory {
 		);
 	}
 
+	public function getBurnChartData()
+	{
+		$pointsClosedBeforeSprint = $this->burndownChart->getPointsClosedBeforeSprint();
+		return [
+			'pointsClosedBeforeSprint' => isset($pointsClosedBeforeSprint) ? $pointsClosedBeforeSprint : 0,
+			'sprint' => $this->getBurnupChart()->getData()
+		];
+	}
+
 	public function getPieChartData()
 	{
 		$pieChartData = [];
