@@ -21,8 +21,7 @@ class SprintLiveDataActionHandler {
 		return [
 			'sprint' => $sprint,
 			'currentSprint' => $factory->getCurrentSprint(),
-			'burndown' => $factory->getBurndownChart(),
-			'burnup' => $factory->getBurnupChart(),
+			'burnChartData' => $factory->getBurnChartData(),
 			'pieChartData' => $factory->getPieChartData(),
 			'sprintBacklog' => $factory->getSprintBacklog()
 		];

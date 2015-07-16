@@ -57,13 +57,17 @@ var PHRAGILE = PHRAGILE || {};
 
         return {
             /**
-             * @param {Object} closedPerDate - An object with date strings as its keys and number of closed points as values
-             * @param {number} closedBeforeSprint - Number of story points that were closed before the sprint start
+             * @param {Object} burnChartData - An object containing two elements:
+             *                                 - List of entries representing days of the sprint,
+             *                                   each entry consists of date string, number of closed points, and
+             *                                   total number of story points at the given date
+             *                                 - Number of story points that were closed before the sprint start
              */
-            init: function (closedPerDate, closedBeforeSprint) {
-                totalPoints = closedPerDate[0].scope;
-                pointsClosedBeforeSprint = closedBeforeSprint;
-                sprintData = dateStringsToDate(closedPerDate);
+            init: function (burnChartData) {
+                var sprintDayData = burnChartData['sprint'];
+                totalPoints = sprintDayData[0].scope;
+                pointsClosedBeforeSprint = burnChartData['pointsClosedBeforeSprint'];
+                sprintData = dateStringsToDate(sprintDayData);
                 remainingPointsPerDay = calculateActualProgressData(sprintData);
             },
 
