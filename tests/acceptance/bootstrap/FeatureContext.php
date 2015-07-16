@@ -418,4 +418,41 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 
 		SprintSnapshot::take($numberOfSprints)->delete(); // cleaning up
 	}
+
+	/**
+	 * @When I go to the :sprint export page
+	 */
+	public function iGoToTheExportPage($sprint)
+	{
+		$this->visit('/sprints/' . Sprint::where('title', $sprint)->first()->phabricator_id . '/export.json');
+	}
+
+	private function responseJSON()
+	{
+		return json_decode($this->getSession()->getPage()->getContent());
+	}
+
+	/**
+	 * @Then I should get a valid JSON response
+	 */
+	public function iShouldGetAValidJsonResponse()
+	{
+		PHPUnit::assertNotNull($this->responseJSON());
+	}
+
+	/**
+	 * @Then there should be a :key property in the response
+	 */
+	public function thereShouldBeAPropertyInTheResponse($key)
+	{
+		PHPUnit::assertObjectHasAttribute($key, $this->responseJSON());
+	}
+
+	/**
+	 * @Then the :key property should contain :number elements
+	 */
+	public function thePropertyShouldContainElements($key, $number)
+	{
+		PHPUnit::assertCount(intval($number), $this->responseJSON()->$key);
+	}
 }
