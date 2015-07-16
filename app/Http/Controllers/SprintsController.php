@@ -21,6 +21,19 @@ class SprintsController extends Controller {
 		);
 	}
 
+	public function exportJSON(Sprint $sprint)
+	{
+		if ($sprint->hasEnded() && !$sprint->sprintSnapshots->isEmpty())
+		{
+			return App::make('SprintSnapshotsController')->exportJSON($sprint->sprintSnapshots->first());
+		} else
+		{
+			return Response::json(
+				\Phragile\Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getExportData($sprint)
+			);
+		}
+	}
+
 	public function create(Project $project)
 	{
 		$user = Auth::user();

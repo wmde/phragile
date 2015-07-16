@@ -45,7 +45,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div id="chart-data" class="hidden" data-before="{{ $burndown->getPointsClosedBeforeSprint() }}">{!! json_encode($burnup->getData()) !!}</div>
+			<div id="chart-data" class="hidden">{!! json_encode($burnChartData) !!}</div>
 		</div>
 
 		<div class="col-md-4">

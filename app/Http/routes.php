@@ -74,6 +74,11 @@ Route::get('/sprints/{sprint}', [
 	'uses' => 'SprintsController@show'
 ]);
 
+Route::get('/sprints/{sprint}/export.json', [
+	'as' => 'sprint_export_json_path',
+	'uses' => 'SprintsController@exportJSON'
+]);
+
 Route::get('/sprints/{sprint}/snapshot', [ // should technically be a POST
 	'as' => 'create_snapshot_path',
 	'middleware' => 'auth',

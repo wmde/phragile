@@ -47,21 +47,13 @@ class SprintDataFactory {
 		return $this->sprint->project->currentSprint();
 	}
 
-	public function getBurndownChart()
+	public function getBurnChartData()
 	{
-		return $this->burndownChart;
-	}
-
-	public function getBurnupChart()
-	{
-		return new BurnupChart(
-			$this->burndownChart->getPointsClosedPerDay(),
-			new ScopeLine(
-				$this->sprint->sprintSnapshots->all() ?: [],
-				$this->taskList->getTasksPerStatus()['total']['points'],
-				$this->sprint->getFormattedDays('Y-m-d')
-			)
-		);
+		$pointsClosedBeforeSprint = $this->burndownChart->getPointsClosedBeforeSprint();
+		return [
+			'pointsClosedBeforeSprint' => isset($pointsClosedBeforeSprint) ? $pointsClosedBeforeSprint : 0,
+			'sprint' => $this->getBurnupData()
+		];
 	}
 
 	public function getPieChartData()
@@ -99,6 +91,19 @@ class SprintDataFactory {
 				? new ClosedTimeByWorkboardDispatcher($this->sprint->phid, $this->getClosedColumnPHIDs())
 				: new ClosedTimeByStatusFieldDispatcher()
 		);
+	}
+
+	private function getBurnupData()
+	{
+		$burnupChart = new BurnupChart(
+			$this->burndownChart->getPointsClosedPerDay(),
+			new ScopeLine(
+				$this->sprint->sprintSnapshots->all() ?: [],
+				$this->taskList->getTasksPerStatus()['total']['points'],
+				$this->sprint->getFormattedDays('Y-m-d')
+			)
+		);
+		return $burnupChart->getData();
 	}
 
 	private function getStatusCssClass($status)

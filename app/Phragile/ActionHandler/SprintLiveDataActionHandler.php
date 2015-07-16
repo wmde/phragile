@@ -16,8 +16,27 @@ class SprintLiveDataActionHandler {
 
 	public function getViewData(Sprint $sprint)
 	{
+		$factory = $this->getSprintDataFactory($sprint);
+
+		return [
+			'sprint' => $sprint,
+			'currentSprint' => $factory->getCurrentSprint(),
+			'burnChartData' => $factory->getBurnChartData(),
+			'pieChartData' => $factory->getPieChartData(),
+			'sprintBacklog' => $factory->getSprintBacklog()
+		];
+	}
+
+	public function getExportData(Sprint $sprint)
+	{
+		$factory = $this->getSprintDataFactory($sprint);
+		return $factory->getBurnChartData();
+	}
+
+	private function getSprintDataFactory(Sprint $sprint)
+	{
 		$tasks = $this->phabricatorAPI->queryTasksByProject($sprint->phid);
-		$factory = new SprintDataFactory(
+		return new SprintDataFactory(
 			$sprint,
 			$tasks,
 			$this->phabricatorAPI->getTaskTransactions(array_map(function($task)
@@ -26,16 +45,5 @@ class SprintLiveDataActionHandler {
 			}, $tasks)),
 			$this->phabricatorAPI
 		);
-
-
-		return [
-			'sprint' => $sprint,
-			'currentSprint' => $factory->getCurrentSprint(),
-			'burndown' => $factory->getBurndownChart(),
-			'burnup' => $factory->getBurnupChart(),
-			'pieChartData' => $factory->getPieChartData(),
-			'sprintBacklog' => $factory->getSprintBacklog()
-		];
 	}
-
 }

@@ -6,23 +6,22 @@ class SprintSnapshotsController extends Controller {
 
 	public function show(SprintSnapshot $snapshot)
 	{
-		$sprintData = json_decode($snapshot->data, true);
-		$factory = new SprintDataFactory(
-			$snapshot->sprint,
-			$sprintData['tasks'],
-			$sprintData['transactions'],
-			App::make('phabricator')
-		);
+		$factory = $this->getSprintDataFactory($snapshot);
 
 		return View::make('sprint.view', [
 			'snapshot' => $snapshot,
 			'sprint' => $snapshot->sprint,
 			'currentSprint' => $factory->getCurrentSprint(),
 			'pieChartData' => $factory->getPieChartData(),
-			'burndown' => $factory->getBurndownChart(),
-			'burnup' => $factory->getBurnupChart(),
+			'burnChartData' => $factory->getBurnChartData(),
 			'sprintBacklog' => $factory->getSprintBacklog()
 		]);
+	}
+
+	public function exportJSON(SprintSnapshot $snapshot)
+	{
+		$factory = $this->getSprintDataFactory($snapshot);
+		return Response::json($factory->getBurnChartData());
 	}
 
 	public function store(Sprint $sprint)
@@ -51,5 +50,16 @@ class SprintSnapshotsController extends Controller {
 			Flash::error('The snapshot could not be deleted. Please try again.');
 			return Redirect::back();
 		}
+	}
+
+	private function getSprintDataFactory(SprintSnapshot $snapshot)
+	{
+		$sprintData = json_decode($snapshot->data, true);
+		return new SprintDataFactory(
+			$snapshot->sprint,
+			$sprintData['tasks'],
+			$sprintData['transactions'],
+			App::make('phabricator')
+		);
 	}
 }

@@ -3,8 +3,7 @@ var PHRAGILE = PHRAGILE || {};
 (function (PHRAGILE) {
     var $chartData = $('#chart-data');
     PHRAGILE.chartData.init(
-        $.parseJSON($chartData.text()),
-        +$chartData.data('before')
+        $.parseJSON($chartData.text())
     );
 
     var showGraphs = function (cssIDs) {
