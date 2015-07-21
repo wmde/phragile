@@ -65,7 +65,7 @@ var PHRAGILE = PHRAGILE || {};
              */
             init: function (burnChartData) {
                 var sprintDayData = burnChartData['sprint'];
-                totalPoints = sprintDayData[0].scope;
+                totalPoints = sprintDayData[sprintDayData.length - 1].scope;
                 pointsClosedBeforeSprint = burnChartData['pointsClosedBeforeSprint'];
                 sprintData = dateStringsToDate(sprintDayData);
                 remainingPointsPerDay = calculateActualProgressData(sprintData);
