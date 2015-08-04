@@ -150,7 +150,7 @@ class TaskListTest extends TestCase {
 		return new TaskList($tasks, new StatusByWorkboardDispatcher(
 			$this->testProjectPHID,
 			new TransactionList($transactions),
-			new ProjectColumnRepository($transactions, $phabricatorAPI),
+			new ProjectColumnRepository($this->testProjectPHID, $transactions, $phabricatorAPI),
 			array_values($this->workboardColumns)
 		));
 	}

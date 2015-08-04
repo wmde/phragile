@@ -7,9 +7,11 @@ class ProjectColumnRepository {
 	 */
 	private $projectColumns;
 	private $phabricator;
+	private $projectPHID;
 
-	public function __construct(array $transactions, PhabricatorAPI $phabricator)
+	public function __construct($projectPHID, array $transactions, PhabricatorAPI $phabricator)
 	{
+		$this->projectPHID = $projectPHID;
 		$this->phabricator = $phabricator;
 		$this->projectColumns = $this->fetchColumnData($transactions);
 	}
@@ -43,7 +45,7 @@ class ProjectColumnRepository {
 	{
 		return array_reduce($transactions, function($columns, $transaction)
 		{
-			if ($transaction['transactionType'] === 'projectcolumn')
+			if ($transaction['transactionType'] === 'projectcolumn' && $transaction['oldValue']['projectPHID'] === $this->projectPHID)
 			{
 				$columns[] = $transaction['newValue']['columnPHIDs'][0];
 				$columns[] = reset($transaction['oldValue']['columnPHIDs']);
