@@ -133,6 +133,6 @@ class SprintDataFactory {
 
 	private function fetchProjectColumns()
 	{
-		return new ProjectColumnRepository($this->transactions, $this->phabricatorAPI);
+		return new ProjectColumnRepository($this->sprint->phid, $this->transactions, $this->phabricatorAPI);
 	}
 }
