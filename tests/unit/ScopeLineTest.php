@@ -52,4 +52,28 @@ class ScopeLineTest extends TestCase {
 		$this->assertSame($data[$duration[0]], 42);
 		$this->assertSame($data[$duration[1]], 42);
 	}
+
+	public function testShouldConsiderCurrentNumberOfStoryPoints()
+	{
+		$daySeconds = 3600 * 24;
+		$dateFormat = 'Y-m-d';
+		$currentTime = time();
+		$duration = [
+			date($dateFormat, $currentTime - 2 * $daySeconds),
+			date($dateFormat, $currentTime - $daySeconds),
+			date($dateFormat, $currentTime),
+			date($dateFormat, $currentTime + $daySeconds),
+		];
+		$snapshot = new SprintSnapshot([
+			'total_points' => 42,
+		]);
+		$snapshot->setCreatedAt(date($dateFormat, $currentTime - $daySeconds));
+		$scopeLine = new ScopeLine([$snapshot], 40, $duration);
+
+		$data = $scopeLine->getData();
+		$this->assertSame($data[$duration[0]], 42);
+		$this->assertSame($data[$duration[1]], 42);
+		$this->assertSame($data[$duration[2]], 40);
+		$this->assertSame($data[$duration[3]], 40);
+	}
 }
