@@ -23,10 +23,14 @@ class ScopeLine {
 	private function calculateScopeLine(array $days)
 	{
 		$currentPoints = $this->findInitialPointsNumber();
+		$today = date('Y-m-d');
 
 		foreach ($days as $day => $points)
 		{
-			if (isset($this->snapshots[$day]))
+			if ($day >= $today)
+			{
+				$days[$day] = $this->pointsNumber;
+			} elseif (isset($this->snapshots[$day]))
 			{
 				$days[$day] = $this->snapshots[$day]->total_points;
 				$currentPoints = $this->snapshots[$day]->total_points;
