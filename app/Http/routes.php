@@ -106,3 +106,9 @@ Route::put('projects/{project}', [
 	'middleware' => 'auth',
 	'uses' => 'ProjectsController@updateSettings'
 ]);
+
+Route::put('sprints/{sprint}', [
+	'as' => 'sprint_settings_path',
+	'middleware' => 'auth',
+	'uses' => 'SprintsController@updateSettings'
+]);
