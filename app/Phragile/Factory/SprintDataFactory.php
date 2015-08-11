@@ -36,7 +36,8 @@ class SprintDataFactory {
 			$tasks,
 			$sprint->project->workboard_mode
 				? new StatusByWorkboardDispatcher($this->sprint->phid, new TransactionList($this->transactions), $this->columns, $this->getClosedColumns())
-				: new StatusByStatusFieldDispatcher(env('REVIEW_TAG_PHID'))
+				: new StatusByStatusFieldDispatcher(env('REVIEW_TAG_PHID')),
+			$sprint->ignore_estimates
 		);
 
 		$this->burndownChart = $this->generateBurndownData();
