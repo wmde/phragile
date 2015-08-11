@@ -27,7 +27,8 @@
 						</li>
 						@if(in_array(Route::currentRouteName(), ['project_path', 'sprint_path', 'sprint_live_path', 'snapshot_path']))
 							<li>{!! link_to_route('create_sprint_path', 'New sprint', isset($project) ? $project->slug : $sprint->project->slug) !!}</li>
-                            <li><a id="project-settings" href="#" data-toggle="modal" data-target="#project-settings-modal">Project settings</a></li>
+							<li><a id="project-settings" href="#" data-toggle="modal" data-target="#project-settings-modal">Project settings</a></li>
+							<li><a id="sprint-settings" href="#" data-toggle="modal" data-target="#sprint-settings-modal">Sprint settings</a></li>
 						@endif
 						<li>{!! link_to_route('logout_path', 'Logout') !!}</li>
 					</ul>
