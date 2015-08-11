@@ -2,7 +2,7 @@
 
 class Sprint extends Eloquent {
 
-	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end'];
+	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end', 'ignore_estimates'];
 
 	private $phabricatorError = null;
 	private $days = null;
