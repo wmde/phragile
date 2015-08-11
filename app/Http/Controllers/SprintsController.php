@@ -59,4 +59,12 @@ class SprintsController extends Controller {
 
 		return $actionHandler->getRedirect();
 	}
+
+	public function updateSettings(Sprint $sprint)
+	{
+		$sprint->update(Input::only('ignore_estimates'));
+
+		Flash::success('The sprint settings have been updated');
+		return Redirect::back();
+	}
 }
