@@ -17,7 +17,10 @@ class CreateSnapshots extends Command {
 	{
 		foreach (Sprint::all() as $sprint)
 		{
-			$sprint->createSnapshot();
+			if ($sprint->isActive())
+			{
+				$sprint->createSnapshot();
+			}
 		}
 	}
 }
