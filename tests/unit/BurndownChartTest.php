@@ -229,4 +229,19 @@ class BurndownChartTest extends TestCase {
 
 		$this->assertNull($burndown->getPointsClosedBeforeSprint());
 	}
+
+	public function testClosedPerDayDetectsMergedTasks()
+	{
+		$burndown = $this->mockWithTransactions(
+			$this->tasks,
+			[
+				'1' => [[
+					        'transactionType' => 'mergedinto',
+					        'dateCreated' => '1418040000', // Dec 8
+				        ]],
+			]
+		);
+
+		$this->assertSame(8, $burndown->getPointsClosedPerDay()['2014-12-08']);
+	}
 }
