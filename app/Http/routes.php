@@ -112,3 +112,9 @@ Route::put('sprints/{sprint}', [
 	'middleware' => 'auth',
 	'uses' => 'SprintsController@updateSettings'
 ]);
+
+Route::get('/sprints/{sprint}/delete', [ // should be a DELETE
+	'as' => 'delete_sprint_path',
+	'middleware' => 'auth',
+	'uses' => 'SprintsController@delete'
+]);
