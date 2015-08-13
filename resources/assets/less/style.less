@@ -240,7 +240,7 @@
   .total {
     background-color: #000;
   }
-  .resolved, .closed {
+  .resolved, .closed, .declined, .invalid, .duplicate {
     background-color: @resolved;
   }
   .wontfix {
@@ -269,7 +269,7 @@
     stroke-width: 2px;
     .fillAndHighlightOnHover(@open);
   }
-  .resolved, .closed {
+  .resolved, .closed, .declined, .invalid, .duplicate {
     .fillAndHighlightOnHover(@resolved);
   }
   .open {
