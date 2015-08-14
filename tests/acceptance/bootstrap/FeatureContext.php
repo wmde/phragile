@@ -412,11 +412,15 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iShouldHaveCreatedOneSnapshotForEachSprint()
 	{
-		$numberOfSprints = Sprint::count();
+		$numberOfActiveSprints = count(array_filter(Sprint::all()->all(), function($sprint)
+			{
+				return $sprint->isActive();
+			}
+		));
 
-		PHPUnit::assertSame($this->numberOfSnapshots + $numberOfSprints, SprintSnapshot::count());
+		PHPUnit::assertSame($this->numberOfSnapshots + $numberOfActiveSprints, SprintSnapshot::count());
 
-		SprintSnapshot::take($numberOfSprints)->delete(); // cleaning up
+		SprintSnapshot::take($numberOfActiveSprints)->delete(); // cleaning up
 	}
 
 	/**
