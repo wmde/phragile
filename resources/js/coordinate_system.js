@@ -57,6 +57,10 @@ var PHRAGILE = PHRAGILE || {};
             for (var name in graphs) {
                 $labelsTable.append(graphs[name].getLabelHTML(index));
             }
+
+            for (var name in barCharts) {
+                $labelsTable.append(barCharts[name].getLabelHTML(index));
+            }
         }
 
         var showDataPointsLabel = function (position, index) {
