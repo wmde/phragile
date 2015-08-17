@@ -104,7 +104,7 @@ class Sprint extends Eloquent {
 			$tasks,
 			function($sum, $task)
 			{
-				return $sum + $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')];
+				return $sum + ($this->ignore_estimates ? 1 : $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')]);
 			},
 			0
 		);
