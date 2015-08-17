@@ -1,10 +1,15 @@
 <?php
 
+use Phragile\Phragile;
+
 class SprintsController extends Controller {
 
 	public function show(Sprint $sprint)
 	{
-		if ($sprint->hasEnded() && !$sprint->sprintSnapshots->isEmpty())
+		if (!$sprint->exists)
+		{
+			return $this->sprintNotFound($sprint->phabricator_id);
+		} elseif ($sprint->hasEnded() && !$sprint->sprintSnapshots->isEmpty())
 		{
 			return App::make('SprintSnapshotsController')->show($sprint->sprintSnapshots->first());
 		} else
@@ -17,7 +22,7 @@ class SprintsController extends Controller {
 	{
 		return View::make(
 			'sprint.view',
-			\Phragile\Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getViewData($sprint)
+			Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getViewData($sprint)
 		);
 	}
 
@@ -29,7 +34,7 @@ class SprintsController extends Controller {
 		} else
 		{
 			return Response::json(
-				\Phragile\Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getExportData($sprint)
+				Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getExportData($sprint)
 			);
 		}
 	}
@@ -54,7 +59,7 @@ class SprintsController extends Controller {
 			array_map('trim', Input::all()),
 			['project_id' => $project->id]
 		));
-		$actionHandler = \Phragile\Phragile::getGlobalInstance()->newSprintStoreActionHandler();
+		$actionHandler = Phragile::getGlobalInstance()->newSprintStoreActionHandler();
 		$actionHandler->performAction($sprint, Auth::user());
 
 		return $actionHandler->getRedirect();
@@ -70,14 +75,25 @@ class SprintsController extends Controller {
 
 	public function delete(Sprint $sprint)
 	{
-		if ($sprint->delete())
-		{
+		if ($sprint->delete()) {
 			Flash::success('The sprint was deleted.');
 			return Redirect::route('project_path', ['project' => $sprint->project->slug]);
-		} else
-		{
+		} else {
 			Flash::error('The sprint could not be deleted. Please try again.');
 			return Redirect::back();
 		}
+	}
+
+	private function sprintNotFound($sprintPhabricatorId)
+	{
+		$actionHandler = Phragile::getGlobalInstance()->newSprintNotFoundActionHandler();
+		return $actionHandler->performAction($sprintPhabricatorId);
+	}
+
+	public function connect()
+	{
+		$project = Project::find(Input::get('project'));
+
+		return $this->store($project);
 	}
 }
