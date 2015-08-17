@@ -18,7 +18,7 @@ Route::bind('project', function($slug)
 
 Route::bind('sprint', function($phabricatorID)
 {
-	return Sprint::where('phabricator_id', $phabricatorID)->first();
+	return Sprint::where('phabricator_id', $phabricatorID)->first() ?: new Sprint(['phabricator_id' => $phabricatorID]);
 });
 
 Route::bind('snapshot', function($snapshotID)
