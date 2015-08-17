@@ -2,7 +2,7 @@
 
 class Sprint extends Eloquent {
 
-	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end'];
+	protected $fillable = ['phid', 'phabricator_id', 'project_id', 'title', 'sprint_start', 'sprint_end', 'ignore_estimates'];
 
 	private $phabricatorError = null;
 	private $days = null;
@@ -104,7 +104,7 @@ class Sprint extends Eloquent {
 			$tasks,
 			function($sum, $task)
 			{
-				return $sum + $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')];
+				return $sum + ($this->ignore_estimates ? 1 : $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')]);
 			},
 			0
 		);

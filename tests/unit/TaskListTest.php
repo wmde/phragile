@@ -21,6 +21,14 @@ class TaskListTest extends TestCase {
 		$this->assertSame(8, $taskList->getTasksPerStatus()['open']['points']);
 	}
 
+	public function testIgnoreEstimates()
+	{
+		$taskList = $this->createTaskListIgnoringEstimatesWithStatusFieldDispatcher($this->tasks);
+
+		$this->assertSame(2, $taskList->getTasksPerStatus()['resolved']['points']);
+		$this->assertSame(1, $taskList->getTasksPerStatus()['open']['points']);
+	}
+
 	public function testGetTasksPerStatusWithWorkboardDispatcher()
 	{
 		$taskList = $this->createTaskListWithWorkboardDispatcher($this->tasks, $this->getProjectColumnTransactions());
@@ -131,6 +139,11 @@ class TaskListTest extends TestCase {
 	private function createTaskListWithStatusFieldDispatcher(array $tasks)
 	{
 		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'));
+	}
+
+	private function createTaskListIgnoringEstimatesWithStatusFieldDispatcher(array $tasks)
+	{
+		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'), true);
 	}
 
 	private function createTaskListWithWorkboardDispatcher(array $tasks, $transactions)

@@ -6,21 +6,21 @@ class TaskList {
 	private $tasks = null;
 	private $statusDispatcher = null;
 
-	public function __construct(array $phabricatorTaskData, StatusDispatcher $statusDispatcher)
+	public function __construct(array $phabricatorTaskData, StatusDispatcher $statusDispatcher, $ignoreEstimates = false)
 	{
 		$this->statusDispatcher = $statusDispatcher;
-		$this->tasks = $this->processTasks($phabricatorTaskData);
+		$this->tasks = $this->processTasks($phabricatorTaskData, $ignoreEstimates);
 	}
 
-	private function processTasks($taskData)
+	private function processTasks($taskData, $ignoreEstimates)
 	{
-		return array_map(function($task)
+		return array_map(function($task) use($ignoreEstimates)
 		{
 			return [
 				'title' => $task['title'],
 				'priority' => $task['priority'],
 				'status' => $this->statusDispatcher->getStatus($task),
-				'story_points' => $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
+				'story_points' => $ignoreEstimates ? 1 : $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
 				'closed' => $this->statusDispatcher->isClosed($task),
 				'id' => $task['id'],
 				'assignee' => $task['ownerPHID'],
