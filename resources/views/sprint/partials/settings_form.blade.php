@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title">Sprint settings</h4>
             </div>
-            {!! Form::model($sprint, ['route' => ['sprint_settings_path', $sprint], 'method' => 'PUT']) !!}
+            {!! Form::model($sprint, ['route' => ['sprint_settings_path', $sprint->phabricator_id], 'method' => 'PUT']) !!}
             <div class="modal-body">
                 <p>
                 <div class="form-group">
