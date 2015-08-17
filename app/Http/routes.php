@@ -118,3 +118,9 @@ Route::get('/sprints/{sprint}/delete', [ // should be a DELETE
 	'middleware' => 'admin',
 	'uses' => 'SprintsController@delete'
 ]);
+
+Route::post('sprints', [
+	'as' => 'connect_sprint_path',
+	'middleware' => 'auth',
+	'uses' => 'SprintsController@connect'
+]);
