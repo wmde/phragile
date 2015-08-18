@@ -11,15 +11,15 @@
                     Edit your project settings here. Please note that if you choose to work with Phabricator's workboards and check "Use workboards instead of statuses" you should have at least one column symbolizing a "closed" state for tasks and copy its name to the field below.
                 </p>
                 <p>
-                    <div class="form-group">
+                    <div class="form-group workboard_mode">
                         <label>
                             {!! Form::checkbox('workboard_mode') !!}
                             Use workboards instead of statuses
                         </label>
                     </div>
-                    <div class="form-group">
-                        {!! Form::label('closed_statuses', 'Closed status columns') !!}
-                        {!! Form::text('closed_statuses') !!}
+                    <div class="form-group form-inline closed_statuses">
+                        {!! Form::label('closed_statuses', 'Closed status columns:') !!}
+                        {!! Form::text('closed_statuses', $sprint->project->closed_statuses, ['class' => 'form-control']) !!}
                     </div>
                 </p>
             </div>
@@ -31,3 +31,21 @@
         </div>
     </div>
 </div>
+
+@section('optional_scripts')
+    @parent
+
+    <script type="text/javascript">
+        if (!$('.workboard_mode input').is(':checked')) {
+            $('.closed_statuses').hide();
+        }
+
+        $( '.workboard_mode input').change(function() {
+            if ($('.workboard_mode input').is(':checked')) {
+                $('.closed_statuses').slideDown('fast');
+            } else {
+                $('.closed_statuses').slideUp('fast');
+            }
+        });
+    </script>
+@stop
