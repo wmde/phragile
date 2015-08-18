@@ -28,7 +28,7 @@
 				@endforeach
 			</ul>
 
-			@if(Auth::check())
+			@if(Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
 				{!! link_to_route(
 					'delete_sprint_path',
 					'',
@@ -88,7 +88,7 @@
 					</a>
 				@endif
 
-				@if(isset($snapshot) && Auth::check())
+				@if(isset($snapshot) && Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
 					{!! link_to_route(
 						'delete_snapshot_path',
 						'',
