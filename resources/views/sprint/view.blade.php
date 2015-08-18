@@ -162,7 +162,7 @@
 @stop
 
 @section('optional_scripts')
+	@parent
+
 	{!! HTML::script('js/sprint_overview.js') !!}
 @stop
-
-@include('sprint.partials.datepicker_assets')

@@ -39,3 +39,5 @@
         </div>
     </div>
 </div>
+
+@include('sprint.partials.datepicker_assets')
