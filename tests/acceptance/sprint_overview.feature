@@ -42,3 +42,10 @@ Feature: Sprint Overview
     And I should see "2014-12-06"
     And I should see "2014-12-07"
     And I should see "2014-12-08"
+
+  Scenario: Delete sprint
+    Given a sprint "Sprint 42" exists for the "Wikidata" project
+    And I am logged in
+    When I go to the "Sprint 42" sprint overview
+    And I click "Delete sprint"
+    Then the sprint "Sprint 42" should not exist

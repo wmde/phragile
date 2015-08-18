@@ -27,6 +27,19 @@
 					</li>
 				@endforeach
 			</ul>
+
+			@if(Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
+				{!! link_to_route(
+					'delete_sprint_path',
+					'',
+					['sprint' => $sprint->phabricator_id],
+					[
+						'class' => 'btn btn-danger btn-lg glyphicon glyphicon-remove',
+						'title' => 'Delete sprint',
+						'onclick' => 'return confirm("Delete this sprint?")'
+					]
+				) !!}
+			@endif
 		</span>
 
 		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" class="btn btn-default" title="Go to Phabricator" target="_blank">
@@ -75,7 +88,7 @@
 					</a>
 				@endif
 
-				@if(isset($snapshot) && Auth::check())
+				@if(isset($snapshot) && Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
 					{!! link_to_route(
 						'delete_snapshot_path',
 						'',

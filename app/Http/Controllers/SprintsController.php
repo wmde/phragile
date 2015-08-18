@@ -67,4 +67,17 @@ class SprintsController extends Controller {
 		Flash::success('The sprint settings have been updated');
 		return Redirect::back();
 	}
+
+	public function delete(Sprint $sprint)
+	{
+		if ($sprint->delete())
+		{
+			Flash::success('The sprint was deleted.');
+			return Redirect::route('project_path', ['project' => $sprint->project->slug]);
+		} else
+		{
+			Flash::error('The sprint could not be deleted. Please try again.');
+			return Redirect::back();
+		}
+	}
 }

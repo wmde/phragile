@@ -53,7 +53,7 @@ Route::get('/projects/{project}', [
 ]);
 
 Route::post('projects/store', [
-	'middleware' => 'auth',
+	'middleware' => 'admin',
 	'as' => 'create_project_path',
 	'uses' => 'ProjectsController@store'
 ]);
@@ -87,7 +87,7 @@ Route::get('/sprints/{sprint}/snapshot', [ // should technically be a POST
 
 Route::get('/snapshots/{snapshot}/delete', [ // should be a DELETE
 	'as' => 'delete_snapshot_path',
-	'middleware' => 'auth',
+	'middleware' => 'admin',
 	'uses' => 'SprintSnapshotsController@delete'
 ]);
 
@@ -111,4 +111,10 @@ Route::put('sprints/{sprint}', [
 	'as' => 'sprint_settings_path',
 	'middleware' => 'auth',
 	'uses' => 'SprintsController@updateSettings'
+]);
+
+Route::get('/sprints/{sprint}/delete', [ // should be a DELETE
+	'as' => 'delete_sprint_path',
+	'middleware' => 'admin',
+	'uses' => 'SprintsController@delete'
 ]);

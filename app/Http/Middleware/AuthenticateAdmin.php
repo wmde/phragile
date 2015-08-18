@@ -3,7 +3,7 @@
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 
-class Authenticate {
+class AuthenticateAdmin {
 
 	/**
 	 * The Guard implementation.
@@ -32,7 +32,7 @@ class Authenticate {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ($this->auth->guest())
+		if (!$this->auth->user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
 		{
 			if ($request->ajax())
 			{

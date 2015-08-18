@@ -459,4 +459,12 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		PHPUnit::assertCount(intval($number), $this->responseJSON()->$key);
 	}
+
+	/**
+	 * @Then the sprint :sprint should not exist
+	 */
+	public function theSprintShouldNotExist($sprint)
+	{
+		PHPUnit::assertNull(Sprint::where('title', $sprint)->first());
+	}
 }
