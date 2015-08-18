@@ -13,12 +13,16 @@ class SprintNotFoundActionHandler {
 		$this->phabricatorAPI = $phabricatorAPI;
 	}
 
-	public function performAction($sprintPhabricatorId)
+	public function performAction($sprintPhabricatorId, $isLoggedIn)
 	{
 		$phabricatorProject = $this->phabricatorAPI->queryProjectByID($sprintPhabricatorId);
 		if (!$phabricatorProject)
 		{
 			return \View::make('sprint.not_found');
+		}
+		if (!$isLoggedIn)
+		{
+			return \View::make('sprint.connect_unauthorized', ['phabricatorProject' => $phabricatorProject]);
 		}
 
 		$duration = $this->phabricatorAPI->getSprintDuration($phabricatorProject['phid']);

@@ -13,6 +13,12 @@ Feature: Unknown Sprint Page
     And I press "Connect this sprint with Phragile"
     Then I should see "Connected \"Test Sprint\" with an existing Phabricator project"
 
+  Scenario: Not logged in
+    Given I am not logged in
+    And a sprint "Test Sprint" exists for the "Wikidata" project in Phabricator but not in Phragile
+    When I go to the sprint overview of the missing sprint
+    Then I should see "Please log in to connect the sprint with Phragile."
+
   Scenario: Sprint exists neither in Phabricator nor Phragile
     Given I am on "/sprints/99999999"
     Then I should see "Sprint not found"

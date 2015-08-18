@@ -87,7 +87,7 @@ class SprintsController extends Controller {
 	private function sprintNotFound($sprintPhabricatorId)
 	{
 		$actionHandler = Phragile::getGlobalInstance()->newSprintNotFoundActionHandler();
-		return $actionHandler->performAction($sprintPhabricatorId);
+		return $actionHandler->performAction($sprintPhabricatorId, Auth::check());
 	}
 
 	public function connect()
