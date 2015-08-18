@@ -164,6 +164,11 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		}
 	}
 
+	private function getPhabricatorProjectFromTitle($title)
+	{
+		return App::make('phabricator')->queryProjectByTitle($title);
+	}
+
 	/**
 	 * @Given a sprint :sprint exists for the :project project
 	 */
@@ -176,14 +181,17 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 
 		if (!$existingSprint)
 		{
+			$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle);
 			$newSprint = new Sprint([
 				'title' => $sprintTitle,
 				'project_id' => $project->id,
 				'sprint_start' => '2014-12-01',
-				'sprint_end' => '2014-12-14'
+				'sprint_end' => '2014-12-14',
+				'phabricator_id' => $phabricatorProject['id'],
+				'phid' => $phabricatorProject['phid'],
 			]);
 
-			if (!$newSprint->save())
+			if (!$phabricatorProject || !$newSprint->save())
 			{
 				throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
 			}
