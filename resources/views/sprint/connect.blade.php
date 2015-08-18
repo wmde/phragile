@@ -19,7 +19,7 @@
 
         @if($duration)
             {!! Form::text('sprint_start', $duration['start'], ['class' => 'hidden']) !!}
-            {!! Form::text('sprint_start', $duration['end'], ['class' => 'hidden']) !!}
+            {!! Form::text('sprint_end', $duration['end'], ['class' => 'hidden']) !!}
         @else
             <div class="form-group">
                 {!! Form::label('sprint_start', 'Sprint start:') !!}
