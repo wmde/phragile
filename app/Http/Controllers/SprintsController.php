@@ -62,7 +62,7 @@ class SprintsController extends Controller {
 
 	public function updateSettings(Sprint $sprint)
 	{
-		$sprint->update(Input::only('ignore_estimates'));
+		$sprint->update(Input::only('sprint_start', 'sprint_end', 'title', 'ignore_estimates'));
 
 		Flash::success('The sprint settings have been updated');
 		return Redirect::back();
