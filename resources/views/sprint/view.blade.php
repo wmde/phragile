@@ -163,19 +163,6 @@
 
 @section('optional_scripts')
 	{!! HTML::script('js/sprint_overview.js') !!}
-	{!! HTML::script('js/datepicker.js') !!}
-
-	<script type="text/javascript">
-		var settings = {
-			format: 'yyyy-mm-dd',
-			autoclose: true
-		};
-
-		$('.datepicker.start').datepicker(settings);
-		$('.datepicker.end').datepicker(settings);
-	</script>
 @stop
 
-@section('optional_styles')
-	{!! HTML::style('/css/datepicker.css') !!}
-@stop
+@include('sprint.partials.datepicker_assets')
