@@ -25,18 +25,18 @@ class SessionsController extends Controller {
 	{
 		Auth::logout();
 		Flash::message('You are now logged out.');
-		return Redirect::to('/');
+		return Redirect::to($this->getContinueRoute());
 	}
 
 	private function loginFailed()
 	{
 		Flash::error('Login failed. Please try again.');
-		return Redirect::to('/');
+		return Redirect::to($this->getContinueRoute());
 	}
 
 	private function obtainAccessToken()
 	{
-		$response = $this->phabricatorOAuth->requestAccessToken(Input::get('code'));
+		$response = $this->phabricatorOAuth->requestAccessToken(Input::get('code'), Input::get('continue'));
 		return isset($response['access_token']) ? $response['access_token'] : null;
 	}
 
@@ -59,6 +59,11 @@ class SessionsController extends Controller {
 		]));
 		Flash::success("Hello ${user['userName']}, you are now logged in!");
 
-		return Redirect::to('/');
+		return Redirect::to($this->getContinueRoute());
+	}
+
+	private function getContinueRoute()
+	{
+		return Input::get('continue', '/');
 	}
 }

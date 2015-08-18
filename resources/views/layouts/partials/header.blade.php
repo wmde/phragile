@@ -30,7 +30,7 @@
 							<li><a id="project-settings" href="#" data-toggle="modal" data-target="#project-settings-modal">Project settings</a></li>
 							<li><a id="sprint-settings" href="#" data-toggle="modal" data-target="#sprint-settings-modal">Sprint settings</a></li>
 						@endif
-						<li>{!! link_to_route('logout_path', 'Logout') !!}</li>
+						<li>{!! link_to_route('logout_path', 'Logout', ['continue' => Request::path()]) !!}</li>
 					</ul>
 				</li>
 
@@ -40,7 +40,7 @@
 					$_ENV['PHABRICATOR_URL'] . 'oauthserver/auth/?' . http_build_query([
 						'response_type' => 'code',
 						'client_id' => $_ENV['OAUTH_CLIENT_ID'],
-						'redirect_uri' => route('login_path'),
+						'redirect_uri' => route('login_path', ['continue' => Request::path()]),
 						'scope' => 'whoami',
 					]),
 					'Log in using Phabricator',

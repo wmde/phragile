@@ -26,3 +26,18 @@ Feature: OAuth Login
     Given I am logged in
     When I reload the page
     Then I should still be logged in
+
+  Scenario: Continue after log in
+    Given I am not logged in
+    And a sprint "Sprint 42" exists for the "Wikidata" project
+    When I go to the "Sprint 42" sprint overview
+    And I follow "Log in using Phabricator"
+    And Phabricator authorizes me
+    Then I should see "Sprint 42"
+
+  Scenario: Continue after log out
+    Given I am logged in
+    And a sprint "Sprint 42" exists for the "Wikidata" project
+    When I go to the "Sprint 42" sprint overview
+    And I follow "Logout"
+    Then I should see "Sprint 42"
