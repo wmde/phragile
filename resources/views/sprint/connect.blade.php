@@ -13,8 +13,8 @@
         {!! Form::text('title', $phabricatorProject['id'], ['class' => 'hidden']) !!}
 
         <div class="form-group">
-            {!! Form::label('project', 'Project') !!}
-            {!! Form::select('project', $projects) !!}
+            {!! Form::label('project', 'Project:') !!}
+            {!! Form::select('project', $projects, ['class' => 'form-control']) !!}
         </div>
 
         @if($duration)
