@@ -13,6 +13,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 {
 	private $params;
 	private $phabricatorProjectID;
+	private $selectedTask;
 
 	public function __construct(array $params)
 	{
@@ -164,6 +165,11 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		}
 	}
 
+	private function getPhabricatorProjectFromTitle($title)
+	{
+		return App::make('phabricator')->queryProjectByTitle($title);
+	}
+
 	/**
 	 * @Given a sprint :sprint exists for the :project project
 	 */
@@ -176,14 +182,17 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 
 		if (!$existingSprint)
 		{
+			$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle);
 			$newSprint = new Sprint([
 				'title' => $sprintTitle,
 				'project_id' => $project->id,
 				'sprint_start' => '2014-12-01',
-				'sprint_end' => '2014-12-14'
+				'sprint_end' => '2014-12-14',
+				'phabricator_id' => $phabricatorProject['id'],
+				'phid' => $phabricatorProject['phid'],
 			]);
 
-			if (!$newSprint->save())
+			if (!$phabricatorProject || !$newSprint->save())
 			{
 				throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
 			}
@@ -242,36 +251,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Given :sprint contains task :taskID
-	 */
-	public function containsTask($sprint, $taskID)
-	{
-		App::make('phabricator')->updateTask(
-			$taskID,
-			[
-				'projectPHIDs' => [Sprint::where(['title' => $sprint])->first()->phid]
-			]
-		);
-	}
-
-	/**
-	 * @When I remove task :taskID from all projects
-	 */
-	public function iRemoveTaskFrom($taskID)
-	{
-		App::make('phabricator')->updateTask($taskID, ['projectPHIDs' => []]);
-	}
-
-	/**
-	 * @Then I should see :text in the latest :sprint snapshot
-	 */
-	public function iShouldSeeInTheLatestSnapshot($text, $sprint)
-	{
-		$this->iGoToTheLatestSnapshotPageOf($sprint);
-		$this->assertResponseContains($text);
-	}
-
-	/**
 	 * @When I go to the :sprint live page
 	 */
 	public function iGoToTheSprintLivePage($sprint)
@@ -324,25 +303,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function theProjectDoesNotExist($project)
 	{
 		Project::where('title', $project)->delete();
-	}
-
-	/**
-	 * @When I am assigned to task :task
-	 */
-	public function iAmAssignedToTask($task)
-	{
-		App::make('phabricator')->updateTask(
-			$task,
-			['ownerPHID' => User::where('username', $this->params['phabricator_username'])->first()->phid]
-		);
-	}
-
-	/**
-	 * @Then I should see my name in the task :task row of the sprint backlog
-	 */
-	public function iShouldSeeMyNameInTheTaskRowOfTheSprintBacklog($task)
-	{
-		$this->assertElementContains("#t$task", $this->params['phabricator_username']);
 	}
 
 	/**
@@ -466,5 +426,72 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function theSprintShouldNotExist($sprint)
 	{
 		PHPUnit::assertNull(Sprint::where('title', $sprint)->first());
+	}
+
+	/**
+	 * @Given :sprint contains a task
+	 */
+	public function containsATask($sprintTitle)
+	{
+		$phid = Sprint::where('title', $sprintTitle)->first()->phid;
+		$this->selectedTask = $this->getOrCreateTaskForSprint($phid);
+	}
+
+	private function getOrCreateTaskForSprint($sprintPHID)
+	{
+		$phabricator = App::make('phabricator');
+		$tasks = $phabricator->queryTasksByProject($sprintPHID);
+
+		if ($tasks) return array_values($tasks)[0];
+
+		return $phabricator->createTask($sprintPHID, [
+			'title' => 'automated test task',
+			'priority' => 'high',
+			'points' => 1,
+		]);
+	}
+
+	/**
+	 * @When I am assigned to this task
+	 */
+	public function iAmAssignedToThisTask()
+	{
+		App::make('phabricator')->updateTask(
+			$this->selectedTask['id'],
+			['ownerPHID' => User::where('username', $this->params['phabricator_username'])->first()->phid]
+		);
+	}
+
+	/**
+	 * @Then I should see my name in the task's row of the sprint backlog
+	 */
+	public function iShouldSeeMyNameInTheTaskSRowOfTheSprintBacklog()
+	{
+		$this->assertElementContains('#t' . $this->selectedTask['id'], $this->params['phabricator_username']);
+	}
+
+	/**
+	 * @When the selected task is removed from all projects
+	 */
+	public function theSelectedTaskIsRemovedFromAllProjects()
+	{
+		App::make('phabricator')->updateTask($this->selectedTask['id'], ['projectPHIDs' => []]);
+	}
+
+	/**
+	 * @Then I should not see the selected task
+	 */
+	public function iShouldNotSeeTheSelectedTask()
+	{
+		$this->assertPageNotContainsText('#' . $this->selectedTask['id'] . ' ');
+	}
+
+	/**
+	 * @Then I should see the selected in the latest :sprint snapshot
+	 */
+	public function iShouldSeeTheSelectedInTheLatestSnapshot($sprint)
+	{
+		$this->iGoToTheLatestSnapshotPageOf($sprint);
+		$this->assertPageContainsText('#' . $this->selectedTask['id'] . ' ');
 	}
 }
