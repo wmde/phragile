@@ -13,6 +13,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 {
 	private $params;
 	private $phabricatorProjectID;
+	private $selectedTask;
 
 	public function __construct(array $params)
 	{
@@ -250,19 +251,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Given :sprint contains task :taskID
-	 */
-	public function containsTask($sprint, $taskID)
-	{
-		App::make('phabricator')->updateTask(
-			$taskID,
-			[
-				'projectPHIDs' => [Sprint::where(['title' => $sprint])->first()->phid]
-			]
-		);
-	}
-
-	/**
 	 * @When I remove task :taskID from all projects
 	 */
 	public function iRemoveTaskFrom($taskID)
@@ -332,25 +320,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function theProjectDoesNotExist($project)
 	{
 		Project::where('title', $project)->delete();
-	}
-
-	/**
-	 * @When I am assigned to task :task
-	 */
-	public function iAmAssignedToTask($task)
-	{
-		App::make('phabricator')->updateTask(
-			$task,
-			['ownerPHID' => User::where('username', $this->params['phabricator_username'])->first()->phid]
-		);
-	}
-
-	/**
-	 * @Then I should see my name in the task :task row of the sprint backlog
-	 */
-	public function iShouldSeeMyNameInTheTaskRowOfTheSprintBacklog($task)
-	{
-		$this->assertElementContains("#t$task", $this->params['phabricator_username']);
 	}
 
 	/**
@@ -474,5 +443,47 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function theSprintShouldNotExist($sprint)
 	{
 		PHPUnit::assertNull(Sprint::where('title', $sprint)->first());
+	}
+
+	/**
+	 * @Given :sprint contains a task
+	 */
+	public function containsATask($sprintTitle)
+	{
+		$phid = Sprint::where('title', $sprintTitle)->first()->phid;
+		$this->selectedTask = $this->getOrCreateTaskForSprint($phid);
+	}
+
+	private function getOrCreateTaskForSprint($sprintPHID)
+	{
+		$phabricator = App::make('phabricator');
+		$tasks = $phabricator->queryTasksByProject($sprintPHID);
+
+		if ($tasks) return array_values($tasks)[0];
+
+		return $phabricator->createTask($phid, [
+			'title' => 'automated test task',
+			'priority' => 'high',
+			'points' => 1,
+		]);
+	}
+
+	/**
+	 * @When I am assigned to this task
+	 */
+	public function iAmAssignedToThisTask()
+	{
+		App::make('phabricator')->updateTask(
+			$this->selectedTask['id'],
+			['ownerPHID' => User::where('username', $this->params['phabricator_username'])->first()->phid]
+		);
+	}
+
+	/**
+	 * @Then I should see my name in the task's row of the sprint backlog
+	 */
+	public function iShouldSeeMyNameInTheTaskSRowOfTheSprintBacklog()
+	{
+		$this->assertElementContains('#t' . $this->selectedTask['id'], $this->params['phabricator_username']);
 	}
 }
