@@ -11,12 +11,12 @@ Feature: Sprint Snapshots
 
   Scenario: Snapshots are not affected by Phabricator actions
     Given a sprint "Sprint 42" exists for the "Wikidata" project
-    And "Sprint 42" contains task "113"
+    And "Sprint 42" contains a task
     When I create a sprint snapshot for "Sprint 42"
-    And I remove task "113" from all projects
-    When I go to the "Sprint 42" sprint overview
-    Then I should not see "T113"
-    But I should see "T113" in the latest "Sprint 42" snapshot
+    And the selected task is removed from all projects
+    When I go to the "Sprint 42" live page
+    Then I should not see the selected task
+    But I should see the selected in the latest "Sprint 42" snapshot
 
   Scenario: Create new snapshot
     Given a sprint "Sprint 42" exists for the "Wikidata" project
