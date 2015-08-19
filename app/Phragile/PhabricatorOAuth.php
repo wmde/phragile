@@ -14,9 +14,9 @@ class PhabricatorOAuth {
 
 	// TODO: This might fail in the future as Phabricator's OAuth implementation is supposed to redirect back to the
 	//       client application and not just respond with a JSON object.
-	public function requestAccessToken($authCode)
+	public function requestAccessToken($authCode, $continue)
 	{
-		return $this->tryToGetJSON($this->accessTokenURL($authCode));
+		return $this->tryToGetJSON($this->accessTokenURL($authCode, $continue));
 	}
 
 	public function authenticate($accessToken)
@@ -30,14 +30,14 @@ class PhabricatorOAuth {
 		return isset($response['result']) ? $response['result'] : null;
 	}
 
-	private function accessTokenURL($authCode)
+	private function accessTokenURL($authCode, $continue)
 	{
 		return $this->phabricatorURL . 'oauthserver/token/?' . http_build_query([
 			'client_id' => $_ENV['OAUTH_CLIENT_ID'],
 			'client_secret' => $_ENV['OAUTH_CLIENT_SECRET'],
 			'code' => $authCode,
 			'grant_type' => 'authorization_code',
-			'redirect_uri' => route('login_path')
+			'redirect_uri' => route('login_path', ['continue' => $continue])
 		]);
 	}
 
