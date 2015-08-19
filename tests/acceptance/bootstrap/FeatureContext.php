@@ -461,7 +461,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 
 		if ($tasks) return array_values($tasks)[0];
 
-		return $phabricator->createTask($phid, [
+		return $phabricator->createTask($sprintPHID, [
 			'title' => 'automated test task',
 			'priority' => 'high',
 			'points' => 1,
