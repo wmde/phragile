@@ -23,8 +23,8 @@ Feature: Create Sprint
     And I fill in "sprint_end" with "01.01.2014"
     And I press "Create new sprint"
     Then I should see "The title field is required."
-    Then I should see "The sprint start field is required."
-    Then I should see "The sprint end does not match the format Y-m-d."
+    And I should see "The sprint start field is required."
+    And I should see "The sprint end does not match the format Y-m-d."
 
   Scenario: Sprint with start date after end date
     Given I am logged in
