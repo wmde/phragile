@@ -251,23 +251,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @When I remove task :taskID from all projects
-	 */
-	public function iRemoveTaskFrom($taskID)
-	{
-		App::make('phabricator')->updateTask($taskID, ['projectPHIDs' => []]);
-	}
-
-	/**
-	 * @Then I should see :text in the latest :sprint snapshot
-	 */
-	public function iShouldSeeInTheLatestSnapshot($text, $sprint)
-	{
-		$this->iGoToTheLatestSnapshotPageOf($sprint);
-		$this->assertResponseContains($text);
-	}
-
-	/**
 	 * @When I go to the :sprint live page
 	 */
 	public function iGoToTheSprintLivePage($sprint)
@@ -485,5 +468,30 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function iShouldSeeMyNameInTheTaskSRowOfTheSprintBacklog()
 	{
 		$this->assertElementContains('#t' . $this->selectedTask['id'], $this->params['phabricator_username']);
+	}
+
+	/**
+	 * @When the selected task is removed from all projects
+	 */
+	public function theSelectedTaskIsRemovedFromAllProjects()
+	{
+		App::make('phabricator')->updateTask($this->selectedTask['id'], ['projectPHIDs' => []]);
+	}
+
+	/**
+	 * @Then I should not see the selected task
+	 */
+	public function iShouldNotSeeTheSelectedTask()
+	{
+		$this->assertPageNotContainsText('#' . $this->selectedTask['id'] . ' ');
+	}
+
+	/**
+	 * @Then I should see the selected in the latest :sprint snapshot
+	 */
+	public function iShouldSeeTheSelectedInTheLatestSnapshot($sprint)
+	{
+		$this->iGoToTheLatestSnapshotPageOf($sprint);
+		$this->assertPageContainsText('#' . $this->selectedTask['id'] . ' ');
 	}
 }
