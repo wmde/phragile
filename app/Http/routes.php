@@ -101,6 +101,11 @@ Route::get('snapshots/{snapshot}', [
 	'uses' => 'SprintSnapshotsController@show'
 ]);
 
+Route::get('snapshots/{snapshot}/export.json', [
+	'as' => 'snapshot_export_json_path',
+	'uses' => 'SprintSnapshotsController@exportJSON'
+]);
+
 Route::put('projects/{project}', [
 	'as' => 'project_settings_path',
 	'middleware' => 'auth',

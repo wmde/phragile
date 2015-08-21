@@ -391,6 +391,14 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->visit('/sprints/' . Sprint::where('title', $sprint)->first()->phabricator_id . '/export.json');
 	}
 
+	/**
+	 * @When I go to the latest snapshot export page of :sprint
+	 */
+	public function iGoToTheLatestSnapshotExportPage($sprint)
+	{
+		$this->visit('/snapshots/' . Sprint::where('title', $sprint)->first()->sprintSnapshots->first()->id . '/export.json');
+	}
+
 	private function responseJSON()
 	{
 		return json_decode($this->getSession()->getPage()->getContent());
