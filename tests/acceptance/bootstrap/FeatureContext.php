@@ -496,11 +496,11 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->assertPageContainsText('#' . $this->selectedTask['id'] . ' ');
 	}
 
-    /**
-     * @When I go to the sprint overview of the missing sprint
-     */
-    public function iGoToTheSprintOverviewOfTheMissingSprint()
-    {
-        $this->visit("/sprints/$this->phabricatorProjectID");
-    }
+	/**
+	 * @When I go to the sprint overview of the missing sprint
+	 */
+	public function iGoToTheSprintOverviewOfTheMissingSprint()
+	{
+		$this->visit("/sprints/$this->phabricatorProjectID");
+	}
 }
