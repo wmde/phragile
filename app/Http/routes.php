@@ -18,7 +18,7 @@ Route::bind('project', function($slug)
 
 Route::bind('sprint', function($phabricatorID)
 {
-	return Sprint::where('phabricator_id', $phabricatorID)->first();
+	return Sprint::where('phabricator_id', $phabricatorID)->first() ?: new Sprint(['phabricator_id' => $phabricatorID]);
 });
 
 Route::bind('snapshot', function($snapshotID)
@@ -117,4 +117,10 @@ Route::get('/sprints/{sprint}/delete', [ // should be a DELETE
 	'as' => 'delete_sprint_path',
 	'middleware' => 'admin',
 	'uses' => 'SprintsController@delete'
+]);
+
+Route::post('sprints/connect', [
+	'as' => 'connect_sprint_path',
+	'middleware' => 'auth',
+	'uses' => 'SprintsController@connect'
 ]);

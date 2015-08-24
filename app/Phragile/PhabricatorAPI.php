@@ -116,4 +116,23 @@ class PhabricatorAPI {
 			['phids' => $phids]
 		);
 	}
+
+	public function getSprintDuration($phid)
+	{
+		try
+		{
+			$duration = $this->client->callMethodSynchronous(
+				'sprint.getstartenddates',
+				['project' => $phid]
+			);
+
+			return array_map(function($date)
+			{
+				return date('Y-m-d', $date);
+			}, $duration);
+		} catch (\ConduitClientException $e)
+		{
+			return null;
+		}
+	}
 }

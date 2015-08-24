@@ -197,6 +197,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 				throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
 			}
 		}
+		$this->phabricatorProjectID = $existingSprint ? $existingSprint->phabricator_id : $newSprint->phabricator_id;
 	}
 
 	/**
@@ -493,5 +494,13 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		$this->iGoToTheLatestSnapshotPageOf($sprint);
 		$this->assertPageContainsText('#' . $this->selectedTask['id'] . ' ');
+	}
+
+	/**
+	 * @When I go to the sprint overview of the missing sprint
+	 */
+	public function iGoToTheSprintOverviewOfTheMissingSprint()
+	{
+		$this->visit("/sprints/$this->phabricatorProjectID");
 	}
 }
