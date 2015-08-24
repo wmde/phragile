@@ -75,10 +75,12 @@ class SprintsController extends Controller {
 
 	public function delete(Sprint $sprint)
 	{
-		if ($sprint->delete()) {
+		if ($sprint->delete())
+		{
 			Flash::success('The sprint was deleted.');
 			return Redirect::route('project_path', ['project' => $sprint->project->slug]);
-		} else {
+		} else
+		{
 			Flash::error('The sprint could not be deleted. Please try again.');
 			return Redirect::back();
 		}
