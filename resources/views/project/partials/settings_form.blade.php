@@ -40,7 +40,7 @@
             $('.closed_statuses').hide();
         }
 
-        $( '.workboard_mode input').change(function() {
+        $('.workboard_mode input').change(function() {
             if ($('.workboard_mode input').is(':checked')) {
                 $('.closed_statuses').slideDown('fast');
             } else {
