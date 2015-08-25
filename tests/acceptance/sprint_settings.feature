@@ -18,6 +18,7 @@ Feature: Sprint Settings
   Scenario: Edit sprint title
     Given I am logged in
     And a sprint "Sprint 42" exists for the "Wikidata" project
+    And the sprint "Sprint Foo Bar" does not exist
     When I go to the "Sprint 42" sprint overview
     And I fill in "title" with "Sprint Foo Bar"
     And I press "save-sprint-settings"
@@ -57,7 +58,6 @@ Feature: Sprint Settings
     And I fill in "title" with ""
     And I press "save-sprint-settings"
     Then I should see "The title field is required."
-
 
   Scenario: Duplicate title
     Given I am logged in

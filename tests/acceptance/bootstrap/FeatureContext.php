@@ -178,24 +178,26 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		Auth::login(User::where('username', $this->params['phabricator_username'])->first()); // this is a bit ugly.
 
 		$project = Project::firstOrCreate(['title' => $projectTitle]);
-		$existingSprint = Sprint::where('title', $sprintTitle)->first();
+		$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle);
+		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
 
-		if (!$existingSprint)
+		if ($existingSprint !== null && !$existingSprint->delete())
 		{
-			$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle);
-			$newSprint = new Sprint([
-				'title' => $sprintTitle,
-				'project_id' => $project->id,
-				'sprint_start' => '2014-12-01',
-				'sprint_end' => '2014-12-14',
-				'phabricator_id' => $phabricatorProject['id'],
-				'phid' => $phabricatorProject['phid'],
-			]);
+			throw new Exception('Could not delete the existing sprint.');
+		}
 
-			if (!$phabricatorProject || !$newSprint->save())
-			{
-				throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
-			}
+		$newSprint = new Sprint([
+			'title' => $sprintTitle,
+			'project_id' => $project->id,
+			'sprint_start' => '2014-12-01',
+			'sprint_end' => '2014-12-14',
+			'phabricator_id' => $phabricatorProject['id'],
+			'phid' => $phabricatorProject['phid'],
+		]);
+
+		if (!$phabricatorProject || !$newSprint->save())
+		{
+			throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
 		}
 	}
 
