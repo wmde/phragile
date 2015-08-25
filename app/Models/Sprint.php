@@ -26,7 +26,7 @@ class Sprint extends Eloquent {
 	public function validate()
 	{
 		$rules = [
-			'title' => 'required|unique:sprints,title,NULL,id,project_id,' . $this->project_id,
+			'title' => 'required|unique:sprints,title,' . $this->id . ',id,project_id,' . $this->project_id,
 			'sprint_start' => 'required|date_format:"Y-m-d"',
 			'sprint_end' => 'required|date_format:"Y-m-d"|after:' . ($this->sprint_start ?: '0-0-0')
 		];
