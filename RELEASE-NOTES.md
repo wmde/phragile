@@ -1,5 +1,13 @@
 # Phragile release notes
 
+## Version 1.1 (dev)
+
+* Restrict deleting snapshots to admins only
+* Possibility to delete a sprint
+* Setting for making story points optional
+* Page to create sprints that exist on Phabricator but not on Phragile
+* Possibility to export snapshot data 
+
 ## Version 1.0 (2015-08-14)
 
 * login via Phabricator OAuth
