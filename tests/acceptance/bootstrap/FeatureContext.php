@@ -178,7 +178,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		Auth::login(User::where('username', $this->params['phabricator_username'])->first()); // this is a bit ugly.
 
 		$project = Project::firstOrCreate(['title' => $projectTitle]);
-		$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle);
+		$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle) ?: $this->createPhabricatorProject($sprintTitle);
 		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
 
 		if ($existingSprint !== null && !$existingSprint->delete())
@@ -199,6 +199,11 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		{
 			throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
 		}
+	}
+
+	private function createPhabricatorProject($sprintTitle)
+	{
+		return App::make('phabricator')->createProject($sprintTitle, []);
 	}
 
 	/**
