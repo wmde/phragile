@@ -165,9 +165,10 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		}
 	}
 
-	private function getPhabricatorProjectFromTitle($title)
+	private function getOrCreatePhabricatorProjectFromTitle($title)
 	{
-		return App::make('phabricator')->queryProjectByTitle($title);
+		$phabricator = App::make('phabricator');
+		return $phabricator->queryProjectByTitle($title) ?: $phabricator->createProject($title, []);
 	}
 
 	/**
@@ -178,24 +179,26 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		Auth::login(User::where('username', $this->params['phabricator_username'])->first()); // this is a bit ugly.
 
 		$project = Project::firstOrCreate(['title' => $projectTitle]);
-		$existingSprint = Sprint::where('title', $sprintTitle)->first();
+		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
+		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
 
-		if (!$existingSprint)
+		if ($existingSprint !== null && !$existingSprint->delete())
 		{
-			$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle);
-			$newSprint = new Sprint([
-				'title' => $sprintTitle,
-				'project_id' => $project->id,
-				'sprint_start' => '2014-12-01',
-				'sprint_end' => '2014-12-14',
-				'phabricator_id' => $phabricatorProject['id'],
-				'phid' => $phabricatorProject['phid'],
-			]);
+			throw new Exception('Could not delete the existing sprint.');
+		}
 
-			if (!$phabricatorProject || !$newSprint->save())
-			{
-				throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
-			}
+		$newSprint = new Sprint([
+			'title' => $sprintTitle,
+			'project_id' => $project->id,
+			'sprint_start' => '2014-12-01',
+			'sprint_end' => '2014-12-14',
+			'phabricator_id' => $phabricatorProject['id'],
+			'phid' => $phabricatorProject['phid'],
+		]);
+
+		if (!$phabricatorProject || !$newSprint->save())
+		{
+			throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
 		}
 		$this->phabricatorProjectID = $existingSprint ? $existingSprint->phabricator_id : $newSprint->phabricator_id;
 	}

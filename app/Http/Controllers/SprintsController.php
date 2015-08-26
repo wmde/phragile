@@ -67,9 +67,24 @@ class SprintsController extends Controller {
 
 	public function updateSettings(Sprint $sprint)
 	{
-		$sprint->update(Input::only('ignore_estimates'));
+		foreach (Input::only('sprint_start', 'sprint_end', 'title', 'ignore_estimates') as $key => $value)
+		{
+			$sprint->$key = $value;
+		}
 
-		Flash::success('The sprint settings have been updated');
+		$validation = $sprint->validate();
+
+		if ($validation->fails())
+		{
+			Flash::error(implode(' ', $validation->messages()->all()));
+		} elseif ($sprint->save())
+		{
+			Flash::success( 'The sprint settings have been updated' );
+		} else
+		{
+			Flash::error('The sprint settings could not be updated. Please try again');
+		}
+
 		return Redirect::back();
 	}
 

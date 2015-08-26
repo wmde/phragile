@@ -1,4 +1,6 @@
 @section('optional_scripts')
+	@parent
+
 	{!! HTML::script('js/datepicker.js') !!}
 
 	<script type="text/javascript">
@@ -24,5 +26,7 @@
 @stop
 
 @section('optional_styles')
+	@parent
+
 	{!! HTML::style('/css/datepicker.css') !!}
 @stop
