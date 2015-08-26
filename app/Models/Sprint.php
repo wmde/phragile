@@ -117,15 +117,15 @@ class Sprint extends Eloquent {
 
 	private function fetchSnapshotData(array $tasks)
 	{
-		$phabricator = App::make('phabricator');
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];
 		}, $tasks);
+		$transactionLoader = new \Phragile\TransactionLoader($this->project->workboard_mode);
 
 		return [
 			'tasks' => $tasks,
-			'transactions' => $phabricator->getTaskTransactions($taskIDs),
+			'transactions' => $transactionLoader->load($taskIDs, App::make('phabricator')),
 		];
 	}
 
