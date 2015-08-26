@@ -3,6 +3,7 @@
 namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
+use Phragile\TransactionLoader;
 use Sprint;
 use Phragile\Factory\SprintDataFactory;
 
@@ -36,13 +37,16 @@ class SprintLiveDataActionHandler {
 	private function getSprintDataFactory(Sprint $sprint)
 	{
 		$tasks = $this->phabricatorAPI->queryTasksByProject($sprint->phid);
+		$taskIDs = array_map(function($task)
+		{
+			return $task['id'];
+		}, $tasks);
+		$transactionLoader = new TransactionLoader($sprint->project->workboard_mode);
+
 		return new SprintDataFactory(
 			$sprint,
 			$tasks,
-			$this->phabricatorAPI->getTaskTransactions(array_map(function($task)
-			{
-				return $task['id'];
-			}, $tasks)),
+			$transactionLoader->load($taskIDs, $this->phabricatorAPI),
 			$this->phabricatorAPI
 		);
 	}
