@@ -165,9 +165,16 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		}
 	}
 
-	private function getPhabricatorProjectFromTitle($title)
+	private function getOrCreatePhabricatorProjectFromTitle($title)
 	{
-		return App::make('phabricator')->queryProjectByTitle($title);
+		$phabricator =  App::make('phabricator');
+		$project = $phabricator->queryProjectByTitle($title);
+
+		if (!$project) {
+			$project = $phabricator->createProject($title, []);
+		}
+
+		return $project;
 	}
 
 	/**
@@ -178,7 +185,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		Auth::login(User::where('username', $this->params['phabricator_username'])->first()); // this is a bit ugly.
 
 		$project = Project::firstOrCreate(['title' => $projectTitle]);
-		$phabricatorProject = $this->getPhabricatorProjectFromTitle($sprintTitle) ?: $this->createPhabricatorProject($sprintTitle);
+		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
 		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
 
 		if ($existingSprint !== null && !$existingSprint->delete())
@@ -199,11 +206,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		{
 			throw new Exception('There was a problem creating the sprint.' . $newSprint->getPhabricatorError());
 		}
-	}
-
-	private function createPhabricatorProject($sprintTitle)
-	{
-		return App::make('phabricator')->createProject($sprintTitle, []);
 	}
 
 	/**
