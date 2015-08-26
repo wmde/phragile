@@ -167,14 +167,8 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 
 	private function getOrCreatePhabricatorProjectFromTitle($title)
 	{
-		$phabricator =  App::make('phabricator');
-		$project = $phabricator->queryProjectByTitle($title);
-
-		if (!$project) {
-			$project = $phabricator->createProject($title, []);
-		}
-
-		return $project;
+		$phabricator = App::make('phabricator');
+		return $phabricator->queryProjectByTitle($title) ?: $phabricator->createProject($title, []);
 	}
 
 	/**
