@@ -15,10 +15,8 @@ class TransactionLoader {
 
 		foreach (array_chunk($taskIDs, 200) as $batch)
 		{
-			$transactions = array_merge(
-				$transactions,
-				$this->removeIrrelevant($phabricatorAPI->getTaskTransactions($batch))
-			);
+			// Not using array_merge here because it would remove the keys
+			$transactions += $this->removeIrrelevant($phabricatorAPI->getTaskTransactions($batch));
 		}
 
 		return $transactions;
