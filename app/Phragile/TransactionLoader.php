@@ -2,12 +2,6 @@
 namespace Phragile;
 
 class TransactionLoader {
-	private $workboardMode;
-
-	public function __construct($workboardMode)
-	{
-		$this->workboardMode = $workboardMode;
-	}
 
 	public function load($taskIDs, PhabricatorAPI $phabricatorAPI)
 	{
@@ -32,8 +26,7 @@ class TransactionLoader {
 
 	private function isRelevantTransaction(array $transaction)
 	{
-		return ($this->workboardMode && $this->isWorkboardTransaction($transaction))
-			|| (!$this->workboardMode && $this->isStatusTransaction($transaction));
+		return $this->isWorkboardTransaction($transaction) || $this->isStatusTransaction($transaction);
 	}
 
 	private function isWorkboardTransaction(array $transaction)

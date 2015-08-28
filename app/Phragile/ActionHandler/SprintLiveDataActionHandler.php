@@ -41,7 +41,7 @@ class SprintLiveDataActionHandler {
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactionLoader = new TransactionLoader($sprint->project->workboard_mode);
+		$transactionLoader = new TransactionLoader();
 
 		return new SprintDataFactory(
 			$sprint,
