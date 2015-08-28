@@ -121,7 +121,7 @@ class Sprint extends Eloquent {
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactionLoader = new \Phragile\TransactionLoader($this->project->workboard_mode);
+		$transactionLoader = new \Phragile\TransactionLoader();
 
 		return [
 			'tasks' => $tasks,
