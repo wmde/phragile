@@ -7,6 +7,7 @@ return [
 		'normal' => 50,
 		'low' => 25,
 		'wishlist' => 20,
+		'lowest' => 10,
 		'needs triage' => 0,
 	],
 ];
