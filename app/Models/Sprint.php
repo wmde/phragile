@@ -1,4 +1,6 @@
 <?php
+use Phragile\TransactionLoader;
+use Phragile\TransactionFilter;
 
 class Sprint extends Eloquent {
 
@@ -123,7 +125,7 @@ class Sprint extends Eloquent {
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactionLoader = new \Phragile\TransactionLoader();
+		$transactionLoader = new TransactionLoader(new TransactionFilter());
 
 		return [
 			'tasks' => $tasks,

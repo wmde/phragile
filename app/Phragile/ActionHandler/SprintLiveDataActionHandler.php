@@ -3,6 +3,8 @@
 namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
+use Phragile\SettingsAwareTransactionFilter;
+use Phragile\TransactionFilter;
 use Phragile\TransactionLoader;
 use Sprint;
 use Phragile\Factory\SprintDataFactory;
@@ -41,7 +43,9 @@ class SprintLiveDataActionHandler {
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactionLoader = new TransactionLoader();
+		$transactionLoader = new TransactionLoader(
+			new SettingsAwareTransactionFilter($sprint->project->workboard_mode)
+		);
 
 		return new SprintDataFactory(
 			$sprint,
