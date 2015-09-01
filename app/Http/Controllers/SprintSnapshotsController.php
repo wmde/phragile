@@ -54,7 +54,7 @@ class SprintSnapshotsController extends Controller {
 
 	private function getSprintDataFactory(SprintSnapshot $snapshot)
 	{
-		$sprintData = json_decode($snapshot->data, true);
+		$sprintData = json_decode($snapshot->getData(), true);
 		return new SprintDataFactory(
 			$snapshot->sprint,
 			$sprintData['tasks'],

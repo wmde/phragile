@@ -22,4 +22,14 @@ class SprintSnapshot extends Eloquent {
 	{
 		return $this->attributes['created_at'];
 	}
+
+	public function getData()
+	{
+		if ($this->data === null)
+		{
+			$this->data = self::find($this->id)->data;
+		}
+
+		return $this->data;
+	}
 }

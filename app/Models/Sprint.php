@@ -22,7 +22,9 @@ class Sprint extends Eloquent {
 	 */
 	public function sprintSnapshots()
 	{
-		return $this->hasMany('SprintSnapshot')->orderBy('created_at', 'desc');
+		return $this->hasMany('SprintSnapshot')
+		            ->select(['id', 'sprint_id', 'created_at', 'total_points'])
+		            ->orderBy('created_at', 'desc');
 	}
 
 	public function validate()
