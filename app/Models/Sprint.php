@@ -18,6 +18,8 @@ class Sprint extends Eloquent {
 	}
 
 	/**
+	 * Returns the sprint's snapshots without the snapshot data
+	 *
 	 * @return \Illuminate\Database\Eloquent\Collection
 	 */
 	public function sprintSnapshots()
