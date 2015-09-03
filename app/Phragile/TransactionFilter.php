@@ -2,6 +2,12 @@
 namespace Phragile;
 
 class TransactionFilter {
+	/***
+	 * Filters out irrelevant transactions
+	 *
+	 * @param array $transactions
+	 * @return array $transactions
+	 */
 	public function filter(array $transactions)
 	{
 		return array_map(function($taskTransactions)
@@ -23,6 +29,6 @@ class TransactionFilter {
 	protected function isStatusTransaction(array $transaction)
 	{
 		return $transaction['transactionType'] === 'status'
-		|| $transaction['transactionType'] === 'mergedinto';
+		    || $transaction['transactionType'] === 'mergedinto';
 	}
 }
