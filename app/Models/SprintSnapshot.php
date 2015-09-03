@@ -25,11 +25,18 @@ class SprintSnapshot extends Eloquent {
 
 	public function getData()
 	{
-		if ($this->data === null)
-		{
+		if ($this->data === null) {
 			$this->data = self::find($this->id)->data;
 		}
 
 		return $this->data;
+	}
+
+	/**
+	 * @return int - Number of story points or tasks depending on the sprint settings
+	 */
+	public function getScope()
+	{
+		return $this->sprint->ignore_estimates ? $this->task_count : $this->total_points;
 	}
 }
