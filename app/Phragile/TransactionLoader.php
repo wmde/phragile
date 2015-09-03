@@ -9,6 +9,13 @@ class TransactionLoader {
 		$this->transactionFilter = $transactionFilter;
 	}
 
+	/***
+	 * Loads task transactions from Phabricator in batches of 200
+	 *
+	 * @param $taskIDs
+	 * @param PhabricatorAPI $phabricatorAPI
+	 * @return array
+	 */
 	public function load($taskIDs, PhabricatorAPI $phabricatorAPI)
 	{
 		$transactions = [];
