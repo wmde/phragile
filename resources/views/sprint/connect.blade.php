@@ -9,6 +9,10 @@
         You can use the following form to connect it with Phragile.
     </p>
 
+    <div class="alert alert-warning" role="alert">
+        Please make sure you put the new sprint into the correct Phragile project! If your project does not exist, please ask one of the Phragile admins to create it.
+    </div>
+
     {!! Form::open(['method' => 'POST', 'route' => ['connect_sprint_path']]) !!}
         {!! Form::text('title', $phabricatorProject['id'], ['class' => 'hidden']) !!}
 
