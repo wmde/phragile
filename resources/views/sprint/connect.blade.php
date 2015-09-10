@@ -11,6 +11,9 @@
 
     <div class="alert alert-warning" role="alert">
         Please make sure you put the new sprint into the correct Phragile project! If your project does not exist, please ask one of the Phragile admins to create it.
+        @if(env('PROJECT_REQUEST_URL'))
+            You can file a request here: {!! link_to(env('PROJECT_REQUEST_URL')) !!}
+        @endif
     </div>
 
     {!! Form::open(['method' => 'POST', 'route' => ['connect_sprint_path']]) !!}
