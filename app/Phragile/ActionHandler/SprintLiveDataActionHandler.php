@@ -44,13 +44,14 @@ class SprintLiveDataActionHandler {
 			return $task['id'];
 		}, $tasks);
 		$transactionLoader = new TransactionLoader(
-			new SettingsAwareTransactionFilter($sprint->project->workboard_mode)
+			new SettingsAwareTransactionFilter($sprint->project->workboard_mode),
+			$this->phabricatorAPI
 		);
 
 		return new SprintDataFactory(
 			$sprint,
 			$tasks,
-			$transactionLoader->load($taskIDs, $this->phabricatorAPI),
+			$transactionLoader->load($taskIDs),
 			$this->phabricatorAPI
 		);
 	}

@@ -127,11 +127,11 @@ class Sprint extends Eloquent {
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactionLoader = new TransactionLoader(new TransactionFilter());
+		$transactionLoader = new TransactionLoader(new TransactionFilter(), App::make('phabricator'));
 
 		return [
 			'tasks' => $tasks,
-			'transactions' => $transactionLoader->load($taskIDs, App::make('phabricator')),
+			'transactions' => $transactionLoader->load($taskIDs),
 		];
 	}
 
