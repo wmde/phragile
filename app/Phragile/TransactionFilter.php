@@ -2,7 +2,7 @@
 namespace Phragile;
 
 class TransactionFilter {
-	/***
+	/**
 	 * Filters out irrelevant transactions
 	 *
 	 * @param array $transactions

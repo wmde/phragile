@@ -9,7 +9,7 @@ class TransactionLoader {
 		$this->transactionFilter = $transactionFilter;
 	}
 
-	/***
+	/**
 	 * Loads task transactions from Phabricator in batches of 200
 	 *
 	 * @param $taskIDs
