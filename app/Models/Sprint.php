@@ -1,4 +1,6 @@
 <?php
+use Phragile\TransactionLoader;
+use Phragile\TransactionFilter;
 
 class Sprint extends Eloquent {
 
@@ -16,6 +18,8 @@ class Sprint extends Eloquent {
 	}
 
 	/**
+	 * Returns the sprint's snapshots without the snapshot data
+	 *
 	 * @return \Illuminate\Database\Eloquent\Collection
 	 */
 	public function sprintSnapshots()
@@ -119,15 +123,15 @@ class Sprint extends Eloquent {
 
 	private function fetchSnapshotData(array $tasks)
 	{
-		$phabricator = App::make('phabricator');
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];
 		}, $tasks);
+		$transactionLoader = new TransactionLoader(new TransactionFilter(), App::make('phabricator'));
 
 		return [
 			'tasks' => $tasks,
-			'transactions' => $phabricator->getTaskTransactions($taskIDs),
+			'transactions' => $transactionLoader->load($taskIDs),
 		];
 	}
 

@@ -27,7 +27,8 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 
 	public function getStatus(array $task)
 	{
-		return $this->columns->getColumnName($this->taskColumnPHIDs[$task['id']]) ?: 'Backlog';
+		$phid = isset($this->taskColumnPHIDs[$task['id']]) ? $this->taskColumnPHIDs[$task['id']] : null;
+		return $this->columns->getColumnName($phid) ?: 'Backlog';
 	}
 
 	private function extractColumnIDs(array $transactions)
@@ -49,7 +50,7 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	public function isClosed(array $task)
 	{
 		return in_array(
-			$this->columns->getColumnName($this->taskColumnPHIDs[$task['id']]),
+			$this->getStatus($task),
 			$this->closedColumnNames
 		);
 	}
