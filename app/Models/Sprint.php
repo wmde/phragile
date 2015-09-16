@@ -101,6 +101,7 @@ class Sprint extends Eloquent {
 			'sprint_id' => $this->id,
 			'data' => json_encode($this->fetchSnapshotData($tasks)),
 			'total_points' => $this->calculateTotalPoints($tasks),
+			'task_count' => count($tasks),
 		]);
 	}
 
@@ -110,7 +111,7 @@ class Sprint extends Eloquent {
 			$tasks,
 			function($sum, $task)
 			{
-				return $sum + ($this->ignore_estimates ? 1 : $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')]);
+				return $sum + $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')];
 			},
 			0
 		);

@@ -32,8 +32,8 @@ class ScopeLine {
 				$days[$day] = $this->pointsNumber;
 			} elseif (isset($this->snapshots[$day]))
 			{
-				$days[$day] = $this->snapshots[$day]->total_points;
-				$currentPoints = $this->snapshots[$day]->total_points;
+				$days[$day] = $this->snapshots[$day]->getScope();
+				$currentPoints = $this->snapshots[$day]->getScope();
 			} else
 			{
 				$days[$day] = $currentPoints;
@@ -47,7 +47,7 @@ class ScopeLine {
 	{
 		foreach ($this->dateRange as $date)
 		{
-			if (isset($this->snapshots[$date])) return $this->snapshots[$date]->total_points;
+			if (isset($this->snapshots[$date])) return $this->snapshots[$date]->getScope();
 		}
 
 		return $this->pointsNumber;

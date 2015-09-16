@@ -25,14 +25,8 @@ class ScopeLineTest extends TestCase {
 
 	public function testShouldAlwaysUseLastSnapshot()
 	{
-		$snapshot1 = new SprintSnapshot([
-			'total_points' => 42,
-		]);
-		$snapshot1->setCreatedAt('2015-01-01 00:00:00');
-		$snapshot2 = new SprintSnapshot([
-			'total_points' => 41,
-		]);
-		$snapshot2->setCreatedAt('2015-01-01 02:00:00');
+		$snapshot1 = $this->newSnapshot('2015-01-01 00:00:00', ['total_points' => 42]);
+		$snapshot2 = $this->newSnapshot('2015-01-01 02:00:00', ['total_points' => 41]);
 		$scopeLine = new ScopeLine([$snapshot1, $snapshot2], 43, ['2015-01-01']);
 
 		$data = $scopeLine->getData();
@@ -41,16 +35,22 @@ class ScopeLineTest extends TestCase {
 
 	public function testShouldFillTotalPointsBackwardsFromFirstSnapshot()
 	{
-		$snapshot = new SprintSnapshot([
-			'total_points' => 42,
-		]);
-		$snapshot->setCreatedAt('2015-01-02 00:00:00');
 		$duration = ['2015-01-01', '2015-01-02'];
+		$snapshot = $this->newSnapshot($duration[1], ['total_points' => 42]);
 		$scopeLine = new ScopeLine([$snapshot], 40, $duration);
 
 		$data = $scopeLine->getData();
 		$this->assertSame($data[$duration[0]], 42);
 		$this->assertSame($data[$duration[1]], 42);
+	}
+
+	public function newSnapshot($date, $fields, $sprint = null)
+	{
+		$snapshot = new SprintSnapshot($fields);
+		$snapshot->sprint = $sprint ?: new Sprint(['ignore_estimates' => false, 'title' => 'wat']);
+		$snapshot->setCreatedAt($date);
+
+		return $snapshot;
 	}
 
 	public function testShouldConsiderCurrentNumberOfStoryPoints()
@@ -64,10 +64,7 @@ class ScopeLineTest extends TestCase {
 			date($dateFormat, $currentTime),
 			date($dateFormat, $currentTime + $daySeconds),
 		];
-		$snapshot = new SprintSnapshot([
-			'total_points' => 42,
-		]);
-		$snapshot->setCreatedAt(date($dateFormat, $currentTime - $daySeconds));
+		$snapshot = $this->newSnapshot(date($dateFormat, $currentTime - $daySeconds), ['total_points' => 42]);
 		$scopeLine = new ScopeLine([$snapshot], 40, $duration);
 
 		$data = $scopeLine->getData();
@@ -75,5 +72,18 @@ class ScopeLineTest extends TestCase {
 		$this->assertSame($data[$duration[1]], 42);
 		$this->assertSame($data[$duration[2]], 40);
 		$this->assertSame($data[$duration[3]], 40);
+	}
+
+	public function testShouldUseTaskCountBasedOnSettings()
+	{
+		$sprint = new Sprint(['ignore_estimates' => true, 'title' => 'sup']);
+		$duration = ['2015-01-01', '2015-01-02'];
+		$s1 = $this->newSnapshot($duration[0], ['total_points' => 5, 'task_count' => 2], $sprint);
+		$s2 = $this->newSnapshot($duration[1], ['total_points' => 8, 'task_count' => 3], $sprint);
+
+		$scopeLine = new ScopeLine([$s1, $s2], 3, $duration);
+		$data = $scopeLine->getData();
+		$this->assertSame($data[$duration[0]], 2);
+		$this->assertSame($data[$duration[1]], 3);
 	}
 }
