@@ -31,7 +31,7 @@ var PHRAGILE = PHRAGILE || {};
             height: 400,
             width: 600,
 
-            margin: { top: 10, right: 10, bottom: 50, left: 35 }
+            margin: { top: 10, right: 10, bottom: 50, left: 40 }
         }
     );
     showGraphs(['burndown', 'ideal']);
