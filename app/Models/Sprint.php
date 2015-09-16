@@ -25,7 +25,7 @@ class Sprint extends Eloquent {
 	public function sprintSnapshots()
 	{
 		return $this->hasMany('SprintSnapshot')
-		            ->select(['id', 'sprint_id', 'created_at', 'total_points'])
+		            ->select(['id', 'sprint_id', 'created_at', 'total_points', 'task_count'])
 		            ->orderBy('created_at', 'desc');
 	}
 
