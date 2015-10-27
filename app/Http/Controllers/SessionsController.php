@@ -7,7 +7,7 @@ class SessionsController extends Controller {
 
 	public function __construct()
 	{
-		$this->phabricatorOAuth = new PhabricatorOAuth($_ENV['PHABRICATOR_URL']);
+		$this->phabricatorOAuth = new PhabricatorOAuth(env('PHABRICATOR_URL'));
 	}
 
 	public function login()

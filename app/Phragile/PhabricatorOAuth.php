@@ -33,8 +33,8 @@ class PhabricatorOAuth {
 	private function accessTokenURL($authCode, $continue)
 	{
 		return $this->phabricatorURL . 'oauthserver/token/?' . http_build_query([
-			'client_id' => $_ENV['OAUTH_CLIENT_ID'],
-			'client_secret' => $_ENV['OAUTH_CLIENT_SECRET'],
+			'client_id' => env('OAUTH_CLIENT_ID'),
+			'client_secret' => env('OAUTH_CLIENT_SECRET'),
 			'code' => $authCode,
 			'grant_type' => 'authorization_code',
 			'redirect_uri' => route('login_path', ['continue' => $continue])

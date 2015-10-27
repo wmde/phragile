@@ -20,7 +20,7 @@ class TaskList {
 				'title' => $task['title'],
 				'priority' => $task['priority'],
 				'status' => $this->statusDispatcher->getStatus($task),
-				'story_points' => $ignoreEstimates ? 1 : $task['auxiliary'][$_ENV['MANIPHEST_STORY_POINTS_FIELD']],
+				'story_points' => $ignoreEstimates ? 1 : $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')],
 				'closed' => $this->statusDispatcher->isClosed($task),
 				'id' => $task['id'],
 				'assignee' => $task['ownerPHID'],

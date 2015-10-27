@@ -42,7 +42,7 @@ class SprintsController extends Controller {
 	public function create(Project $project)
 	{
 		$user = Auth::user();
-		$user->setPhabricatorURL($_ENV['PHABRICATOR_URL']);
+		$user->setPhabricatorURL(env('PHABRICATOR_URL'));
 
 		if (!$user->certificateValid())
 		{

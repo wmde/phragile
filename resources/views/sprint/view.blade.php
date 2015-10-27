@@ -28,7 +28,7 @@
 				@endforeach
 			</ul>
 
-			@if(Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
+			@if(Auth::check() && Auth::user()->isInAdminList(env('PHRAGILE_ADMINS')))
 				{!! link_to_route(
 					'delete_sprint_path',
 					'',
@@ -42,7 +42,7 @@
 			@endif
 		</span>
 
-		<a href="{{ $_ENV['PHABRICATOR_URL'] }}project/view/{{ $sprint->phabricator_id }}" class="btn btn-default" title="Go to Phabricator" target="_blank">
+		<a href="{{ env('PHABRICATOR_URL') }}project/view/{{ $sprint->phabricator_id }}" class="btn btn-default" title="Go to Phabricator" target="_blank">
 			<img src="/images/phabricator.png" class="phabricator-icon"/>
 		</a>
 	</h1>
@@ -88,7 +88,7 @@
 					</a>
 				@endif
 
-				@if(isset($snapshot) && Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
+				@if(isset($snapshot) && Auth::check() && Auth::user()->isInAdminList(env('PHRAGILE_ADMINS')))
 					{!! link_to_route(
 						'delete_snapshot_path',
 						'',
@@ -133,7 +133,7 @@
 				<tr id="t{{ $task['id'] }}">
 					<td>
 						{!! link_to(
-							$_ENV['PHABRICATOR_URL'] . 'T' . $task['id'],
+							env('PHABRICATOR_URL') . 'T' . $task['id'],
 							"#${task['id']} " . $task['title'],
 							[
 								'class' => 'title',

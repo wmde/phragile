@@ -11,7 +11,7 @@
 						Copy and paste your Conduit certificate from Phabricator here.
 						You can find it at
 						{!! link_to(
-							$_ENV['PHABRICATOR_URL'] . '/settings/panel/conduit/',
+							env('PHABRICATOR_URL') . '/settings/panel/conduit/',
 							'Phabricator &gt; Settings &gt; Conduit Certificate'
 						) !!}
 					</p>

@@ -37,7 +37,7 @@
 					</ul>
 				</div>
 
-				@if(Auth::check() && Auth::user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
+				@if(Auth::check() && Auth::user()->isInAdminList(env('PHRAGILE_ADMINS')))
 					@include('project.partials.create')
 				@endif
 			</p>
