@@ -32,7 +32,7 @@ class AuthenticateAdmin {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if (!$this->auth->user()->isInAdminList($_ENV['PHRAGILE_ADMINS']))
+		if (!$this->auth->user()->isInAdminList(env('PHRAGILE_ADMINS')))
 		{
 			if ($request->ajax())
 			{

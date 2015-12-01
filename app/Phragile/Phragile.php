@@ -25,7 +25,7 @@ class Phragile {
 	public function newSprintStoreActionHandler()
 	{
 		return new SprintStoreActionHandler(
-			new PhabricatorAPI(new ConduitClient($_ENV['PHABRICATOR_URL'])),
+			new PhabricatorAPI(new ConduitClient(env('PHABRICATOR_URL'))),
 			App::make('phabricator')
 		);
 	}

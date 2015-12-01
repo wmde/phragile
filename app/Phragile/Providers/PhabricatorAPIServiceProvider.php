@@ -8,8 +8,8 @@ class PhabricatorAPIServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$this->app->singleton('phabricator', function() {
-			$phabricator = new PhabricatorAPI(new \ConduitClient($_ENV['PHABRICATOR_URL']));
-			$phabricator->connect($_ENV['PHRAGILE_BOT_NAME'], $_ENV['PHRAGILE_BOT_CERTIFICATE']);
+			$phabricator = new PhabricatorAPI(new \ConduitClient(env('PHABRICATOR_URL')));
+			$phabricator->connect(env('PHRAGILE_BOT_NAME'), env('PHRAGILE_BOT_CERTIFICATE'));
 
 			return $phabricator;
 		});
