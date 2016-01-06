@@ -50,8 +50,8 @@
 	<div class="row">
 		<div class="col-md-8">
 			<ul class="nav nav-tabs" id="pick-chart">
-				<li role="presentation" data-graphs="ideal burndown"><a href="#">Burndown chart</a></li>
-				<li role="presentation" data-graphs="scope burnup"><a href="#">Burnup chart</a></li>
+				<li role="presentation" data-graphs="ideal burndown"><a href="#!burndown">Burndown chart</a></li>
+				<li role="presentation" data-graphs="scope burnup"><a href="#!burnup">Burnup chart</a></li>
 			</ul>
 			<div id="burndown">
 				<table class="table table-condensed" id="graph-labels">

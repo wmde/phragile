@@ -35,7 +35,7 @@ var PHRAGILE = PHRAGILE || {};
         }
     );
 
-    if (window.location.hash === '#burnup') {
+    if (window.location.hash === '#!burnup') {
         showGraphs(['burnup', 'scope']);
         $('#pick-chart li:last').addClass('active');
     } else {
@@ -45,13 +45,12 @@ var PHRAGILE = PHRAGILE || {};
 
 
     var $chartButtons = $('#pick-chart li');
-    $chartButtons.click(function (e) {
+    $chartButtons.click(function () {
         var $button = $(this);
 
         $chartButtons.removeClass('active');
         $button.addClass('active');
         showGraphs($button.data('graphs').split(' '));
-
-        e.preventDefault();
+        window.location.hash = $button.find('a').attr('href');
     });
 })(PHRAGILE);
