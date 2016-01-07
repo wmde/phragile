@@ -34,16 +34,23 @@ var PHRAGILE = PHRAGILE || {};
             margin: { top: 10, right: 10, bottom: 50, left: 40 }
         }
     );
-    showGraphs(['burndown', 'ideal']);
+
+    if (window.location.hash === '#!burnup') {
+        showGraphs(['burnup', 'scope']);
+        $('#pick-chart li:last').addClass('active');
+    } else {
+        showGraphs(['burndown', 'ideal']);
+        $('#pick-chart li:first').addClass('active');
+    }
+
 
     var $chartButtons = $('#pick-chart li');
-    $chartButtons.click(function (e) {
+    $chartButtons.click(function () {
         var $button = $(this);
 
         $chartButtons.removeClass('active');
         $button.addClass('active');
         showGraphs($button.data('graphs').split(' '));
-
-        e.preventDefault();
+        window.location.hash = $button.find('a').attr('href');
     });
 })(PHRAGILE);
