@@ -83,6 +83,7 @@ class SprintsController extends Controller {
 		} elseif ($sprint->save())
 		{
 			Flash::success( 'The sprint settings have been updated' );
+			return Redirect::route('sprint_path', ['sprint' => $sprint->phabricator_id]);
 		} else
 		{
 			Flash::error('The sprint settings could not be updated. Please try again');
