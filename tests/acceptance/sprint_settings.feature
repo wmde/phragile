@@ -34,6 +34,16 @@ Feature: Sprint Settings
     Then I should see "The sprint settings have been updated"
     And the "ignore_estimates" checkbox should be checked
 
+  Scenario: Change project of the sprint
+    Given I am logged in
+    And a sprint "Sprint 42" exists for the "Wikidata" project
+    And the "Some Other Project" project exists
+    When I go to the "Sprint 42" sprint overview
+    And I select "Some Other Project" from "project_id"
+    And I press "save-sprint-settings"
+    Then I should see "The sprint settings have been updated"
+    And "Some Other Project" should be shown as a project name
+
   Scenario: Invalid date format
     Given I am logged in
     And a sprint "Sprint 42" exists for the "Wikidata" project

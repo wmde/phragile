@@ -22,7 +22,10 @@ class SprintsController extends Controller {
 	{
 		return View::make(
 			'sprint.view',
-			Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getViewData($sprint)
+			array_merge(
+				Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getViewData($sprint),
+				[ 'projects' => Project::orderBy('title')->lists('title', 'id') ]
+			)
 		);
 	}
 
@@ -67,7 +70,7 @@ class SprintsController extends Controller {
 
 	public function updateSettings(Sprint $sprint)
 	{
-		foreach (Input::only('sprint_start', 'sprint_end', 'title', 'ignore_estimates') as $key => $value)
+		foreach (Input::only('sprint_start', 'sprint_end', 'title', 'project_id', 'ignore_estimates') as $key => $value)
 		{
 			$sprint->$key = $value;
 		}
