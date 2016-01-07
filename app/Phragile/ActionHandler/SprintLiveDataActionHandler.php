@@ -4,7 +4,6 @@ namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
 use Phragile\SettingsAwareTransactionFilter;
-use Phragile\TransactionFilter;
 use Phragile\TransactionLoader;
 use Sprint;
 use Phragile\Factory\SprintDataFactory;
