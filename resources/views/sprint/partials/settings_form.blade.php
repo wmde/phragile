@@ -7,7 +7,6 @@
             </div>
             {!! Form::model($sprint, ['route' => ['sprint_settings_path', $sprint->phabricator_id], 'method' => 'PUT']) !!}
             <div class="modal-body">
-                <p>
                 <div class="form-group">
                     {!! Form::label('sprint_start', 'Sprint start:') !!}
                     {!! Form::text('sprint_start', $sprint->sprint_start, ['class' => 'form-control datepicker start']) !!}
@@ -29,7 +28,6 @@
                         Ignore story point estimates
                     </label>
                 </div>
-                </p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
