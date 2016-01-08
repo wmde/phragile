@@ -2,7 +2,7 @@
 
 class Project extends Eloquent {
 
-	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode'];
+	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode', 'ignored_columns'];
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Collection
@@ -32,6 +32,11 @@ class Project extends Eloquent {
 	public function getClosedColumns()
 	{
 		return preg_split('/\s*,\s*/', $this->closed_statuses);
+	}
+
+	public function getIgnoredColumns()
+	{
+		return preg_split('/\s*,\s*/', $this->ignored_columns);
 	}
 
 	private function newestPastSprint()

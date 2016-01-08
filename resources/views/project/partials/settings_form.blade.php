@@ -21,6 +21,10 @@
                         {!! Form::label('closed_statuses', 'Closed status columns:') !!}
                         {!! Form::text('closed_statuses', $sprint->project->closed_statuses, ['class' => 'form-control']) !!}
                     </div>
+                    <div class="form-group form-inline">
+                        {!! Form::label('ignored_columns', 'Ignored workboard columns:') !!}
+                        {!! Form::text('ignored_columns', $sprint->project->ignored_columns, ['class' => 'form-control']) !!}
+                    </div>
                 </p>
             </div>
             <div class="modal-footer">
