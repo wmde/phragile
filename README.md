@@ -25,12 +25,12 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 
 ## Installation
 
-**Requirements**
+### Requirements
 
 * PHP 5.5 or later
 * MySQL, SQLite or PostgreSQL
 
-**Installation**
+### Installation
 
 * [Install Phabricator](https://secure.phabricator.com/book/phabricator/article/installation_guide/)
 * [Activate Phabricator OAuth](https://github.com/wmde/phragile/wiki/Activating-Phabricator-OAuth)
@@ -38,6 +38,16 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 * Run `composer update` in the repository’s root directory
 * Copy `.env.example` to `.env` and edit the file according to the instructions
 * Run `php artisan migrate`
+
+### Server configuration
+
+**nginx**
+
+rewrite rule example
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
 
 ## Tests
 ### Acceptance tests
