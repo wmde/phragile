@@ -3,6 +3,7 @@
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
 use PHPUnit_Framework_Assert as PHPUnit;
 
@@ -235,6 +236,14 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 				'sprint_end' => $end
 			]
 		);
+	}
+
+	/**
+	 * @Then :projectTitle should be shown as a project name
+	 */
+	public function shouldBeShownAsAProjectName($projectTitle)
+	{
+		$this->assertElementContains('h1.sprint-overview-title', $projectTitle);
 	}
 
 	/**

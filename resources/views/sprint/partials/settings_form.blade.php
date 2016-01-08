@@ -23,6 +23,11 @@
                 </div>
 
                 <div class="form-group">
+                    {!! Form::label('project_id', 'Project:') !!}
+                    {!! Form::select('project_id', $projects, $sprint->project_id, ['class' => 'form-control']) !!}
+                </div>
+
+                <div class="form-group">
                     <label>
                         {!! Form::checkbox('ignore_estimates') !!}
                         Ignore story point estimates
@@ -37,5 +42,3 @@
         </div>
     </div>
 </div>
-
-@include('sprint.partials.datepicker_assets')
