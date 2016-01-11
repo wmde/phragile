@@ -3,7 +3,6 @@
 namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
-use Sprint;
 
 class SprintNotFoundActionHandler {
 	private $phabricatorAPI;
@@ -30,18 +29,8 @@ class SprintNotFoundActionHandler {
 		return \View::make('sprint.connect', [
 			'duration' => $duration,
 			'phabricatorProject' => $phabricatorProject,
-			'projects' => $this->getProjects(),
+			'projects' => \Project::orderBy('title')->lists('title','id'),
 		]);
 	}
 
-	private function getProjects()
-	{
-		$projects = [];
-		foreach (\Project::orderBy('title', 'ASC')->get() as $project)
-		{
-			$projects[$project['id']] = $project['title'];
-		}
-
-		return $projects;
-	}
 }
