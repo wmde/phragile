@@ -95,13 +95,13 @@ class Sprint extends Eloquent {
 	 */
 	public function createSnapshot()
 	{
-		$tasks = $this->fetchTasks();
+		$data = $this->fetchSnapshotData($this->fetchTasks());
 
 		return SprintSnapshot::create([
 			'sprint_id' => $this->id,
-			'data' => json_encode($this->fetchSnapshotData($tasks)),
-			'total_points' => $this->calculateTotalPoints($tasks),
-			'task_count' => count($tasks),
+			'data' => json_encode($data),
+			'total_points' => $this->calculateTotalPoints($data['tasks']),
+			'task_count' => count($data['tasks']),
 		]);
 	}
 
@@ -128,12 +128,36 @@ class Sprint extends Eloquent {
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactionLoader = new TransactionLoader(new TransactionFilter(), App::make('phabricator'));
+		$phabricator = App::make('phabricator');
+		$transactions = (new TransactionLoader(
+			new TransactionFilter(),
+			$phabricator
+		))->load($taskIDs);
+
+		$tasks = $this->filterIgnoredColumns($tasks, $transactions, $phabricator);
 
 		return [
 			'tasks' => $tasks,
-			'transactions' => $transactionLoader->load($taskIDs),
+			'transactions' => $transactions,
 		];
+	}
+
+	private function filterIgnoredColumns(array $tasks, array $transactions, \Phragile\PhabricatorAPI $phabricator)
+	{
+		$columnRepository = new \Phragile\ProjectColumnRepository(
+			$this->phid,
+			$transactions,
+			$phabricator
+		);
+		$statuses = (new \Phragile\Factory\StatusDispatcherFactory(
+			$this,
+			$columnRepository,
+			$transactions
+		))->getStatusDispatcher();
+
+		return array_filter($tasks, function($task) use($statuses) {
+			return !in_array($statuses->getStatus($task), $this->project->getIgnoredColumns());
+		});
 	}
 
 	/**
