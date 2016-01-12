@@ -21,7 +21,7 @@
 
         <div class="form-group">
             {!! Form::label('project', 'Project:') !!}
-            {!! Form::select('project', $projects, ['class' => 'form-control']) !!}
+            {!! Form::select('project', $projects, null, ['class' => 'form-control']) !!}
         </div>
 
         @if($duration)
