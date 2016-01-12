@@ -6,26 +6,40 @@ class TaskList {
 	private $tasks = null;
 	private $statusDispatcher = null;
 
-	public function __construct(array $phabricatorTaskData, StatusDispatcher $statusDispatcher, $ignoreEstimates = false)
+	/**
+	 * TaskList constructor.
+	 * @param array $phabricatorTaskData
+	 * @param StatusDispatcher $statusDispatcher
+	 * @param array $options
+	 * 		@option boolean "ignore_estimates"
+	 * 		@option array "ignored_columns"
+	 */
+	public function __construct(array $phabricatorTaskData, StatusDispatcher $statusDispatcher, array $options)
 	{
 		$this->statusDispatcher = $statusDispatcher;
-		$this->tasks = $this->processTasks($phabricatorTaskData, $ignoreEstimates);
+		$this->tasks = $this->processTasks($phabricatorTaskData, $options);
 	}
 
-	private function processTasks($taskData, $ignoreEstimates)
+	private function processTasks($taskData, $options)
 	{
-		return array_map(function($task) use($ignoreEstimates)
-		{
-			return [
-				'title' => $task['title'],
-				'priority' => $task['priority'],
-				'status' => $this->statusDispatcher->getStatus($task),
-				'story_points' => $ignoreEstimates ? 1 : $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')],
-				'closed' => $this->statusDispatcher->isClosed($task),
-				'id' => $task['id'],
-				'assignee' => $task['ownerPHID'],
-			];
-		}, array_values($taskData));
+		return array_filter(
+			array_map(function($task) use($options)
+			{
+				return [
+					'title' => $task['title'],
+					'priority' => $task['priority'],
+					'status' => $this->statusDispatcher->getStatus($task),
+					'story_points' => $options['ignore_estimates'] ? 1 : $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')],
+					'closed' => $this->statusDispatcher->isClosed($task),
+					'id' => $task['id'],
+					'assignee' => $task['ownerPHID'],
+				];
+			}, array_values($taskData)),
+			function($task) use($options)
+			{
+				return !in_array($task['status'], $options['ignored_columns']);
+			}
+		);
 	}
 
 	/**

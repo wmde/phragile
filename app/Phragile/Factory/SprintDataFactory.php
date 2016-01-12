@@ -32,7 +32,7 @@ class SprintDataFactory {
 		$this->taskList = new TaskList(
 			$tasks,
 			(new StatusDispatcherFactory($sprint, $this->columns, $transactions))->getStatusDispatcher(),
-			$sprint->ignore_estimates
+			['ignore_estimates' => $sprint->ignore_estimates, 'ignored_columns' => $sprint->project->getIgnoredColumns()]
 		);
 
 		$this->burndownChart = $this->generateBurndownData();
