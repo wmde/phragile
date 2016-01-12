@@ -138,12 +138,12 @@ class TaskListTest extends TestCase {
 
 	private function createTaskListWithStatusFieldDispatcher(array $tasks)
 	{
-		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'));
+		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'), ['ignore_estimates' => false, 'ignored_columns' => []]);
 	}
 
 	private function createTaskListIgnoringEstimatesWithStatusFieldDispatcher(array $tasks)
 	{
-		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'), true);
+		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'), ['ignore_estimates' => true, 'ignored_columns' => []]);
 	}
 
 	private function createTaskListWithWorkboardDispatcher(array $tasks, $transactions)
@@ -160,12 +160,16 @@ class TaskListTest extends TestCase {
 			}, $this->workboardColumns);
 		}));
 
-		return new TaskList($tasks, new StatusByWorkboardDispatcher(
-			$this->testProjectPHID,
-			new TransactionList($transactions),
-			new ProjectColumnRepository($this->testProjectPHID, $transactions, $phabricatorAPI),
-			array_values($this->workboardColumns)
-		));
+		return new TaskList(
+			$tasks,
+			new StatusByWorkboardDispatcher(
+				$this->testProjectPHID,
+				new TransactionList($transactions),
+				new ProjectColumnRepository($this->testProjectPHID, $transactions, $phabricatorAPI),
+				array_values($this->workboardColumns)
+			),
+			['ignore_estimates' => false, 'ignored_columns' => []]
+		);
 	}
 
 	private function addDummyDataToTasks()
