@@ -5,13 +5,10 @@ use Phragile\BurnupChart;
 use Phragile\ProjectColumnRepository;
 use Phragile\PhabricatorAPI;
 use Phragile\TaskList;
-use Phragile\StatusByStatusFieldDispatcher;
-use Phragile\StatusByWorkboardDispatcher;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
-use Phragile\TransactionList;
 use Phragile\ScopeLine;
 
 class SprintDataFactory {
@@ -31,12 +28,10 @@ class SprintDataFactory {
 		$this->transactions = $transactions;
 		$this->phabricatorAPI = $phabricatorAPI;
 
-		$this->columns = $this->fetchProjectColumns();
+		$this->columns = new ProjectColumnRepository($this->sprint->phid, $this->transactions, $this->phabricatorAPI);
 		$this->taskList = new TaskList(
 			$tasks,
-			$sprint->project->workboard_mode
-				? new StatusByWorkboardDispatcher($this->sprint->phid, new TransactionList($this->transactions), $this->columns, $this->getClosedColumns())
-				: new StatusByStatusFieldDispatcher(env('REVIEW_TAG_PHID')),
+			(new StatusDispatcherFactory($sprint, $this->columns, $transactions))->getStatusDispatcher(),
 			$sprint->ignore_estimates
 		);
 
@@ -130,10 +125,5 @@ class SprintDataFactory {
 	private function getClosedColumns()
 	{
 		return $this->sprint->project->getClosedColumns();
-	}
-
-	private function fetchProjectColumns()
-	{
-		return new ProjectColumnRepository($this->sprint->phid, $this->transactions, $this->phabricatorAPI);
 	}
 }
