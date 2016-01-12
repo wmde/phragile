@@ -58,6 +58,18 @@ class TaskListTest extends TestCase {
 		$this->assertSame(10, $taskList->getTasksPerStatus()['to do']['points']);
 	}
 
+	public function testIgnoreToDoColumn()
+	{
+		$taskList = $this->createTaskListWithWorkboardDispatcher($this->tasks, $this->getProjectColumnTransactions(), []);
+		$taskListIgnore = $this->createTaskListWithWorkboardDispatcher($this->tasks, $this->getProjectColumnTransactions(), ['to do']);
+
+		$this->assertFalse(isset($taskListIgnore->getTasksPerStatus()['to do']['points']));
+		$this->assertSame(10, $taskList->getTasksPerStatus()['to do']['points']);
+
+		$this->assertSame(30, $taskList->getTasksPerStatus()['total']['points']);
+		$this->assertSame(20, $taskListIgnore->getTasksPerStatus()['total']['points']);
+	}
+
 	private $testProjectPHID = 'PHID-123';
 
 	private $tasks = [
@@ -146,7 +158,7 @@ class TaskListTest extends TestCase {
 		return new TaskList($tasks, new StatusByStatusFieldDispatcher('PHID-REVIEW123'), ['ignore_estimates' => true, 'ignored_columns' => []]);
 	}
 
-	private function createTaskListWithWorkboardDispatcher(array $tasks, $transactions)
+	private function createTaskListWithWorkboardDispatcher(array $tasks, $transactions, array $ignored_columns = [])
 	{
 		$phabricatorAPI = $this->getMockBuilder('Phragile\PhabricatorAPI')
 			->disableOriginalConstructor()
@@ -168,7 +180,7 @@ class TaskListTest extends TestCase {
 				new ProjectColumnRepository($this->testProjectPHID, $transactions, $phabricatorAPI),
 				array_values($this->workboardColumns)
 			),
-			['ignore_estimates' => false, 'ignored_columns' => []]
+			['ignore_estimates' => false, 'ignored_columns' => $ignored_columns]
 		);
 	}
 
