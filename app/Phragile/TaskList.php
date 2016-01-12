@@ -10,9 +10,7 @@ class TaskList {
 	 * TaskList constructor.
 	 * @param array $phabricatorTaskData
 	 * @param StatusDispatcher $statusDispatcher
-	 * @param array $options
-	 * 		@option boolean "ignore_estimates"
-	 * 		@option array "ignored_columns"
+	 * @param array $options - (boolean) "ignore_estimates", (array) "ignored_columns"
 	 */
 	public function __construct(array $phabricatorTaskData, StatusDispatcher $statusDispatcher, array $options)
 	{
