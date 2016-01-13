@@ -8,9 +8,60 @@ use Phragile\TransactionList;
 
 class TaskListTest extends TestCase {
 
-	public function __construct()
+	private $tasks = [
+		[
+			'status' => 'open',
+			'points' => 8
+		],
+		[
+			'status' => 'resolved',
+			'points' => 5
+		],
+		[
+			'status' => 'resolved',
+			'points' => 8
+		],
+		[
+			'status' => 'wontfix',
+			'points' => 2
+		],
+		[
+			'status' => 'wontfix',
+			'points' => 7
+		]
+	];
+	/**
+	 * @before
+	 */
+	public function addDummyDataToTasks()
 	{
-		$this->addDummyDataToTasks();
+		$i = 0;
+		$this->tasks = array_map(function($task) use(&$i)
+		{
+			return array_merge($task, [
+				'title' => 'a task',
+				'priority' => 'low',
+				'isClosed' => false,
+				'projectPHIDs' => ['x'],
+				'ownerPHID' => null,
+				'id' => ++$i,
+				'auxiliary' => [env('MANIPHEST_STORY_POINTS_FIELD') => $task['points']],
+			]);
+		}, $this->tasks);
+	}
+
+	private $testSprint = null;
+	/**
+	 * @before
+	 */
+	public function initTestSprint()
+	{
+		$this->testSprint = new Sprint([
+			'phid' => 'PHID-123',
+		]);
+		$this->testSprint->project = new Project([
+			'closed_columns' => 'done',
+		]);
 	}
 
 	public function testGetTasksPerStatus()
@@ -44,7 +95,7 @@ class TaskListTest extends TestCase {
 			'transactionType' => 'projectcolumn',
 			'oldValue' => [
 				'columnPHIDs' => [],
-				'projectPHID' => 'PHID-456', // not identical to $this->testProjectPHID and should be ignored
+				'projectPHID' => 'PHID-456', // not identical to $this->testSprint->phid and should be ignored
 			],
 			'newValue' => [
 				'columnPHIDs' => [array_keys($this->workboardColumns)[2]],
@@ -70,31 +121,6 @@ class TaskListTest extends TestCase {
 		$this->assertSame(20, $taskListIgnore->getTasksPerStatus()['total']['points']);
 	}
 
-	private $testProjectPHID = 'PHID-123';
-
-	private $tasks = [
-		[
-			'status' => 'open',
-			'points' => 8
-		],
-		[
-			'status' => 'resolved',
-			'points' => 5
-		],
-		[
-			'status' => 'resolved',
-			'points' => 8
-		],
-		[
-			'status' => 'wontfix',
-			'points' => 2
-		],
-		[
-			'status' => 'wontfix',
-			'points' => 7
-		]
-	];
-
 	private function getProjectColumnTransactions()
 	{
 		return [
@@ -102,7 +128,7 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => ['anyNotClosed'],
-					'projectPHID' => $this->testProjectPHID,
+					'projectPHID' => $this->testSprint->phid,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[0]],
@@ -112,7 +138,7 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => ['anyNotClosed'],
-					'projectPHID' => $this->testProjectPHID,
+					'projectPHID' => $this->testSprint->phid,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[1]],
@@ -122,7 +148,7 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => [],
-					'projectPHID' => $this->testProjectPHID,
+					'projectPHID' => $this->testSprint->phid,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[2]],
@@ -132,7 +158,7 @@ class TaskListTest extends TestCase {
 				'transactionType' => 'projectcolumn',
 				'oldValue' => [
 					'columnPHIDs' => [],
-					'projectPHID' => $this->testProjectPHID,
+					'projectPHID' => $this->testSprint->phid,
 				],
 				'newValue' => [
 					'columnPHIDs' => [array_keys($this->workboardColumns)[2]],
@@ -175,29 +201,11 @@ class TaskListTest extends TestCase {
 		return new TaskList(
 			$tasks,
 			new StatusByWorkboardDispatcher(
-				$this->testProjectPHID,
+				$this->testSprint,
 				new TransactionList($transactions),
-				new ProjectColumnRepository($this->testProjectPHID, $transactions, $phabricatorAPI),
-				array_values($this->workboardColumns)
+				new ProjectColumnRepository($this->testSprint->phid, $transactions, $phabricatorAPI)
 			),
 			['ignore_estimates' => false, 'ignored_columns' => $ignored_columns]
 		);
-	}
-
-	private function addDummyDataToTasks()
-	{
-		$i = 0;
-		$this->tasks = array_map(function($task) use(&$i)
-		{
-			return array_merge($task, [
-				'title' => 'a task',
-				'priority' => 'low',
-				'isClosed' => false,
-				'projectPHIDs' => ['x'],
-				'ownerPHID' => null,
-				'id' => ++$i,
-				'auxiliary' => [env('MANIPHEST_STORY_POINTS_FIELD') => $task['points']],
-			]);
-		}, $this->tasks);
 	}
 }

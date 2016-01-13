@@ -31,10 +31,9 @@ class StatusDispatcherFactory
 	private function getWorkboardDispatcher()
 	{
 		return new StatusByWorkboardDispatcher(
-			$this->sprint->phid,
+			$this->sprint,
 			new TransactionList($this->transactions),
-			$this->projectColumnRepository,
-			$this->sprint->project->getClosedColumns()
+			$this->projectColumnRepository
 		);
 	}
 
