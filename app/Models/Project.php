@@ -2,7 +2,7 @@
 
 class Project extends Eloquent {
 
-	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode', 'ignored_columns'];
+	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode', 'ignored_columns', 'default_column'];
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Collection

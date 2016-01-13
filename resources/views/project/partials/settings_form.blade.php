@@ -25,6 +25,10 @@
                         {!! Form::label('ignored_columns', 'Ignored workboard columns:') !!}
                         {!! Form::text('ignored_columns', $sprint->project->ignored_columns, ['class' => 'form-control']) !!}
                     </div>
+                    <div class="form-group form-inline workboard-related">
+                        {!! Form::label('default_column', 'Default workboard column:') !!}
+                        {!! Form::text('default_column', $sprint->project->default_column, ['class' => 'form-control', 'placeholder' => 'Backlog']) !!}
+                    </div>
                 </p>
             </div>
             <div class="modal-footer">

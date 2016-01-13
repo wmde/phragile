@@ -18,3 +18,10 @@ Feature: Workboard Support
     When I fill in "ignored_columns" with "Proposed, Ignore"
     And I press "Save"
     Then the "ignored_columns" field should contain "Proposed, Ignore"
+
+  Scenario: Set default workboard column
+    Given I am logged in
+    And I am on the "Wikidata" project page
+    When I fill in "default_column" with "Incoming"
+    And I press "Save"
+    Then the "default_column" field should contain "Incoming"
