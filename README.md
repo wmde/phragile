@@ -30,10 +30,16 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 * PHP 5.5 or later
 * MySQL, SQLite or PostgreSQL
 
-### Installation
+### Preparation
 
 * [Install Phabricator](https://secure.phabricator.com/book/phabricator/article/installation_guide/)
 * [Activate Phabricator OAuth](https://github.com/wmde/phragile/wiki/Activating-Phabricator-OAuth)
+* Add a  custom field for story points to http://yourphabricator/config/edit/maniphest.custom-field-definitions/   
+    e.g.: ```{ "yourcompany:story_points": { "name": "Story Points", "type": "int" } }```
+    
+    **OR** [Install the sprint extension](https://github.com/wikimedia/phabricator-extensions-Sprint)
+
+### Installation
 * Clone this repository
 * Run `composer update` in the repository’s root directory
 * Copy `.env.example` to `.env` and edit the file according to the instructions
