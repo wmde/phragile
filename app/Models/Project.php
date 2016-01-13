@@ -39,6 +39,11 @@ class Project extends Eloquent {
 		return preg_split('/\s*,\s*/', $this->ignored_columns);
 	}
 
+	public function getDefaultColumn()
+	{
+		return $this->default_column ?: 'Backlog';
+	}
+
 	private function newestPastSprint()
 	{
 		return Sprint::where('sprint_start', '<=', date('Y-m-d'))
