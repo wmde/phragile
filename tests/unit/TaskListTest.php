@@ -121,6 +121,17 @@ class TaskListTest extends TestCase {
 		$this->assertSame(20, $taskListIgnore->getTasksPerStatus()['total']['points']);
 	}
 
+	public function testDefaultColumn()
+	{
+		$taskList = $this->createTaskListWithWorkboardDispatcher($this->tasks, $this->getProjectColumnTransactions(), []);
+		$this->assertSame(7, $taskList->getTasksPerStatus()['Backlog']['points']);
+
+		$this->testSprint->project->default_column = 'Incoming';
+		$taskList = $this->createTaskListWithWorkboardDispatcher($this->tasks, $this->getProjectColumnTransactions(), []);
+		$this->assertFalse(isset($taskList->getTasksPerStatus()['Backlog']['points']));
+		$this->assertSame(7, $taskList->getTasksPerStatus()['Incoming']['points']);
+	}
+
 	private function getProjectColumnTransactions()
 	{
 		return [
