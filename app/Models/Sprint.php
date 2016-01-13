@@ -1,6 +1,7 @@
 <?php
 use Phragile\TransactionLoader;
 use Phragile\TransactionFilter;
+use Phragile\PhabricatorAPI;
 
 class Sprint extends Eloquent {
 
@@ -95,13 +96,16 @@ class Sprint extends Eloquent {
 	 */
 	public function createSnapshot()
 	{
-		$data = $this->fetchSnapshotData($this->fetchTasks());
+		$phabricator = App::make('phabricator');
+		$tasks = $this->fetchTasks($phabricator);
+		$data = $this->fetchSnapshotData($phabricator, $tasks);
+		$filteredTasks = $this->filterIgnoredColumns($tasks, $data['transactions'], $phabricator);
 
 		return SprintSnapshot::create([
 			'sprint_id' => $this->id,
 			'data' => json_encode($data),
-			'total_points' => $this->calculateTotalPoints($data['tasks']),
-			'task_count' => count($data['tasks']),
+			'total_points' => $this->calculateTotalPoints($filteredTasks),
+			'task_count' => count($filteredTasks),
 		]);
 	}
 
@@ -117,24 +121,21 @@ class Sprint extends Eloquent {
 		);
 	}
 
-	private function fetchTasks()
+	private function fetchTasks(PhabricatorAPI $phabricator)
 	{
-		return App::make('phabricator')->queryTasksByProject($this->phid);
+		return $phabricator->queryTasksByProject($this->phid);
 	}
 
-	private function fetchSnapshotData(array $tasks)
+	private function fetchSnapshotData(PhabricatorAPI $phabricator, array $tasks)
 	{
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];
 		}, $tasks);
-		$phabricator = App::make('phabricator');
 		$transactions = (new TransactionLoader(
 			new TransactionFilter(),
 			$phabricator
 		))->load($taskIDs);
-
-		$tasks = $this->filterIgnoredColumns($tasks, $transactions, $phabricator);
 
 		return [
 			'tasks' => $tasks,
@@ -142,7 +143,7 @@ class Sprint extends Eloquent {
 		];
 	}
 
-	private function filterIgnoredColumns(array $tasks, array $transactions, \Phragile\PhabricatorAPI $phabricator)
+	private function filterIgnoredColumns(array $tasks, array $transactions, PhabricatorAPI $phabricator)
 	{
 		$columnRepository = new \Phragile\ProjectColumnRepository(
 			$this->phid,
