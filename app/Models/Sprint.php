@@ -1,6 +1,7 @@
 <?php
 use Phragile\TransactionLoader;
 use Phragile\TransactionFilter;
+use Phragile\PhabricatorAPI;
 
 class Sprint extends Eloquent {
 
@@ -95,13 +96,16 @@ class Sprint extends Eloquent {
 	 */
 	public function createSnapshot()
 	{
-		$tasks = $this->fetchTasks();
+		$phabricator = App::make('phabricator');
+		$tasks = $this->fetchTasks($phabricator);
+		$data = $this->fetchSnapshotData($phabricator, $tasks);
+		$filteredTasks = $this->filterIgnoredColumns($tasks, $data['transactions'], $phabricator);
 
 		return SprintSnapshot::create([
 			'sprint_id' => $this->id,
-			'data' => json_encode($this->fetchSnapshotData($tasks)),
-			'total_points' => $this->calculateTotalPoints($tasks),
-			'task_count' => count($tasks),
+			'data' => json_encode($data),
+			'total_points' => $this->calculateTotalPoints($filteredTasks),
+			'task_count' => count($filteredTasks),
 		]);
 	}
 
@@ -117,23 +121,44 @@ class Sprint extends Eloquent {
 		);
 	}
 
-	private function fetchTasks()
+	private function fetchTasks(PhabricatorAPI $phabricator)
 	{
-		return App::make('phabricator')->queryTasksByProject($this->phid);
+		return $phabricator->queryTasksByProject($this->phid);
 	}
 
-	private function fetchSnapshotData(array $tasks)
+	private function fetchSnapshotData(PhabricatorAPI $phabricator, array $tasks)
 	{
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactionLoader = new TransactionLoader(new TransactionFilter(), App::make('phabricator'));
+		$transactions = (new TransactionLoader(
+			new TransactionFilter(),
+			$phabricator
+		))->load($taskIDs);
 
 		return [
 			'tasks' => $tasks,
-			'transactions' => $transactionLoader->load($taskIDs),
+			'transactions' => $transactions,
 		];
+	}
+
+	private function filterIgnoredColumns(array $tasks, array $transactions, PhabricatorAPI $phabricator)
+	{
+		$columnRepository = new \Phragile\ProjectColumnRepository(
+			$this->phid,
+			$transactions,
+			$phabricator
+		);
+		$statuses = (new \Phragile\Factory\StatusDispatcherFactory(
+			$this,
+			$columnRepository,
+			$transactions
+		))->getStatusDispatcher();
+
+		return array_filter($tasks, function($task) use($statuses) {
+			return !in_array($statuses->getStatus($task), $this->project->getIgnoredColumns());
+		});
 	}
 
 	/**

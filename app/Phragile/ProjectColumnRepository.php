@@ -5,27 +5,38 @@ class ProjectColumnRepository {
 	/**
 	 * @var maps workboard column PHIDs to a map of column data
 	 */
-	private $projectColumns;
+	private $projectColumns = null;
+	private $transactions;
 	private $phabricator;
 	private $projectPHID;
 
 	public function __construct($projectPHID, array $transactions, PhabricatorAPI $phabricator)
 	{
 		$this->projectPHID = $projectPHID;
+		$this->transactions = $transactions;
 		$this->phabricator = $phabricator;
-		$this->projectColumns = $this->fetchColumnData($transactions);
 	}
 
 	public function getColumnName($phid)
 	{
+		$this->initialize();
 		return $phid ? $this->projectColumns[$phid]['name'] : null;
 	}
 
 	public function getColumnPHID($name)
 	{
+		$this->initialize();
 		foreach ($this->projectColumns as $phid => $column)
 		{
 			if ($column['name'] === $name) return $phid;
+		}
+	}
+
+	private function initialize()
+	{
+		if ($this->projectColumns === null)
+		{
+			$this->projectColumns = $this->fetchColumnData($this->transactions);
 		}
 	}
 

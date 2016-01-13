@@ -11,3 +11,10 @@ Feature: Workboard Support
     And I press "Save"
     Then the "workboard_mode" checkbox should be checked
     And the "closed_statuses" field should contain "Done, Deployed"
+
+  Scenario: Ignore workboard columns
+    Given I am logged in
+    And I am on the "Wikidata" project page
+    When I fill in "ignored_columns" with "Proposed, Ignore"
+    And I press "Save"
+    Then the "ignored_columns" field should contain "Proposed, Ignore"

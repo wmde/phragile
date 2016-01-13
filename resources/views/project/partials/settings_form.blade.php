@@ -17,9 +17,13 @@
                             Use workboards instead of statuses
                         </label>
                     </div>
-                    <div class="form-group form-inline closed_statuses">
+                    <div class="form-group form-inline workboard-related">
                         {!! Form::label('closed_statuses', 'Closed status columns:') !!}
                         {!! Form::text('closed_statuses', $sprint->project->closed_statuses, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="form-group form-inline workboard-related">
+                        {!! Form::label('ignored_columns', 'Ignored workboard columns:') !!}
+                        {!! Form::text('ignored_columns', $sprint->project->ignored_columns, ['class' => 'form-control']) !!}
                     </div>
                 </p>
             </div>
@@ -37,14 +41,14 @@
 
     <script type="text/javascript">
         if (!$('.workboard_mode input').is(':checked')) {
-            $('.closed_statuses').hide();
+            $('.workboard-related').hide();
         }
 
         $('.workboard_mode input').change(function() {
             if ($('.workboard_mode input').is(':checked')) {
-                $('.closed_statuses').slideDown('fast');
+                $('.workboard-related').slideDown('fast');
             } else {
-                $('.closed_statuses').slideUp('fast');
+                $('.workboard-related').slideUp('fast');
             }
         });
     </script>
