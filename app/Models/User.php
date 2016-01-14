@@ -45,7 +45,7 @@ class User extends Eloquent implements AuthenticatableContract {
 		try
 		{
 			$client = new ConduitClient($this->phabricatorURL);
-			$client->setConduitToken($token);
+			$client->setConduitToken($token ?: $this->conduit_api_token);
 			$client->callMethodSynchronous('user.whoami', []);
 		} catch (ConduitClientException $e)
 		{
