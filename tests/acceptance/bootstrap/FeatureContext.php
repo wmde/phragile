@@ -72,24 +72,24 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @When I submit a valid Conduit certificate
+	 * @When I submit a valid Conduit API Token
 	 */
-	public function iSubmitAValidConduitCertificate()
+	public function iSubmitAValidConduitAPIToken()
 	{
-		$this->submitConduitCertificate($this->params['conduit_certificate']);
+		$this->submitConduitAPIToken($this->params['conduit_api_token']);
 	}
 
 	/**
-	 * @When I submit an invalid Conduit certificate
+	 * @When I submit an invalid Conduit API Token
 	 */
-	public function iSubmitAnInvalidConduitCertificate()
+	public function iSubmitAnInvalidConduitAPIToken()
 	{
-		$this->submitConduitCertificate('INVALID_CERTIFICATE');
+		$this->submitConduitAPIToken('INVALID_API_TOKEN');
 	}
 
-	private function submitConduitCertificate($certificate)
+	private function submitConduitAPIToken($token)
 	{
-		$this->fillField('conduit_certificate', $certificate);
+		$this->fillField('conduit_api_token', $token);
 		$this->pressButton('Submit');
 	}
 
@@ -102,20 +102,20 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Given I have not added my Conduit certificate
+	 * @Given I have not added my Conduit API Token
 	 */
-	public function iHaveNotAddedMyConduitCertificate()
+	public function iHaveNotAddedMyConduitAPIToken()
 	{
 		User::where(['username' => $this->params['phabricator_username']])
-			->update(['conduit_certificate' => '']);
+			->update(['conduit_api_token' => '']);
 	}
 
 	/**
-	 * @Then I should see my Conduit certificate in a text area
+	 * @Then I should see my Conduit API Token in a text area
 	 */
-	public function iShouldSeeMyConduitCertificateInATextArea()
+	public function iShouldSeeMyConduitAPITokenInATextArea()
 	{
-		$this->assertElementContainsText('#conduit-modal textarea', $this->params['conduit_certificate']);
+		$this->assertElementContainsText('#conduit-modal textarea', $this->params['conduit_api_token']);
 	}
 
 	/**
