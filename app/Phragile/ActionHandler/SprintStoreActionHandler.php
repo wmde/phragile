@@ -101,7 +101,7 @@ class SprintStoreActionHandler {
 
 	private function connectIfPhabricatorProjectExists($errorMessage)
 	{
-		if (str_contains($errorMessage, 'Project name is already used'))
+		if (str_contains($errorMessage, ['Project name is already used', 'Project name generates the same hashtag']))
 		{
 			$this->connectWithPhabricatorProject();
 		} else $this->redirectBackWithError('Could not create a Phabricator project for this sprint.');
