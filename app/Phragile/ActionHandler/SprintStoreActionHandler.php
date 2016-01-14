@@ -76,12 +76,16 @@ class SprintStoreActionHandler {
 	{
 		if ($this->previousActionFailed()) return;
 
-		try
-		{
-			$this->userPhabricatorAPI->connect($this->user->username, $this->user->conduit_certificate);
-		} catch(\ConduitClientException $e)
-		{
-			$this->redirectBackWithError($e->getMessage());
+		if(!empty($this->user->conduit_api_token)) {
+			$this->userPhabricatorAPI->setConduitAPIToken($this->user->conduit_api_token);
+		} else {
+			try
+			{
+				$this->userPhabricatorAPI->connect($this->user->username, $this->user->conduit_certificate);
+			} catch(\ConduitClientException $e)
+			{
+				$this->redirectBackWithError($e->getMessage());
+			}
 		}
 	}
 
