@@ -41,7 +41,7 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 
 ### Installation
 * Clone this repository
-* Run `composer update` in the repository’s root directory
+* Run `composer install` in the repository’s root directory
 * Copy `.env.example` to `.env` and edit the file according to the instructions
 * Run `php artisan migrate`
 
