@@ -17,9 +17,9 @@
 						<li>
 							{!! link_to(
 								'#',
-								'Conduit certificate',
+								'Conduit API Token',
 								[
-									'id' => 'conduit-certificate',
+									'id' => 'conduit-api-token',
 									'data-toggle' => 'modal',
 									'data-target' => '#conduit-modal',
 								]
@@ -34,7 +34,7 @@
 					</ul>
 				</li>
 
-				@include('layouts.partials.conduit_certificate_form')
+				@include('layouts.partials.conduit_api_token_form')
 			@else
 				{!! link_to(
 					env('PHABRICATOR_URL') . 'oauthserver/auth/?' . http_build_query([

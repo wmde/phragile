@@ -2,21 +2,21 @@
 
 class UsersController extends Controller {
 
-	public function updateCertificate()
+	public function updateAPIToken()
 	{
 		$user = Auth::user();
 		$user->setPhabricatorURL(env('PHABRICATOR_URL'));
-		$certificate = Input::get('conduit_certificate');
+		$token = Input::get('conduit_api_token');
 
-		if ($user->certificateValid($certificate))
+		if ($user->apiTokenValid($token))
 		{
-			$user->conduit_certificate = Input::get('conduit_certificate');
+			$user->conduit_api_token = Input::get('conduit_api_token');
 			$user->save();
 
-			Flash::success('Added your Conduit certificate.');
+			Flash::success('Added your Conduit API Token.');
 		} else
 		{
-			Flash::error('The submitted Conduit certificate was invalid.');
+			Flash::error('The submitted Conduit API Token was invalid.');
 		}
 
 		return Redirect::back();

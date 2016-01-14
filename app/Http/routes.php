@@ -41,10 +41,10 @@ Route::get('/logout', [
 	'uses' => 'SessionsController@logout'
 ]);
 
-Route::put('/conduit_certificate', [
+Route::put('/conduit_api_token', [
 	'middleware' => 'auth',
-	'as' => 'conduit_certificate_path',
-	'uses' => 'UsersController@updateCertificate'
+	'as' => 'conduit_api_token_path',
+	'uses' => 'UsersController@updateAPIToken'
 ]);
 
 Route::get('/projects/{project}', [
