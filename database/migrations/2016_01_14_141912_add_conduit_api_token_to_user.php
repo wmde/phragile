@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 
-class AddConduitAPITokenToUser extends Migration {
+class AddConduitApiTokenToUser extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -13,7 +13,7 @@ class AddConduitAPITokenToUser extends Migration {
 	{
 		Schema::table('users', function($table)
 		{
-			$table->text('conduit_api_token');
+			$table->string('conduit_api_token')->default('');
 		});
 	}
 
