@@ -19,9 +19,9 @@ Feature: Workboard Support
     And I press "Save"
     Then the "ignored_columns" field should contain "Proposed, Ignore"
 
-  Scenario: Set default workboard column
+  Scenario: Set backlog workboard column
     Given I am logged in
     And I am on the "Wikidata" project page
-    When I fill in "default_column" with "Incoming"
+    When I fill in "backlog_column" with "Incoming"
     And I press "Save"
-    Then the "default_column" field should contain "Incoming"
+    Then the "backlog_column" field should contain "Incoming"

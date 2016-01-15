@@ -22,7 +22,7 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	public function getStatus(array $task)
 	{
 		$phid = isset($this->taskColumnPHIDs[$task['id']]) ? $this->taskColumnPHIDs[$task['id']] : null;
-		return $this->columns->getColumnName($phid) ?: $this->sprint->project->getDefaultColumn();
+		return $this->columns->getColumnName($phid) ?: $this->sprint->project->getBacklogColumn();
 	}
 
 	private function extractColumnIDs(array $transactions)
