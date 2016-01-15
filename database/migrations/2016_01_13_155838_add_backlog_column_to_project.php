@@ -14,7 +14,7 @@ class AddBacklogColumnToProject extends Migration {
 	{
 		Schema::table('projects', function($t)
 		{
-			$t->string('backlog_column');
+			$t->string('backlog_column')->default('');
 		});
 	}
 
