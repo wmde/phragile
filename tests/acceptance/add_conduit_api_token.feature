@@ -19,4 +19,4 @@ Feature: Add Conduit Conduit API Token
     Given I am logged in
     And I have not added my Conduit API Token
     When I submit a valid Conduit API Token
-    Then I should see my Conduit API Token in a text area
+    Then I should see my Conduit API Token in an input field

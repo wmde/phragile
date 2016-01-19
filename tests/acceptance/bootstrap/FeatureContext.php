@@ -111,11 +111,11 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Then I should see my Conduit API Token in a text area
+	 * @Then I should see my Conduit API Token in an input field
 	 */
-	public function iShouldSeeMyConduitAPITokenInATextArea()
+	public function iShouldSeeMyConduitAPITokenInAnInputField()
 	{
-		$this->assertElementContainsText('#conduit-modal textarea', $this->params['conduit_api_token']);
+		$this->assertFieldContains('conduit_api_token', $this->params['conduit_api_token']);
 	}
 
 	/**

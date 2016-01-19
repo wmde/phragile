@@ -15,15 +15,7 @@
 						) !!}
 					</p>
 					<p>
-						{!! Form::textarea(
-							'conduit_api_token',
-							null,
-							[
-								'class' => 'form-control',
-								'rows' => 4,
-								'placeholder' => 'Conduit API Token',
-							]
-						) !!}
+						{!! Form::text('conduit_api_token', null, ['class' => 'form-control']) !!}
 					</p>
 				</div>
 				<div class="modal-footer">
