@@ -11,6 +11,11 @@ class PhabricatorAPI {
 		$this->priorities = \Config::get('phabricator.MANIPHEST_PRIORITIES', []);
 	}
 
+	public function setConduitAPIToken($token)
+	{
+		$this->client->setConduitToken($token);
+	}
+
 	public function connect($user, $certificate)
 	{
 		return $this->client->callMethodSynchronous(

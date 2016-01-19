@@ -13,4 +13,4 @@ default:
               phabricator_path: ''
               phabricator_username: ''
               phabricator_password: ''
-              conduit_certificate: ''
+              conduit_api_token: ''

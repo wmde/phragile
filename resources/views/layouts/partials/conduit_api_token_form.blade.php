@@ -3,28 +3,19 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				<h4 class="modal-title">Conduit certificate</h4>
+				<h4 class="modal-title">Conduit API Token</h4>
 			</div>
-			{!! Form::model(Auth::user(), ['route' => 'conduit_certificate_path', 'method' => 'PUT']) !!}
+			{!! Form::model(Auth::user(), ['route' => 'conduit_api_token_path', 'method' => 'PUT']) !!}
 				<div class="modal-body">
 					<p>
-						Copy and paste your Conduit certificate from Phabricator here.
-						You can find it at
+						Paste a Phabricator Conduit API Token here. You can create and find your tokens at
 						{!! link_to(
-							env('PHABRICATOR_URL') . '/settings/panel/conduit/',
-							'Phabricator &gt; Settings &gt; Conduit Certificate'
+							env('PHABRICATOR_URL') . '/settings/panel/apitokens/',
+							'Phabricator &gt; Settings &gt; Conduit API Tokens'
 						) !!}
 					</p>
 					<p>
-						{!! Form::textarea(
-							'conduit_certificate',
-							null,
-							[
-								'class' => 'form-control',
-								'rows' => 4,
-								'placeholder' => 'Conduit Certificate',
-							]
-						) !!}
+						{!! Form::text('conduit_api_token', null, ['class' => 'form-control']) !!}
 					</p>
 				</div>
 				<div class="modal-footer">

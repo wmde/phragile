@@ -40,6 +40,21 @@ class User extends Eloquent implements AuthenticatableContract {
 		return true;
 	}
 
+	public function apiTokenValid($token = null)
+	{
+		try
+		{
+			$client = new ConduitClient($this->phabricatorURL);
+			$client->setConduitToken($token ?: $this->conduit_api_token);
+			$client->callMethodSynchronous('user.whoami', []);
+		} catch (ConduitClientException $e)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 	/**
 	 * @param string $admins - Comma separated Phabricator user names
 	 * @return bool
