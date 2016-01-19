@@ -43,7 +43,7 @@ class ProjectsController extends Controller {
 
 	public function updateSettings(Project $project)
 	{
-		$project->update(Input::only('closed_statuses', 'workboard_mode', 'ignored_columns', 'backlog_column'));
+		$project->update(Input::only('closed_statuses', 'workboard_mode', 'ignored_columns', 'default_column'));
 
 		Flash::success('The project settings have been updated');
 		return Redirect::back();

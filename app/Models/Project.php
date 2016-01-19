@@ -2,7 +2,7 @@
 
 class Project extends Eloquent {
 
-	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode', 'ignored_columns', 'backlog_column'];
+	protected $fillable = ['title', 'slug', 'closed_statuses', 'workboard_mode', 'ignored_columns', 'default_column'];
 
 	/**
 	 * @return \Illuminate\Database\Eloquent\Collection
@@ -39,9 +39,9 @@ class Project extends Eloquent {
 		return preg_split('/\s*,\s*/', $this->ignored_columns);
 	}
 
-	public function getBacklogColumn()
+	public function getDefaultColumn()
 	{
-		return $this->backlog_column ?: 'Backlog';
+		return $this->default_column ?: 'Backlog';
 	}
 
 	private function newestPastSprint()

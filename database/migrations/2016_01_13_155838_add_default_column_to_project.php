@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddBacklogColumnToProject extends Migration {
+class AddDefaultColumnToProject extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -14,7 +14,7 @@ class AddBacklogColumnToProject extends Migration {
 	{
 		Schema::table('projects', function($t)
 		{
-			$t->string('backlog_column')->default('');
+			$t->string('default_column')->default('');
 		});
 	}
 
@@ -27,7 +27,7 @@ class AddBacklogColumnToProject extends Migration {
 	{
 		Schema::table('projects', function($t)
 		{
-			$t->dropColumn('backlog_column');
+			$t->dropColumn('default_column');
 		});
 	}
 
