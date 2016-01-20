@@ -3,9 +3,11 @@ Feature: Sprint Overview
   As a scrum master
   I want to see a sprint overview including a burndown chart, task information diagrams and a sortable sprint backlog
 
-  Scenario: Sprint Backlog
+  Background:
     Given a sprint "Sprint 42" exists for the "Wikidata" project
-    And it has the following tasks for the "Sprint 42" sprint:
+
+  Scenario: Sprint Backlog
+    Given it has the following tasks for the "Sprint 42" sprint:
       | title         | priority |  points |
       | Fix things    | high     |  13     |
       | Implement XYZ | low      |  8      |
@@ -18,15 +20,13 @@ Feature: Sprint Overview
     And I should see "8"
 
   Scenario: Assignees in Sprint Backlog
-    Given a sprint "Wikidata Sprint 42" exists for the "Wikidata" project
-    And "Wikidata Sprint 42" contains a task
+    Given "Wikidata Sprint 42" contains a task
     When I am assigned to this task
     And I go to the "Wikidata Sprint 42" sprint overview
     Then I should see my name in the task's row of the sprint backlog
 
   Scenario: Sprint duration
-    Given a sprint "Sprint 42" exists for the "Wikidata" project
-    And the sprint "Sprint 42" starts on "2014-11-25" and ends on "2014-12-08"
+    Given the sprint "Sprint 42" starts on "2014-11-25" and ends on "2014-12-08"
     When I go to the "Sprint 42" sprint overview
     Then I should see "2014-11-25"
     And I should see "2014-11-26"
@@ -44,8 +44,7 @@ Feature: Sprint Overview
     And I should see "2014-12-08"
 
   Scenario: Delete sprint
-    Given a sprint "Sprint 42" exists for the "Wikidata" project
-    And I am logged in
+    Given I am logged in
     When I go to the "Sprint 42" sprint overview
     And I click "Delete sprint"
     Then the sprint "Sprint 42" should not exist

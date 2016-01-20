@@ -3,10 +3,12 @@ Feature: Create Sprint
   As a scrum master
   I want to be able to create new sprints
 
-  Scenario: Create new sprint
+  Background:
     Given I am logged in
     And I am on the "Wikidata" project page
-    And the sprint "Wikidata Sprint 42" does not exist
+
+  Scenario: Create new sprint
+    Given the sprint "Wikidata Sprint 42" does not exist
     When I click "New sprint"
     And I fill in "title" with "Wikidata Sprint 42"
     And I fill in "sprint_start" with "2014-12-01"
@@ -17,8 +19,6 @@ Feature: Create Sprint
     And I should see "Wikidata Sprint 42" on "/projects/wikidata"
 
   Scenario: Sprint with invalid data
-    Given I am logged in
-    And I am on the "Wikidata" project page
     When I click "New sprint"
     And I fill in "sprint_end" with "01.01.2014"
     And I press "Create new sprint"
@@ -27,8 +27,6 @@ Feature: Create Sprint
     And I should see "The sprint end does not match the format Y-m-d."
 
   Scenario: Sprint with start date after end date
-    Given I am logged in
-    And I am on the "Wikidata" project page
     When I click "New sprint"
     And I fill in "sprint_end" with "2014-12-01"
     And I fill in "sprint_start" with "2014-12-01"

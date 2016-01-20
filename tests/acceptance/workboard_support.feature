@@ -3,9 +3,11 @@ Feature: Workboard Support
   As a user
   I want to be able to switch to workboard mode and see each task's workboard column
 
-  Scenario: Edit project settings
+  Background:
     Given I am logged in
     And I am on the "Wikidata" project page
+
+  Scenario: Edit project settings
     When I check "workboard_mode"
     And I fill in "closed_statuses" with "Done, Deployed"
     And I press "Save"
@@ -13,15 +15,11 @@ Feature: Workboard Support
     And the "closed_statuses" field should contain "Done, Deployed"
 
   Scenario: Ignore workboard columns
-    Given I am logged in
-    And I am on the "Wikidata" project page
     When I fill in "ignored_columns" with "Proposed, Ignore"
     And I press "Save"
     Then the "ignored_columns" field should contain "Proposed, Ignore"
 
   Scenario: Set default workboard column
-    Given I am logged in
-    And I am on the "Wikidata" project page
     When I fill in "default_column" with "Incoming"
     And I press "Save"
     Then the "default_column" field should contain "Incoming"
