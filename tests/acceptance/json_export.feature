@@ -4,7 +4,9 @@ Feature: Export Chart Data
   I want to be able to access the charts' underlying data.
 
   Background:
-    Given a sprint "Sprint 42" exists for the "Wikidata" project
+    Given I am logged in
+    And I submit a valid Conduit API Token
+    And a sprint "Sprint 42" exists for the "Wikidata" project
     And the sprint "Sprint 42" starts on "2014-11-25" and ends on "2014-12-08"
 
   Scenario: View exported sprint
