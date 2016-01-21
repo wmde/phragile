@@ -24,8 +24,10 @@ class SprintsController extends Controller {
 			'sprint.view',
 			array_merge(
 				Phragile::getGlobalInstance()->newSprintLiveDataActionHandler()->getViewData($sprint),
-				[ 'projects' => Project::orderBy('title')->lists('title', 'id') ],
-				[ 'project' => $sprint->project ]
+				[
+					'projects' => Project::orderBy('title')->lists('title', 'id'),
+					'project' => $sprint->project
+				]
 			)
 		);
 	}
