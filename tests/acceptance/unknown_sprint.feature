@@ -5,6 +5,7 @@ Feature: Unknown Sprint Page
 
   Scenario: Sprint exists in Phabricator but not in Phragile
     Given I am logged in
+    And the "Wikidata" project exists
     And a sprint "Test Sprint" exists for the "Wikidata" project in Phabricator but not in Phragile
     When I go to the sprint overview of the missing sprint
     And I select "Wikidata" from "project"
@@ -15,6 +16,7 @@ Feature: Unknown Sprint Page
 
   Scenario: Not logged in
     Given I am not logged in
+    And the "Wikidata" project exists
     And a sprint "Test Sprint" exists for the "Wikidata" project in Phabricator but not in Phragile
     When I go to the sprint overview of the missing sprint
     Then I should see "Please log in to connect the sprint with Phragile."
