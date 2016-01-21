@@ -346,6 +346,15 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
+	 * @Given I copied the :sprint Phabricator ID from Phabricator
+	 */
+	public function iCopiedThePhabricatorIdFromPhabricator($sprint)
+	{
+		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprint);
+		$this->phabricatorProjectID = $phabricatorProject['id'];
+	}
+
+	/**
 	 * @Given I copied the :project :sprint Phabricator ID
 	 */
 	public function iCopiedThePhabricatorId($project, $sprint)

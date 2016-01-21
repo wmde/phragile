@@ -5,6 +5,8 @@ Feature: Connect Existing Sprint Project
 
   Background:
     Given I am logged in
+    And I submit a valid Conduit API Token
+    And the "Wikidata" project exists
     And I am on the "Wikidata" project page
 
   Scenario: Connect existing project
@@ -26,8 +28,8 @@ Feature: Connect Existing Sprint Project
     Then I should see "The title has already been taken"
 
   Scenario: Connect using a Phabricator ID
-    Given I copied the "Wikidata" "Test Sprint" Phabricator ID
-    And a sprint "Test Sprint" exists for the "Wikidata" project in Phabricator but not in Phragile
+    Given a sprint "Test Sprint" exists for the "Wikidata" project in Phabricator but not in Phragile
+    And I copied the "Test Sprint" Phabricator ID from Phabricator
     When I click "New sprint"
     And I paste the copied Phabricator ID
     And I fill in "sprint_start" with "2015-04-01"
