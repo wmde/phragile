@@ -177,8 +177,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function aSprintExistsForTheProject($sprintTitle, $projectTitle)
 	{
-		Auth::login(User::where('username', $this->params['phabricator_username'])->first()); // this is a bit ugly.
-
 		$project = Project::firstOrCreate(['title' => $projectTitle]);
 		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
 		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
@@ -332,6 +330,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function aSprintExistsForTheProjectInPhabricatorButNotInPhragile($sprintTitle, $projectTitle)
 	{
+		$this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
 		$project = Project::where('title', $projectTitle)->first();
 		try
 		{
@@ -345,15 +344,12 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Given I copied the :project :sprint Phabricator ID
+	 * @Given I copied the :sprint Phabricator ID from Phabricator
 	 */
-	public function iCopiedThePhabricatorId($project, $sprint)
+	public function iCopiedThePhabricatorIdFromPhabricator($sprint)
 	{
-		$this->phabricatorProjectID = Sprint::where(
-			'title', $sprint
-		)->where(
-			'project_id', Project::where('title', $project)->first()->id
-		)->first()->phabricator_id;
+		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprint);
+		$this->phabricatorProjectID = $phabricatorProject['id'];
 	}
 
 	/**
