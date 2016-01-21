@@ -177,8 +177,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function aSprintExistsForTheProject($sprintTitle, $projectTitle)
 	{
-		Auth::login(User::where('username', $this->params['phabricator_username'])->first()); // this is a bit ugly.
-
 		$project = Project::firstOrCreate(['title' => $projectTitle]);
 		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
 		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
