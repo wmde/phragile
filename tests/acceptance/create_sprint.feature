@@ -5,6 +5,8 @@ Feature: Create Sprint
 
   Background:
     Given I am logged in
+    And I submit a valid Conduit API Token
+    And the "Wikidata" project exists
     And I am on the "Wikidata" project page
 
   Scenario: Create new sprint
