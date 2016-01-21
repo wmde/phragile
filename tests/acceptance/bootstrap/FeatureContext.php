@@ -353,18 +353,6 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Given I copied the :project :sprint Phabricator ID
-	 */
-	public function iCopiedThePhabricatorId($project, $sprint)
-	{
-		$this->phabricatorProjectID = Sprint::where(
-			'title', $sprint
-		)->where(
-			'project_id', Project::where('title', $project)->first()->id
-		)->first()->phabricator_id;
-	}
-
-	/**
 	 * @When I paste the copied Phabricator ID
 	 */
 	public function iPasteTheCopiedPhabricatorId()
