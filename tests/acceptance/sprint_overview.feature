@@ -20,9 +20,10 @@ Feature: Sprint Overview
     And I should see "8"
 
   Scenario: Assignees in Sprint Backlog
-    Given "Wikidata Sprint 42" contains a task
+    Given I am logged in
+    And "Sprint 42" contains a task
     When I am assigned to this task
-    And I go to the "Wikidata Sprint 42" sprint overview
+    And I go to the "Sprint 42" sprint overview
     Then I should see my name in the task's row of the sprint backlog
 
   Scenario: Sprint duration
