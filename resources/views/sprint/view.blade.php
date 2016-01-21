@@ -43,7 +43,7 @@
 		</span>
 
 		<a href="{{ env('PHABRICATOR_URL') }}project/view/{{ $sprint->phabricator_id }}" class="btn btn-default" title="Go to Phabricator" target="_blank">
-			<img src="/images/phabricator.png" class="phabricator-icon"/>
+			<img src="{{ URL::asset('/images/phabricator.png') }}" class="phabricator-icon"/>
 		</a>
 	</h1>
 

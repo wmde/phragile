@@ -1,8 +1,8 @@
 <nav class="navbar navbar-inverse" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="/">
-				<img src="/images/phragile_logo_white.svg" alt="Phragile logo"/>
+			<a class="navbar-brand" href="{!! url() !!}">
+				<img src="{{ URL::asset('/images/phragile_logo_white.svg') }}" alt="Phragile logo"/>
 			</a>
 		</div>
 
