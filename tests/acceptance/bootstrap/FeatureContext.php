@@ -332,6 +332,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function aSprintExistsForTheProjectInPhabricatorButNotInPhragile($sprintTitle, $projectTitle)
 	{
+		$this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
 		$project = Project::where('title', $projectTitle)->first();
 		try
 		{
