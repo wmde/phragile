@@ -3,6 +3,8 @@
 @section('title', "Phragile - {$project->title}")
 
 @section('content')
+	@include('project.partials.settings_form')
+
 	<h1>{{ $project->title }}</h1>
 	<p>
 		@if(Auth::check())
