@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
                 <h4 class="modal-title">Project settings</h4>
             </div>
-            {!! Form::model($sprint->project, ['route' => ['project_settings_path', $sprint->project->slug], 'method' => 'PUT']) !!}
+            {!! Form::model($project, ['route' => ['project_settings_path', $project->slug], 'method' => 'PUT']) !!}
             <div class="modal-body">
                 <p>
                     Edit your project settings here. Please note that if you choose to work with Phabricator's workboards and check "Use workboards instead of statuses" you should have at least one column symbolizing a "closed" state for tasks and copy its name to the field below.
@@ -19,15 +19,15 @@
                     </div>
                     <div class="form-group form-inline workboard-related">
                         {!! Form::label('closed_statuses', 'Closed status columns:') !!}
-                        {!! Form::text('closed_statuses', $sprint->project->closed_statuses, ['class' => 'form-control']) !!}
+                        {!! Form::text('closed_statuses', $project->closed_statuses, ['class' => 'form-control']) !!}
                     </div>
                     <div class="form-group form-inline workboard-related">
                         {!! Form::label('ignored_columns', 'Ignored workboard columns:') !!}
-                        {!! Form::text('ignored_columns', $sprint->project->ignored_columns, ['class' => 'form-control']) !!}
+                        {!! Form::text('ignored_columns', $project->ignored_columns, ['class' => 'form-control']) !!}
                     </div>
                     <div class="form-group form-inline workboard-related">
                         {!! Form::label('default_column', 'Default workboard column:') !!}
-                        {!! Form::text('default_column', $sprint->project->default_column, ['class' => 'form-control', 'placeholder' => 'Backlog']) !!}
+                        {!! Form::text('default_column', $project->default_column, ['class' => 'form-control', 'placeholder' => 'Backlog']) !!}
                     </div>
                 </p>
             </div>
