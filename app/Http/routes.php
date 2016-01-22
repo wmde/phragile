@@ -129,3 +129,8 @@ Route::post('sprints/connect', [
 	'middleware' => 'auth',
 	'uses' => 'SprintsController@connect'
 ]);
+
+Route::get('/stats', [
+	'as' => 'stats',
+	'uses' => 'StatsController@index'
+]);
