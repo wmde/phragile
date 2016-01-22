@@ -1,10 +1,10 @@
 @extends('layouts.default')
 
-@section('title', 'Phragile - Create a new sprint')
+@section('title', 'Phragile - Add a new sprint')
 
 @section('content')
-	<h1>Create sprint for <span id="project-title">{{ $project->title }}</span></h1>
-
+	<h1>Add sprint for <span id="project-title">{{ $project->title }}</span></h1>
+	<p>You can connect to an existing Phabricator project by using its project title or project ID as title.</p>
 	{!! Form::open(['method' => 'POST', 'route' => ['store_sprint_path', $project->slug]]) !!}
 		<div class="form-group">
 			{!! Form::label('sprint_start', 'Sprint start:') !!}
@@ -17,11 +17,13 @@
 		</div>
 
 		<div class="form-group">
-			{!! Form::label('title', 'Title:') !!}
+			{!! Form::label('title', 'Title / ID:') !!}
 			{!! Form::text('title', '', ['class' => 'form-control', 'id' => 'sprint-title']) !!}
 		</div>
 
-		{!! Form::submit('Create new sprint', ['class' => 'btn btn-primary']) !!}
+
+
+		{!! Form::submit('Add sprint', ['class' => 'btn btn-primary']) !!}
 	{!! Form::close() !!}
 @stop
 
