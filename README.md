@@ -44,6 +44,7 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 * Run `composer install` in the repository’s root directory
 * Copy `.env.example` to `.env` and edit the file according to the instructions
 * Run `php artisan migrate`
+* Make `storage/` writable for the server process
 
 ### Server configuration
 
