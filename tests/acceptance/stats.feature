@@ -7,12 +7,12 @@ Feature: Website
     Given I am logged in
     When I click "Statistics"
     Then I should see "Overall numbers"
-    And I should see "Projects: 0"
+    And I should see "Projects 0"
 
   Scenario: Statspage when adding a project with a sprint
     Given a sprint "Sprint 42" exists for the "Wikidata" project
     And I am logged in
     When I click "Statistics"
-    Then I should see "Projects: 1"
-    And I should see "Sprints: 1"
-    And I should see "Wikidata: 1"
+    Then I should see "Projects 1"
+    And I should see "Sprints 1"
+    And I should see "Wikidata 1"
