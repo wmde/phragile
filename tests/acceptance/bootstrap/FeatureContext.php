@@ -62,6 +62,10 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->fillField('username', $this->params['phabricator_username']);
 		$this->fillField('password', $this->params['phabricator_password']);
 		$this->pressButton('Login');
+		if ($this->assertSession()->elementExists('css', 'button:contains("Authorize Access")'))
+		{
+			$this->pressButton('Authorize Access');
+		}
 		$this->clickLink('Continue');
 	}
 
