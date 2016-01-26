@@ -15,6 +15,8 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	private $params;
 	private $phabricatorProjectID;
 	private $selectedTask;
+	private $numberOfSprints;
+	private $numberOfProjects;
 
 	public function __construct(array $params)
 	{
@@ -518,5 +520,46 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function iGoToTheSprintOverviewOfTheMissingSprint()
 	{
 		$this->visit("/sprints/$this->phabricatorProjectID");
+	}
+
+	/**
+	 * @Then I should see the current number of projects
+	 */
+	public function iShouldSeeTheCurrentNumberOfProjects()
+	{
+		$this->assertPageContainsText('Projects ' . Project::count());
+	}
+
+	/**
+	 * @Then I should see the current number of sprints
+	 */
+	public function iShouldSeeTheCurrentNumberOfSprints()
+	{
+		$this->assertPageContainsText('Sprints ' . Sprint::count());
+	}
+
+	/**
+	 * @When I remember the current number of projects and sprints
+	 */
+	public function iRememberTheCurrentNumberOfProjectsAndSprints()
+	{
+		$this->numberOfProjects = Project::count();
+		$this->numberOfSprints = Sprint::count();
+	}
+
+	/**
+	 * @Then I should see the remembered number of projects plus :number
+	 */
+	public function iShouldSeeTheRememberedNumberOfProjectsPlus($number)
+	{
+		$this->assertPageContainsText('Projects ' . ($this->numberOfProjects + $number));
+	}
+
+	/**
+	 * @Then I should see the remembered number of sprints plus :number
+	 */
+	public function iShouldSeeTheRememberedNumberOfSprintsPlus($number)
+	{
+		$this->assertPageContainsText('Sprints ' . ($this->numberOfSprints + $number));
 	}
 }
