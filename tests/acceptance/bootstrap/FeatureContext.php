@@ -62,11 +62,16 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->fillField('username', $this->params['phabricator_username']);
 		$this->fillField('password', $this->params['phabricator_password']);
 		$this->pressButton('Login');
-		if ($this->assertSession()->elementExists('css', 'button:contains("Authorize Access")'))
+		try
 		{
 			$this->pressButton('Authorize Access');
+		} catch(Behat\Mink\Exception\ElementNotFoundException $e)
+		{
+			// Absence of this button just means that the user has authorized Phragile before.
+		} finally
+		{
+			$this->clickLink( 'Continue' );
 		}
-		$this->clickLink('Continue');
 	}
 
 	/**
