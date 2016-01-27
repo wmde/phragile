@@ -28,6 +28,10 @@ cd -
 
 # Start NGINX & PHP-FPM
 cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+if [ -e  ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ];
+then
+    cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf
+fi
 ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 
 nginx -c `pwd`/build/phabricator.conf || true # nginx complains about something but should work anyway
