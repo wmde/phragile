@@ -21,7 +21,7 @@
                 <tbody class="list">
                 <tr>
                     <td>Projects</td>
-                    <td>{!! $projectCount !!}</td>
+                    <td>{!! $projects->count() !!}</td>
                 </tr>
                 <tr>
                     <td>Sprints</td>
@@ -39,16 +39,16 @@
                 </tr>
                 </thead>
                 <tbody class="list">
-                @foreach($sprintsPerProject as $projectSprints)
+                @foreach($projects->get() as $project)
                     <tr>
                         <td>
                             {!! link_to_route(
                                 'project_path',
-                                $projectSprints[0],
-                                ['project' => $projectSprints[0]]
+                                $project->title,
+                                ['project' => $project->slug]
                             ) !!}
                         </td>
-                        <td>{{ $projectSprints[1] }}</td>
+                        <td>{{ $project->sprints->count() }}</td>
                     </tr>
                 @endforeach
                 </tbody>
