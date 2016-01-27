@@ -1,0 +1,14 @@
+default:
+  extensions:
+    Behat\MinkExtension:
+      base_url: 'http://localhost:3030/'
+
+  suites:
+    default:
+      contexts:
+        - FeatureContext:
+            params:
+              phabricator_path: '/tmp/phab/phabricator/'
+              phabricator_username: 'admin'
+              phabricator_password: 'phragile'
+              conduit_api_token: 'api-6nqd63uay2jsgfjsaesyxo3c7mnt'
