@@ -11,10 +11,10 @@
 			"package": {
 				"name": "libphutil",
 				"dist": {
-					"url": "https://github.com/jakobw/libphutil/archive/master.zip",
+					"url": "https://github.com/wmde/libphutil/archive/master.zip",
 					"type": "zip"
 				},
-				"version": "1.1"
+				"version": "1.2"
 			}
 		}
 	],
@@ -25,7 +25,7 @@
 		"laracasts/flash": "~1.0",
 		"guzzlehttp/guzzle": "~4.2",
 		"doctrine/dbal": "~2.4",
-		"libphutil": "1.1"
+		"libphutil": "1.2"
 	},
 	"require-dev": {
 		"behat/behat": "~3.0",

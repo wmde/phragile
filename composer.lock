@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cc1d19da72c2acf0f4d1aafb8da28dd2",
-    "content-hash": "9d05867214070cd9dbe34e3a7c21f82b",
+    "hash": "b4d768bbe89b710f8abfed6760d5e463",
+    "content-hash": "1421089d8674f02591a355049b6f8f10",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1231,10 +1231,10 @@
         },
         {
             "name": "libphutil",
-            "version": "1.1",
+            "version": "1.2",
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jakobw/libphutil/archive/master.zip",
+                "url": "https://github.com/wmde/libphutil/archive/master.zip",
                 "reference": null,
                 "shasum": null
             },
