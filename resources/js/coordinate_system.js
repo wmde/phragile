@@ -95,8 +95,11 @@ var PHRAGILE = PHRAGILE || {};
         var highlightDataPoints = function (index, x) {
             svg.selectAll('.data-point:nth-child(' + (index + 1) + ')')
                 .attr('class', 'data-point selected');
-            svg.select('.x.axis .tick.' + tickClassFormat(x) + ' text')
-                .style('font-weight', 'bold');
+            svg.select(
+                '.x.axis .tick.'
+                + tickClassFormat(PHRAGILE.Helpers.dayAfter(x))
+                + ' text'
+            ).style('font-weight', 'bold');
         };
 
         var highlightAtMouse = function () {
