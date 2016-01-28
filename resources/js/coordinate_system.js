@@ -12,6 +12,8 @@ var PHRAGILE = PHRAGILE || {};
 
             x, y,
 
+            tickDateFormat = d3.time.format('%b %e'),
+            tickClassFormat = d3.time.format('%b-%d'),
             MAX_TICKS = 35;
 
         var id = function (val) { return val; };
@@ -26,13 +28,20 @@ var PHRAGILE = PHRAGILE || {};
                 .attr('transform', 'translate(' + dimensions.margin.left + ',' + dimensions.margin.top + ')');
         };
 
+        var addTicksClass = function () {
+            svg.selectAll('.x.axis .tick')
+                .attr('class', function(d) {
+                    return 'tick ' + tickClassFormat(d);
+                });
+        };
+
         var addAxes = function () {
             var xAxis = d3.svg.axis().scale(x)
                 .orient('bottom')
                 .ticks(
                 Math.min(sprintDays.length, MAX_TICKS)
             )
-                .tickFormat(d3.time.format('%b %e'));
+                .tickFormat(tickDateFormat);
 
             var yAxis = d3.svg.axis().scale(y)
                 .orient('left').ticks(5);
@@ -49,6 +58,8 @@ var PHRAGILE = PHRAGILE || {};
             svg.append('g')
                 .attr('class', 'y axis')
                 .call(yAxis);
+
+            addTicksClass();
         };
 
         var loadLabels = function (index) {
@@ -81,11 +92,14 @@ var PHRAGILE = PHRAGILE || {};
 
         var bisect = d3.bisector(id).left;
 
-        var highlightDataPoints = function (index) {
+        var highlightDataPoints = function (index, x) {
             svg.selectAll('.data-point:nth-child(' + (index + 1) + ')')
                 .attr('class', 'data-point selected');
-            svg.select('.x.axis .tick:nth-child(' + (index + 1) + ') text')
-                .style('font-weight', 'bold');
+            svg.select(
+                '.x.axis .tick.'
+                + tickClassFormat(PHRAGILE.Helpers.dayAfter(x))
+                + ' text'
+            ).style('font-weight', 'bold');
         };
 
         var highlightAtMouse = function () {
