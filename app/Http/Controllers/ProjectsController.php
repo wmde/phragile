@@ -4,10 +4,20 @@ class ProjectsController extends Controller {
 
 	public function show(Project $project)
 	{
+		if (!$project->exists)
+		{
+			return $this->projectNotFound();
+		}
+
 		$currentSprint = $project->currentSprint();
 
 		return $currentSprint ? App::make('SprintsController')->show($currentSprint)
 		                      : View::make('project.view', compact('project'));
+	}
+
+	private function projectNotFound()
+	{
+		return View::make('project.not_found', ['projects' => Project::all()]);
 	}
 
 	public function index()
