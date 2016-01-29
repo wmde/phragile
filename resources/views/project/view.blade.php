@@ -10,7 +10,7 @@
 		@if(Auth::check())
 			{!! link_to_route(
 				'create_sprint_path',
-				'Create a new sprint',
+				'Add a new sprint',
 				['project' => $project->slug]
 			) !!}
 		@else
