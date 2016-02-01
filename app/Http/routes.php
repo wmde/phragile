@@ -79,13 +79,13 @@ Route::get('/sprints/{sprint}/export.json', [
 	'uses' => 'SprintsController@exportJSON'
 ]);
 
-Route::get('/sprints/{sprint}/snapshot', [ // should technically be a POST
+Route::post('/sprints/{sprint}/snapshot', [
 	'as' => 'create_snapshot_path',
 	'middleware' => 'auth',
 	'uses' => 'SprintSnapshotsController@store'
 ]);
 
-Route::get('/snapshots/{snapshot}/delete', [ // should be a DELETE
+Route::delete('/snapshots/{snapshot}/delete', [
 	'as' => 'delete_snapshot_path',
 	'middleware' => 'admin',
 	'uses' => 'SprintSnapshotsController@delete'
@@ -118,7 +118,7 @@ Route::put('sprints/{sprint}', [
 	'uses' => 'SprintsController@updateSettings'
 ]);
 
-Route::get('/sprints/{sprint}/delete', [ // should be a DELETE
+Route::delete('/sprints/{sprint}/delete', [
 	'as' => 'delete_sprint_path',
 	'middleware' => 'admin',
 	'uses' => 'SprintsController@delete'

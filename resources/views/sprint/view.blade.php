@@ -29,16 +29,15 @@
 			</ul>
 
 			@if(Auth::check() && Auth::user()->isInAdminList(env('PHRAGILE_ADMINS')))
-				{!! link_to_route(
-					'delete_sprint_path',
-					'',
-					['sprint' => $sprint->phabricator_id],
-					[
-						'class' => 'btn btn-danger btn-lg glyphicon glyphicon-remove',
-						'title' => 'Delete sprint',
-						'onclick' => 'return confirm("Delete this sprint?")'
-					]
-				) !!}
+				{!! Form::open(['route' => ['delete_sprint_path', $sprint->phabricator_id], 'method' => 'DELETE']) !!}
+					{!! Form::submit(
+						'&#xe014;', [
+							'class' => 'btn btn-danger btn-lg glyphicon',
+							'title' => 'Delete sprint',
+							'onclick' => 'return confirm("Delete this sprint?")'
+						])
+					!!}
+				{!! Form::close() !!}
 			@endif
 		</span>
 
@@ -83,22 +82,25 @@
 				@endif
 
 				@if(!isset($snapshot) && Auth::check())
-					<a class="btn btn-default btn-sm" href="{{ route('create_snapshot_path', $sprint->phabricator_id) }}">
-						Create snapshot
-					</a>
+					{!! Form::open(['route' => ['create_snapshot_path', $sprint->phabricator_id]]) !!}
+						{!! Form::submit(
+							'Create snapshot', [
+								'class' => 'btn btn-default btn-sm'
+							])
+						!!}
+					{!! Form::close() !!}
 				@endif
 
 				@if(isset($snapshot) && Auth::check() && Auth::user()->isInAdminList(env('PHRAGILE_ADMINS')))
-					{!! link_to_route(
-						'delete_snapshot_path',
-						'',
-						['snapshot' => $snapshot->id],
-						[
-							'class' => 'btn btn-danger btn-sm glyphicon glyphicon-remove',
-							'title' => 'Delete snapshot',
-							'onclick' => 'return confirm("Delete this snapshot?")'
-						]
-					) !!}
+					{!! Form::open(['route' => ['delete_snapshot_path', $snapshot->id], 'method' => 'DELETE']) !!}
+						{!! Form::submit(
+							'&#xe014;', [
+								'class' => 'btn btn-danger btn-sm glyphicon',
+								'title' => 'Delete snapshot',
+								'onclick' => 'return confirm("Delete this snapshot?")'
+							])
+						!!}
+					{!! Form::close() !!}
 				@endif
 			</div>
 

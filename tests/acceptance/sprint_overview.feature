@@ -47,5 +47,5 @@ Feature: Sprint Overview
   Scenario: Delete sprint
     Given I am logged in
     When I go to the "Sprint 42" sprint overview
-    And I click "Delete sprint"
+    And I press "Delete sprint"
     Then the sprint "Sprint 42" should not exist
