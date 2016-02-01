@@ -26,14 +26,25 @@ phabricator/bin/storage upgrade -f
 cd -
 
 # Start Phragile
-php -S localhost:3030 public/index.php &
-
-# Start NGINX & PHP-FPM
-cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-if [ -e  ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ];
+if [ "$TRAVIS_PHP_VERSION" != "hhvm" ];
 then
-    cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf
+    php -S localhost:3030 public/index.php &
+else
+    hhvm --mode daemon -d hhvm.server.type=fastcgi -d hhvm.server.port=9001 -d hhvm.log.file=/tmp/hhvm-phragile.log
 fi
-~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
 
-nginx -c `pwd`/build/nginx.conf || true # nginx emits an error when run as non-root user (but still starts). Do not break the build due to this.
+# Start Phabricator (NGINX & PHP-FPM/FastCGI)
+if [ "$TRAVIS_PHP_VERSION" != "hhvm" ];
+then
+    cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+    if [ -e  ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ];
+    then
+        cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf
+    fi
+    ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+
+    nginx -c `pwd`/build/nginx.conf || true # nginx emits an error when run as non-root user (but still starts). Do not break the build due to this.
+else
+    hhvm --mode daemon -d hhvm.server.type=fastcgi -d hhvm.server.port=9000 -d hhvm.log.file=/tmp/hhvm-phabricator.log
+    nginx -c `pwd`/build/nginx-hhvm.conf || true # nginx emits an error when run as non-root user (but still starts). Do not break the build due to this.
+fi
