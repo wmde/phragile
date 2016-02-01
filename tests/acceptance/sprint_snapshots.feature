@@ -22,7 +22,7 @@ Feature: Sprint Snapshots
     Given a sprint "Sprint 42" exists for the "Wikidata" project
     And I am logged in
     When I go to the "Sprint 42" live page
-    And I click "Create snapshot"
+    And I press "Create snapshot"
     Then I should see "Successfully created a snapshot for \"Sprint 42\""
     And I should see a snapshot that was created today
 
@@ -31,7 +31,7 @@ Feature: Sprint Snapshots
     And I am logged in
     And "Sprint 42" has one snapshot
     When I go to the latest snapshot page of "Sprint 42"
-    And I click "Delete snapshot"
+    And I press "Delete snapshot"
     Then "Sprint 42" should not have any snapshots
 
   Scenario: Automated snapshots
