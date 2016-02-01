@@ -20,7 +20,7 @@
         {!! Form::text('title', $phabricatorProject['id'], ['class' => 'hidden']) !!}
 
         <div class="form-group">
-            {!! Form::label('project', 'Project:') !!}
+            {!! Form::label('project', 'Project') !!}
             {!! Form::select('project', $projects, null, ['class' => 'form-control']) !!}
         </div>
 
@@ -29,12 +29,12 @@
             {!! Form::text('sprint_end', $duration['end'], ['class' => 'hidden']) !!}
         @else
             <div class="form-group">
-                {!! Form::label('sprint_start', 'Sprint start:') !!}
+                {!! Form::label('sprint_start', 'Sprint start') !!}
                 {!! Form::text('sprint_start', '', ['class' => 'form-control datepicker start']) !!}
             </div>
 
             <div class="form-group">
-                {!! Form::label('sprint_end', 'Sprint end:') !!}
+                {!! Form::label('sprint_end', 'Sprint end') !!}
                 {!! Form::text('sprint_end', '', ['class' => 'form-control datepicker end']) !!}
             </div>
         @endif

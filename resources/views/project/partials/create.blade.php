@@ -12,7 +12,7 @@
             {!! Form::open(['method' => 'POST', 'route' => 'create_project_path']) !!}
                 <div class="modal-body">
                     <div class="form-group">
-                        {!! Form::label('title', 'Title:') !!}
+                        {!! Form::label('title', 'Title') !!}
                         {!! Form::text('title', '', ['class' => 'form-control']) !!}
                     </div>
                 </div>
