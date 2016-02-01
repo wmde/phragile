@@ -32,3 +32,9 @@ Feature: Projects
     When I fill in "title" with "Foobar"
     And I press "Create"
     Then I should see "A project with this title already exists."
+
+  Scenario: Error for projects that do not exist
+    Given the project "Foobar" does not exist
+    When I go to "/projects/foobar"
+    Then I should see "It looks like this project does not exist."
+    And I should see "Select a project"
