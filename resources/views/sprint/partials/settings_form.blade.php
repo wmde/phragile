@@ -8,22 +8,22 @@
             {!! Form::model($sprint, ['route' => ['sprint_settings_path', $sprint->phabricator_id], 'method' => 'PUT']) !!}
             <div class="modal-body">
                 <div class="form-group">
-                    {!! Form::label('sprint_start', 'Sprint start:') !!}
+                    {!! Form::label('sprint_start', 'Sprint start') !!}
                     {!! Form::text('sprint_start', $sprint->sprint_start, ['class' => 'form-control datepicker start']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('sprint_end', 'Sprint end:') !!}
+                    {!! Form::label('sprint_end', 'Sprint end') !!}
                     {!! Form::text('sprint_end', $sprint->sprint_end, ['class' => 'form-control datepicker end']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('title', 'Title:') !!}
+                    {!! Form::label('title', 'Title') !!}
                     {!! Form::text('title', $sprint->title, ['class' => 'form-control', 'id' => 'sprint-title']) !!}
                 </div>
 
                 <div class="form-group">
-                    {!! Form::label('project_id', 'Project:') !!}
+                    {!! Form::label('project_id', 'Project') !!}
                     {!! Form::select('project_id', $projects, $sprint->project_id, ['class' => 'form-control']) !!}
                 </div>
 
