@@ -28,7 +28,7 @@
 		"libphutil": "1.2"
 	},
 	"require-dev": {
-		"behat/behat": "~3.0",
+		"behat/behat": "v3.1.0rc1",
 		"behat/mink": "~1.6",
 		"behat/mink-extension": "~2.0",
 		"behat/mink-goutte-driver": "~1.1",
