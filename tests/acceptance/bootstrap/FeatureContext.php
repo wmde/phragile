@@ -161,7 +161,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function theProjectExists($title)
 	{
-		Project::firstOrCreate([
+		return Project::firstOrCreate([
 			'title' => $title,
 			'slug' => Str::slug($title)
 		]);
@@ -195,7 +195,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function aSprintExistsForTheProject($sprintTitle, $projectTitle)
 	{
-		$project = Project::firstOrCreate(['title' => $projectTitle]);
+		$project = $this->theProjectExists($projectTitle);
 		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
 		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
 
