@@ -34,6 +34,7 @@
 		"behat/mink-goutte-driver": "~1.1",
 		"phpunit/phpunit": "~4.4",
 		"laracasts/behat-laravel-extension": "@dev",
+		"backup-manager/laravel": "~1.1",
 		"squizlabs/php_codesniffer": "~2.1",
 		"phpmd/phpmd": "~2.1"
 	},

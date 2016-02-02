@@ -148,6 +148,7 @@ return [
 
 		'Laracasts\Flash\FlashServiceProvider',
 		'Phragile\Providers\PhabricatorAPIServiceProvider',
+		BackupManager\Laravel\Laravel5ServiceProvider::class,
 	],
 
 	/*
