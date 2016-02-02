@@ -28,7 +28,7 @@ before_script: build/before_script.sh
 
 script:
   - composer ci
-  - ./vendor/bin/behat
+  - ./vendor/bin/behat --order=random
 
 notifications:
   irc:

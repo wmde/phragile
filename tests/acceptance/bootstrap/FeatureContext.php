@@ -23,6 +23,12 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$this->params = $params;
 	}
 
+	private function setUserAuthToken()
+	{
+		User::where('username', $this->params['phabricator_username'])
+			->update(['conduit_api_token' => $this->params['conduit_api_token']]);
+	}
+
 	/**
 	 * @Given I am not logged in
 	 */
@@ -70,7 +76,8 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 			// Absence of this button just means that the user has authorized Phragile before.
 		} finally
 		{
-			$this->clickLink( 'Continue' );
+			$this->clickLink('Continue');
+			$this->setUserAuthToken();
 		}
 	}
 
@@ -154,7 +161,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function theProjectExists($title)
 	{
-		Project::firstOrCreate([
+		return Project::firstOrCreate([
 			'title' => $title,
 			'slug' => Str::slug($title)
 		]);
@@ -188,7 +195,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function aSprintExistsForTheProject($sprintTitle, $projectTitle)
 	{
-		$project = Project::firstOrCreate(['title' => $projectTitle]);
+		$project = $this->theProjectExists($projectTitle);
 		$phabricatorProject = $this->getOrCreatePhabricatorProjectFromTitle($sprintTitle);
 		$existingSprint = Sprint::where('phid', $phabricatorProject['phid'])->first();
 
