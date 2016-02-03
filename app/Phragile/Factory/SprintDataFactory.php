@@ -2,6 +2,7 @@
 namespace Phragile\Factory;
 
 use Phragile\BurnupChart;
+use Phragile\PieChart;
 use Phragile\ProjectColumnRepository;
 use Phragile\PhabricatorAPI;
 use Phragile\StatusCssClassService;
@@ -22,6 +23,7 @@ class SprintDataFactory {
 	private $columns = null;
 	private $burndownChart = null;
 	private $cssClassService = null;
+	private $pieChart = null;
 
 	public function __construct(\Sprint $sprint, array $tasks, array $transactions, PhabricatorAPI $phabricatorAPI)
 	{
@@ -38,6 +40,7 @@ class SprintDataFactory {
 		);
 
 		$this->cssClassService = new StatusCssClassService($this->isWorkboardMode(), $this->getClosedColumns());
+		$this->pieChart = new PieChart($this->taskList->getTasksPerStatus(), $this->cssClassService);
 		$this->burndownChart = $this->generateBurndownData();
 	}
 
@@ -57,14 +60,7 @@ class SprintDataFactory {
 
 	public function getPieChartData()
 	{
-		$pieChartData = [];
-
-		foreach ($this->taskList->getTasksPerStatus() as $status => $task)
-		{
-			$pieChartData[$status] = array_merge($task, ['cssClass' => $this->cssClassService->getCssClass($status)]);
-		}
-
-		return $pieChartData;
+		return $this->pieChart->getData();
 	}
 
 	public function getSprintBacklog()
