@@ -3,7 +3,7 @@ namespace Phragile;
 
 class ProjectColumnRepository {
 	/**
-	 * @var maps workboard column PHIDs to a map of column data
+	 * @var array|null maps workboard column PHIDs to a map of column data
 	 */
 	private $projectColumns = null;
 	private $transactions;
