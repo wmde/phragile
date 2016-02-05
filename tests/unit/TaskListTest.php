@@ -60,7 +60,7 @@ class TaskListTest extends TestCase {
 			'phid' => 'PHID-123',
 		]);
 		$this->testSprint->project = new Project([
-			'closed_columns' => 'done',
+			'closed_statuses' => 'done',
 		]);
 	}
 
