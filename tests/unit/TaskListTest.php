@@ -4,7 +4,7 @@ use Phragile\TaskList;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\StatusByWorkboardDispatcher;
 use Phragile\ProjectColumnRepository;
-use Phragile\TransactionList;
+use Phragile\SortedTransactionList;
 
 class TaskListTest extends TestCase {
 
@@ -213,7 +213,7 @@ class TaskListTest extends TestCase {
 			$tasks,
 			new StatusByWorkboardDispatcher(
 				$this->testSprint,
-				new TransactionList($transactions),
+				new SortedTransactionList($transactions),
 				new ProjectColumnRepository($this->testSprint->phid, $transactions, $phabricatorAPI)
 			),
 			['ignore_estimates' => false, 'ignored_columns' => $ignored_columns]

@@ -11,10 +11,10 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	 */
 	private $taskColumnPHIDs = [];
 
-	public function __construct(\Sprint $sprint, TransactionList $transactions, ProjectColumnRepository $columns)
+	public function __construct(\Sprint $sprint, SortedTransactionList $transactions, ProjectColumnRepository $columns)
 	{
 		$this->sprint = $sprint;
-		$this->transactions = $transactions->getChronologicallySorted();
+		$this->transactions = $transactions->getTransactions();
 		$this->taskColumnPHIDs = $this->extractColumnIDs($this->transactions);
 		$this->columns = $columns;
 	}
