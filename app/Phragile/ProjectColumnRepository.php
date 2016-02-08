@@ -30,6 +30,7 @@ class ProjectColumnRepository {
 		{
 			if ($column['name'] === $name) return $phid;
 		}
+		return null;
 	}
 
 	private function initialize()

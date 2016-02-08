@@ -108,4 +108,10 @@ class ProjectColumnRepositoryTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($expectedPhid, $repository->getColumnPhid($columnName));
 	}
 
+	public function testGivenNonExistingColumnName_getColumnPHIDReturnsNull()
+	{
+		$repository = $this->newProjectColumnRepository();
+		$this->assertNull($repository->getColumnPHID('PHID-no-such-column'));
+	}
+
 }
