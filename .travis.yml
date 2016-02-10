@@ -29,7 +29,12 @@ before_script: build/before_script.sh
 
 script:
   - composer ci
+  - phpunit --coverage-text --coverage-clover=coverage.clover
   - ./vendor/bin/behat --order=random
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
 
 notifications:
   irc:
