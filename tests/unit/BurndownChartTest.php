@@ -188,6 +188,56 @@ class BurndownChartTest extends TestCase {
 		$this->assertSame(10, $burndown->getPointsClosedPerDay()['2014-12-08']);
 	}
 
+	public function testClosedPerDayConsidersMostRecentColumnChangeInWorkboardMode()
+	{
+		$burndown = $this->mockWithTransactionsInWorkboardMode(
+			$this->tasks,
+			[
+				'1' => [
+					[
+						'transactionType' => 'projectcolumn',
+						'oldValue' => [
+							'columnPHIDs' => ['anyNotClosed'],
+							'projectPHID' => $this->testProjectPHID,
+						],
+						'newValue' => [
+							'columnPHIDs' => [$this->closedColumnPHIDs[1]],
+							'projectPHID' => $this->testProjectPHID,
+						],
+						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 10:00:00')->format('U'),
+					],
+					[
+						'transactionType' => 'projectcolumn',
+						'oldValue' => [
+							'columnPHIDs' => [$this->closedColumnPHIDs[1]],
+							'projectPHID' => $this->testProjectPHID,
+						],
+						'newValue' => [
+							'columnPHIDs' => ['anyNotClosed'],
+							'projectPHID' => $this->testProjectPHID,
+						],
+						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 12:00:00')->format('U'),
+					],
+					[
+						'transactionType' => 'projectcolumn',
+						'oldValue' => [
+							'columnPHIDs' => ['anyNotClosed'],
+							'projectPHID' => $this->testProjectPHID,
+						],
+						'newValue' => [
+							'columnPHIDs' => [$this->closedColumnPHIDs[1]],
+							'projectPHID' => $this->testProjectPHID,
+						],
+						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '09.12.2014 10:00:00')->format('U'),
+					],
+				],
+			]
+		);
+
+		$this->assertSame(0, $burndown->getPointsClosedPerDay()['2014-12-08']);
+		$this->assertSame(8, $burndown->getPointsClosedPerDay()['2014-12-09']);
+	}
+
 	public function testClosedPerDayAddsStoryPointsInWorkboardMode()
 	{
 		$burndown = $this->mockWithTransactionsInWorkboardMode(
