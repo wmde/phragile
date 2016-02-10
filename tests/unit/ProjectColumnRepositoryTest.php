@@ -4,7 +4,7 @@ use Phragile\PhabricatorAPI;
 use Phragile\ProjectColumnRepository;
 
 /**
- * @covers ProjectColumnRepositoryTest
+ * @covers Phragile\ProjectColumnRepository
  */
 class ProjectColumnRepositoryTest extends PHPUnit_Framework_TestCase {
 
