@@ -33,7 +33,7 @@ class PieChartTest extends TestCase {
 			new StatusCssClassService(true, ['Done'])
 		);
 
-		$this->assertSame($chart->getStatusColors()['Done'], 'rgb(' . implode(',', PieChart::$GREEN) . ')');
+		$this->assertSame($chart->getStatusColors()['closed done'], 'rgb(' . implode(',', PieChart::$GREEN) . ')');
 	}
 
 	public function testHasDefaultColorFor1OpenTask()
@@ -43,7 +43,7 @@ class PieChartTest extends TestCase {
 			new StatusCssClassService(true, ['Done'])
 		);
 
-		$this->assertSame($chart->getStatusColors()['To Do'], 'rgb(' . implode(',', PieChart::$ORANGE) . ')');
+		$this->assertSame($chart->getStatusColors()['open to-do'], 'rgb(' . implode(',', PieChart::$ORANGE) . ')');
 	}
 
 	public function testHasDifferentColorShadesForEachType()
@@ -57,5 +57,19 @@ class PieChartTest extends TestCase {
 			count($chart->getStatusColors()),
 			count(array_unique(array_values($chart->getStatusColors()), SORT_REGULAR))
 		);
+	}
+
+	public function testHasCssClassAsKeys()
+	{
+		$chart = new PieChart(
+			['To Do' => [], 'Deployed' => [], 'To Be Discussed' => [], 'Wontfix' => []],
+			new StatusCssClassService(true, ['Done', 'Deployed', 'Invalid', 'Wontfix'])
+		);
+
+		$colorMap = $chart->getStatusColors();
+		$this->assertArrayHasKey('open to-do', $colorMap);
+		$this->assertArrayHasKey('open to-be-discussed', $colorMap);
+		$this->assertArrayHasKey('closed deployed', $colorMap);
+		$this->assertArrayHasKey('closed wontfix', $colorMap);
 	}
 }

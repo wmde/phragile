@@ -58,9 +58,21 @@ class PieChart {
 	 */
 	public function getStatusColors()
 	{
-		return array_merge(
+		return $this->mapToCssClasses(array_merge(
 			$this->getColors($this->getStatusesByCssClass('closed'), PieChart::$GREEN),
 			$this->getColors($this->getStatusesByCssClass('open'), PieChart::$ORANGE)
-		);
+		));
+	}
+
+	private function mapToCssClasses(array $statusMap)
+	{
+		$cssClassMap = [];
+
+		foreach ($statusMap as $status => $color)
+		{
+			$cssClassMap[$this->cssClassService->getCssClass($status)] = $color;
+		}
+
+		return $cssClassMap;
 	}
 }
