@@ -29,7 +29,17 @@ class PieChart {
 			$pieChartData[$status] = array_merge($task, ['cssClass' => $this->cssClassService->getCssClass($status)]);
 		}
 
-		return $pieChartData;
+		return $this->sortByCssClass($pieChartData);
+	}
+
+	private function sortByCssClass(array $data)
+	{
+		uasort($data, function($a, $b)
+		{
+			return $a < $b ? 1 : -1;
+		});
+
+		return $data;
 	}
 
 	private function getStatusesByCssClass($cssClass)
@@ -43,7 +53,6 @@ class PieChart {
 	private function getColors($statuses, $base)
 	{
 		$colorMap = [];
-		sort($statuses);
 		$colors = (new ColorGenerator())->generate(count($statuses), $base);
 
 		for ($i = 0; $i < count($statuses); $i++)
