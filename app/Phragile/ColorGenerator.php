@@ -5,8 +5,8 @@ namespace Phragile;
  * Generates different shades of a color for the pie chart
  */
 class ColorGenerator {
-	private $MAX_COLOR_INTERVAL = 5;
-	private $MAX_COLOR_DIFFERENCE = 30;
+	private $MAX_COLOR_INTERVAL = 10;
+	private $MAX_COLOR_DIFFERENCE = 40;
 
 	/**
 	 * @param int $n - Number of colors
