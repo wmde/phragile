@@ -63,6 +63,11 @@ class SprintDataFactory {
 		return $this->pieChart->getData();
 	}
 
+	public function getStatusColors()
+	{
+		return $this->pieChart->getStatusColors();
+	}
+
 	public function getSprintBacklog()
 	{
 		$assignees = new AssigneeRepository($this->phabricatorAPI, $this->tasks);

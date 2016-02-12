@@ -43,6 +43,7 @@ class PieChart {
 	private function getColors($statuses, $base)
 	{
 		$colorMap = [];
+		sort($statuses);
 		$colors = (new ColorGenerator())->generate(count($statuses), $base);
 
 		for ($i = 0; $i < count($statuses); $i++)

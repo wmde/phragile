@@ -5,6 +5,7 @@
 @section('content')
 	@include('project.partials.settings_form')
 	@include('sprint.partials.settings_form')
+	@include('sprint.partials.status_colors')
 
 	<h1 class="sprint-overview-title">
 		{{ $sprint->project->title }}
