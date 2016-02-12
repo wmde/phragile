@@ -4,6 +4,8 @@ namespace Phragile;
 class PieChart {
 	private $data = [];
 	private $cssClassService = null;
+	public static $GREEN = [170, 204, 30];
+	public static $ORANGE = [255, 180, 38];
 
 	/**
 	 * @param array $data
@@ -28,5 +30,37 @@ class PieChart {
 		}
 
 		return $pieChartData;
+	}
+
+	private function getStatusesByCssClass($cssClass)
+	{
+		return array_keys(array_filter($this->getData(), function($status) use($cssClass)
+		{
+			return $status['cssClass'] === $cssClass;
+		}));
+	}
+
+	private function getColors($statuses, $base)
+	{
+		$colorMap = [];
+		$colors = (new ColorGenerator())->generate(count($statuses), $base);
+
+		for ($i = 0; $i < count($statuses); $i++)
+		{
+			$colorMap[$statuses[$i]] = $colors[$i];
+		}
+
+		return $colorMap;
+	}
+
+	/**
+	 * @return array - Colors mapped to statuses
+	 */
+	public function getStatusColors()
+	{
+		return array_merge(
+			$this->getColors($this->getStatusesByCssClass('closed'), PieChart::$GREEN),
+			$this->getColors($this->getStatusesByCssClass('open'), PieChart::$ORANGE)
+		);
 	}
 }
