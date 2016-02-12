@@ -36,7 +36,7 @@ class PieChart {
 	{
 		return array_keys(array_filter($this->getData(), function($status) use($cssClass)
 		{
-			return $status['cssClass'] === $cssClass;
+			return strpos($status['cssClass'], $cssClass) === 0;
 		}));
 	}
 

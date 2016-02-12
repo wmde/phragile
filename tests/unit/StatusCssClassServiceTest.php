@@ -28,10 +28,10 @@ class StatusCssClassServiceTest extends TestCase {
 	public function columnProvider()
 	{
 		return [
-			['To Do', 'open'],
-			['Doing', 'open'],
-			['Done', 'closed'],
-			['Deployed', 'closed'],
+			['To Do', 'open to-do'],
+			['Doing', 'open doing'],
+			['Done', 'closed done'],
+			['Deployed', 'closed deployed'],
 		];
 	}
 }
