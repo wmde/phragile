@@ -5,7 +5,7 @@ use Phragile\ProjectColumnRepository;
 use Phragile\StatusDispatcher;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\StatusByWorkboardDispatcher;
-use Phragile\TransactionList;
+use Phragile\SortedTransactionList;
 
 class StatusDispatcherFactory
 {
@@ -32,7 +32,7 @@ class StatusDispatcherFactory
 	{
 		return new StatusByWorkboardDispatcher(
 			$this->sprint,
-			new TransactionList($this->transactions),
+			new SortedTransactionList($this->transactions),
 			$this->projectColumnRepository
 		);
 	}
