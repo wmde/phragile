@@ -1,11 +1,11 @@
 <?php
 
-use Phragile\TransactionList;
+use Phragile\SortedTransactionList;
 
 /**
- * @covers Phragile\TransactionList
+ * @covers Phragile\SortedTransactionList
  */
-class TransactionListTest extends PHPUnit_Framework_TestCase {
+class SortedTransactionListTest extends PHPUnit_Framework_TestCase {
 
 	public function testTaskTransactionsAreSortedByTimestamp()
 	{
@@ -49,7 +49,7 @@ class TransactionListTest extends PHPUnit_Framework_TestCase {
 				],
 			]
 		];
-		$sortedTransactions = (new TransactionList($transactions))->getChronologicallySorted();
+		$sortedTransactions = (new SortedTransactionList($transactions))->getTransactions();
 		$this->assertEquals(
 			'01.01.2016',
 			DateTime::createFromFormat('U', $sortedTransactions['fooTask'][0]['dateCreated'])->format('d.m.Y')

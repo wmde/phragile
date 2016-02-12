@@ -3,7 +3,7 @@
 use Phragile\PhabricatorAPI;
 use Phragile\ProjectColumnRepository;
 use Phragile\StatusByWorkboardDispatcher;
-use Phragile\TransactionList;
+use Phragile\SortedTransactionList;
 
 /**
  * @covers Phragile\StatusByWorkboardDispatcher
@@ -47,7 +47,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	{
 		return new StatusByWorkboardDispatcher(
 			$sprint,
-			new TransactionList($transactions),
+			new SortedTransactionList($transactions),
 			new ProjectColumnRepository(
 				'PHID-123',
 				$transactions,
