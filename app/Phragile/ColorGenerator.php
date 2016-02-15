@@ -11,7 +11,7 @@ class ColorGenerator {
 	/**
 	 * @param int $n - Number of colors
 	 * @param array $base - Base color in [r, g, b] notation
-	 * @return string
+	 * @return string[]
 	 */
 	public function generate($n, array $base)
 	{
