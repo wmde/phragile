@@ -36,6 +36,11 @@ class Handler extends ExceptionHandler {
 	 */
 	public function render($request, Exception $e)
 	{
+		if ($e instanceof \ConduitClientException && $e->getErrorCode() === 'ERR-INVALID-SESSION')
+		{
+			return response()->view('errors.missing_api_token', [], 500);
+		}
+
 		if ($this->isHttpException($e))
 		{
 			return $this->renderHttpException($e);
