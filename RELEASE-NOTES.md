@@ -1,12 +1,17 @@
 # Phragile release notes
 
-## Version 1.1 (dev)
+## Version 1.1 (2016-02-15)
 
 * Restrict deleting snapshots to admins only
 * Possibility to delete a sprint
 * Setting for making story points optional
 * Page to create sprints that exist on Phabricator but not on Phragile
 * Possibility to export snapshot data 
+* Project statistics page
+* Direct links to burnup or burndown charts
+* Support for large projects
+* Possibility to change a sprint’s project
+* Switch from Conduit certificate authentication to Conduit API token authentication
 
 ## Version 1.0 (2015-08-14)
 
