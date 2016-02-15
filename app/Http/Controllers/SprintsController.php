@@ -50,7 +50,7 @@ class SprintsController extends Controller {
 		$user = Auth::user();
 		$user->setPhabricatorURL(env('PHABRICATOR_URL'));
 
-		if (!$user->apiTokenValid() && !$user->certificateValid())
+		if (!$user->apiTokenValid())
 		{
 			Flash::warning('Please set a valid Conduit API Token before trying to create a new sprint.');
 			return Redirect::back();

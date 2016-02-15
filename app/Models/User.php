@@ -1,6 +1,5 @@
 <?php
 
-use Phragile\PhabricatorAPI;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
@@ -24,20 +23,6 @@ class User extends Eloquent implements AuthenticatableContract {
 	public function setPhabricatorURL($url)
 	{
 		$this->phabricatorURL = $url;
-	}
-
-	public function certificateValid($certificate = null)
-	{
-		try
-		{
-			$phabricator = new PhabricatorAPI(new ConduitClient($this->phabricatorURL));
-			$phabricator->connect($this->username, $certificate ?: $this->conduit_certificate);
-		} catch (ConduitClientException $e)
-		{
-			return false;
-		}
-
-		return true;
 	}
 
 	public function apiTokenValid($token = null)

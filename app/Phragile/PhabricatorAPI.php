@@ -16,19 +16,6 @@ class PhabricatorAPI {
 		$this->client->setConduitToken($token);
 	}
 
-	public function connect($user, $certificate)
-	{
-		return $this->client->callMethodSynchronous(
-			'conduit.connect',
-			[
-				'client' => 'Phragile',
-				'clientVersion' => 1,
-				'user' => $user,
-				'certificate' => $certificate
-			]
-		);
-	}
-
 	public function createProject($title, array $members = [])
 	{
 		$response = $this->client->callMethodSynchronous(
