@@ -2,8 +2,10 @@
 namespace Phragile\Factory;
 
 use Phragile\BurnupChart;
+use Phragile\PieChart;
 use Phragile\ProjectColumnRepository;
 use Phragile\PhabricatorAPI;
+use Phragile\StatusCssClassService;
 use Phragile\TaskList;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
@@ -20,6 +22,8 @@ class SprintDataFactory {
 	private $taskList = null;
 	private $columns = null;
 	private $burndownChart = null;
+	private $cssClassService = null;
+	private $pieChart = null;
 
 	public function __construct(\Sprint $sprint, array $tasks, array $transactions, PhabricatorAPI $phabricatorAPI)
 	{
@@ -35,6 +39,8 @@ class SprintDataFactory {
 			['ignore_estimates' => $sprint->ignore_estimates, 'ignored_columns' => $sprint->project->getIgnoredColumns()]
 		);
 
+		$this->cssClassService = new StatusCssClassService($this->isWorkboardMode(), $this->getClosedColumns());
+		$this->pieChart = new PieChart($this->taskList->getTasksPerStatus(), $this->cssClassService);
 		$this->burndownChart = $this->generateBurndownData();
 	}
 
@@ -54,14 +60,12 @@ class SprintDataFactory {
 
 	public function getPieChartData()
 	{
-		$pieChartData = [];
+		return $this->pieChart->getData();
+	}
 
-		foreach ($this->taskList->getTasksPerStatus() as $status => $task)
-		{
-			$pieChartData[$status] = array_merge($task, ['cssClass' => $this->getStatusCssClass($status)]);
-		}
-
-		return $pieChartData;
+	public function getStatusColors()
+	{
+		return $this->pieChart->getStatusColors();
 	}
 
 	public function getSprintBacklog()
@@ -72,7 +76,7 @@ class SprintDataFactory {
 		{
 			return array_merge($task, [
 				'assignee' => $assignees->getName($task['assignee']) ?: '-',
-				'cssClass' => $this->getStatusCssClass($task['status']),
+				'cssClass' => $this->cssClassService->getCssClass($task['status']),
 			]);
 		}, $this->taskList->getTasks());
 	}
@@ -100,13 +104,6 @@ class SprintDataFactory {
 			)
 		);
 		return $burnupChart->getData();
-	}
-
-	private function getStatusCssClass($status)
-	{
-		if ($this->sprint->project->workboard_mode && $status !== 'total')
-			return in_array($status, $this->getClosedColumns()) ? 'closed' : 'open';
-		else return $status;
 	}
 
 	private function isWorkboardMode()
