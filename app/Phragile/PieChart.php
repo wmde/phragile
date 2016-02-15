@@ -36,7 +36,7 @@ class PieChart {
 	{
 		uasort($data, function($a, $b)
 		{
-			return $a < $b ? 1 : -1;
+			return $a['cssClass'] > $b['cssClass'] ? 1 : -1;
 		});
 
 		return $data;
