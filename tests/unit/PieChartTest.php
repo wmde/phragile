@@ -72,4 +72,23 @@ class PieChartTest extends TestCase {
 		$this->assertArrayHasKey('closed deployed', $colorMap);
 		$this->assertArrayHasKey('closed wontfix', $colorMap);
 	}
+
+	public function testOrdersByCssClass()
+	{
+		$chart = new PieChart(
+			[
+				'Done' => ['points' => 10],
+				'Doing' => ['points' => 11],
+				'Blocked By Others' => ['points' => 12],
+				'Deployed' => ['points' => 13]
+			],
+			new StatusCssClassService(true, ['Done', 'Deployed'])
+		);
+
+		$colorMap = array_values($chart->getData());
+		$this->assertSame($colorMap[0]['cssClass'], 'closed deployed');
+		$this->assertSame($colorMap[1]['cssClass'], 'closed done');
+		$this->assertSame($colorMap[2]['cssClass'], 'open blocked-by-others');
+		$this->assertSame($colorMap[3]['cssClass'], 'open doing');
+	}
 }
