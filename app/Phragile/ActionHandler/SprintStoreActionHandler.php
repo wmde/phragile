@@ -23,6 +23,7 @@ class SprintStoreActionHandler {
 	{
 		$this->sprint = $sprint;
 		$this->user = $user;
+		$this->user->setPhabricatorURL(env('PHABRICATOR_URL'));
 
 		$this->validate();
 		$this->trySprintCreationFromPhabricatorID();
@@ -76,16 +77,12 @@ class SprintStoreActionHandler {
 	{
 		if ($this->previousActionFailed()) return;
 
-		if(!empty($this->user->conduit_api_token)) {
+		if ($this->user->apiTokenValid())
+		{
 			$this->userPhabricatorAPI->setConduitAPIToken($this->user->conduit_api_token);
-		} else {
-			try
-			{
-				$this->userPhabricatorAPI->connect($this->user->username, $this->user->conduit_certificate);
-			} catch(\ConduitClientException $e)
-			{
-				$this->redirectBackWithError($e->getMessage());
-			}
+		} else
+		{
+			$this->redirectBackWithError('Please make sure you are using a valid Conduit API token.');
 		}
 	}
 
