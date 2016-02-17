@@ -133,11 +133,11 @@
 
 		<tbody class="list">
 			@foreach($sprintBacklog as $task)
-				<tr id="t{{ $task['id'] }}">
+				<tr id="t{{ $task->getId() }}">
 					<td>
 						{!! link_to(
-							env('PHABRICATOR_URL') . 'T' . $task['id'],
-							"#${task['id']} " . $task['title'],
+							env('PHABRICATOR_URL') . 'T' . $task->getId(),
+							'#' . $task->getId(). ' ' . $task->getTitle(),
 							[
 								'class' => 'title',
 								'target' => '_blank'
@@ -145,18 +145,18 @@
 						) !!}
 					</td>
 
-					<?php $priorityValue = Config::get('phabricator.MANIPHEST_PRIORITIES')[strtolower($task['priority'])] ?>
+					<?php $priorityValue = Config::get('phabricator.MANIPHEST_PRIORITIES')[strtolower($task->getPriority())] ?>
 					<td class="filter-backlog" data-column="priority" data-value="{{ $priorityValue }}">
 						<span class="priority hidden">{{ $priorityValue }}</span>
-						{{ $task['priority'] }}
+						{{ $task->getPriority() }}
 					</td>
-					<td class="points">{{ $task['story_points'] }}</td>
+					<td class="points">{{ $task->getPoints() }}</td>
 
-					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $task['assignee'] }}">
-						{{ $task['assignee']}}
+					<td class="assignee filter-backlog" data-column="assignee" data-value="{{ $task->getAssigneeName() }}">
+						{{ $task->getAssigneeName() }}
 					</td>
-					<td class="filter-backlog" data-column="status" data-value="{{ $task['status'] }}">
-						<span class="status status-label {{ $task['cssClass'] }}">{{ $task['status'] }}</span>
+					<td class="filter-backlog" data-column="status" data-value="{{ $task->getStatus() }}">
+						<span class="status status-label {{ $task->getCssClass() }}">{{ $task->getStatus() }}</span>
 					</td>
 				</tr>
 			@endforeach

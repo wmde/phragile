@@ -11,23 +11,23 @@ class StatusByStatusFieldDispatcher implements StatusDispatcher {
 
 	private function isTaskInReview(array $task)
 	{
-		return !$task['isClosed'] && in_array($this->reviewTagPHID, $task['projectPHIDs']);
+		return !$this->isClosed($task) && in_array($this->reviewTagPHID, $task['attachments']['projects']['projectPHIDs']);
 	}
 
 	private function isTaskBeingDone(array $task)
 	{
-		return !$task['isClosed'] && !is_null($task['ownerPHID']);
+		return !$this->isClosed($task) && !is_null($task['fields']['ownerPHID']);
 	}
 
 	public function getStatus(array $task)
 	{
 		if ($this->isTaskInReview($task)) return 'patch to review';
 		elseif ($this->isTaskBeingDone($task)) return 'doing';
-		else return $task['status'];
+		else return $task['fields']['status']['value'];
 	}
 
 	public function isClosed(array $task)
 	{
-		return $task['isClosed'];
+		return in_array($task['fields']['status']['value'], ['resolved', 'declined', 'invalid']);
 	}
 }

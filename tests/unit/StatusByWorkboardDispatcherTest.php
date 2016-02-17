@@ -102,6 +102,18 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 		$this->assertTrue($dispatcher->isClosed($task));
 	}
 
+	public function testGivenIrrelevantTransaction_tasksStatusIsBasedOnProjectsDefaultColumn()
+	{
+		$sprint = $this->newSprint();
+		$task = ['id' => 'fooTask'];
+		$transaction = $this->getFirstTransaction();
+		$transaction['oldValue']['projectPHID'] = 'PHID-SOME-OTHER-PROJ-PHID';
+		$transaction['newValue']['projectPHID'] = 'PHID-SOME-OTHER-PROJ-PHID';
+		$dispatcher = $this->newDispatcher($sprint, ['fooTask' => [$transaction]]);
+		$this->assertEquals('backlog', $dispatcher->getStatus($task));
+		$this->assertFalse($dispatcher->isClosed($task));
+	}
+
 	private function getFirstTransaction()
 	{
 		return [

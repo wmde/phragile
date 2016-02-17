@@ -35,10 +35,10 @@ class BurndownChart {
 
 			if (in_array($taskClosedDay, $sprintDuration))
 			{
-				$this->pointsClosedPerDay[$taskClosedDay] += $this->tasks->findTaskByID($id)['story_points'];
+				$this->pointsClosedPerDay[$taskClosedDay] += $this->tasks->findTaskByID($id)->getPoints();
 			} elseif ($taskClosedDay < $this->sprint->sprint_start)
 			{
-				$this->pointsClosedBeforeSprint += $this->tasks->findTaskByID($id)['story_points'];
+				$this->pointsClosedBeforeSprint += $this->tasks->findTaskByID($id)->getPoints();
 			}
 		}
 	}
@@ -101,7 +101,7 @@ class BurndownChart {
 		$closedTaskTransactions = [];
 		foreach ($transactions as $taskID => $taskTransactions)
 		{
-			if ($this->tasks->findTaskByID($taskID)['closed'])
+			if ($this->tasks->findTaskByID($taskID) && $this->tasks->findTaskByID($taskID)->isClosed())
 			{
 				$closedTaskTransactions[$taskID] = $taskTransactions;
 			}

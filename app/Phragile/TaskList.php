@@ -4,44 +4,17 @@ namespace Phragile;
 
 class TaskList {
 	private $tasks = null;
-	private $statusDispatcher = null;
 
 	/**
-	 * TaskList constructor.
-	 * @param array $phabricatorTaskData
-	 * @param StatusDispatcher $statusDispatcher
-	 * @param array $options - (boolean) "ignore_estimates", (array) "ignored_columns"
+	 * @param Task[] $tasks
 	 */
-	public function __construct(array $phabricatorTaskData, StatusDispatcher $statusDispatcher, array $options)
+	public function __construct(array $tasks)
 	{
-		$this->statusDispatcher = $statusDispatcher;
-		$this->tasks = $this->processTasks($phabricatorTaskData, $options);
-	}
-
-	private function processTasks($taskData, $options)
-	{
-		return array_filter(
-			array_map(function($task) use($options)
-			{
-				return [
-					'title' => $task['title'],
-					'priority' => $task['priority'],
-					'status' => $this->statusDispatcher->getStatus($task),
-					'story_points' => $options['ignore_estimates'] ? 1 : $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')],
-					'closed' => $this->statusDispatcher->isClosed($task),
-					'id' => $task['id'],
-					'assignee' => $task['ownerPHID'],
-				];
-			}, array_values($taskData)),
-			function($task) use($options)
-			{
-				return !in_array($task['status'], $options['ignored_columns']);
-			}
-		);
+		$this->tasks = $tasks;
 	}
 
 	/**
-	 * @return array[]
+	 * @return Task[]
 	 */
 	public function getTasks()
 	{
@@ -53,20 +26,20 @@ class TaskList {
 	 */
 	public function getTasksPerStatus()
 	{
-		return array_reduce($this->tasks, function($acc, $task)
+		return array_reduce($this->tasks, function($acc, Task $task)
 		{
 			$acc['total']['tasks'] += 1;
-			$acc['total']['points'] += $task['story_points'];
+			$acc['total']['points'] += $task->getPoints();
 
-			if (isset($acc[$task['status']]))
+			if (isset($acc[$task->getStatus()]))
 			{
-				$acc[$task['status']]['tasks'] += 1;
-				$acc[$task['status']]['points'] += $task['story_points'];
+				$acc[$task->getStatus()]['tasks'] += 1;
+				$acc[$task->getStatus()]['points'] += $task->getPoints();
 			} else
 			{
-				$acc[$task['status']] = [
+				$acc[$task->getStatus()] = [
 					'tasks' => 1,
-					'points' => $task['story_points']
+					'points' => $task->getPoints()
 				];
 			}
 
@@ -82,7 +55,7 @@ class TaskList {
 	{
 		foreach ($this->tasks as $task)
 		{
-			if ($task['id'] == $id)
+			if ($task->getId() == $id)
 			{
 				return $task;
 			}
@@ -94,7 +67,7 @@ class TaskList {
 	 */
 	public function getClosedTaskIDs()
 	{
-		return array_map(function($task)
+		return array_map(function(Task $task)
 		{
 			return $task['id'];
 		}, array_filter($this->tasks, function($task)
