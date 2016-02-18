@@ -12,10 +12,10 @@ class TaskDataProcessor {
 	}
 
 	/**
-	 * @param $rawData
+	 * @param array $rawData
 	 * @return Task[]
 	 */
-	public function process($rawData)
+	public function process(array $rawData)
 	{
 		return array_filter(
 			array_map(function($task)

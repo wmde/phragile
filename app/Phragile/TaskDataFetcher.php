@@ -15,7 +15,15 @@ class TaskDataFetcher {
 	 */
 	public function fetchProjectTasks($projectPHID)
 	{
-		// TODO: This is not yet working around the pagination/search limit.
-		return $this->phabricatorAPI->searchTasksByProjectPHID($projectPHID);
+		$rawTaskData = [];
+		$after = '0';
+		while (!is_null($after))
+		{
+			$response = $this->phabricatorAPI->searchTasksByProjectPHID($projectPHID, $after);
+			$after = $response['cursor']['after'];
+			$rawTaskData = array_merge($rawTaskData, $response['data']);
+		};
+
+		return $rawTaskData;
 	}
 }

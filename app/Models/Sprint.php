@@ -1,4 +1,9 @@
 <?php
+use Phragile\Factory\StatusDispatcherFactory;
+use Phragile\ProjectColumnRepository;
+use Phragile\TaskDataFetcher;
+use Phragile\TaskDataProcessor;
+use Phragile\TaskList;
 use Phragile\TransactionLoader;
 use Phragile\TransactionFilter;
 use Phragile\PhabricatorAPI;
@@ -97,33 +102,26 @@ class Sprint extends Eloquent {
 	public function createSnapshot()
 	{
 		$phabricator = App::make('phabricator');
-		$tasks = $this->fetchTasks($phabricator);
-		$data = $this->fetchSnapshotData($phabricator, $tasks);
-		$filteredTasks = $this->filterIgnoredColumns($tasks, $data['transactions'], $phabricator);
+		$rawTaskData = $this->fetchTasks($phabricator);
+		$data = $this->fetchSnapshotData($phabricator, $rawTaskData);
+		$columns = new ProjectColumnRepository($this->phid, $data['transactions'], $phabricator);
+		$tasks = (new TaskDataProcessor(
+			(new StatusDispatcherFactory($this, $columns, $data['transactions']))->getStatusDispatcher(),
+			['ignore_estimates' => $this->ignore_estimates, 'ignored_columns' => $this->project->getIgnoredColumns()]
+		))->process($rawTaskData);
+		$sumOfTasks = (new TaskList($tasks))->getTasksPerStatus();
 
 		return SprintSnapshot::create([
 			'sprint_id' => $this->id,
 			'data' => json_encode($data),
-			'total_points' => $this->calculateTotalPoints($filteredTasks),
-			'task_count' => count($filteredTasks),
+			'total_points' => $sumOfTasks['total']['points'],
+			'task_count' => count($sumOfTasks['total']['tasks']),
 		]);
-	}
-
-	private function calculateTotalPoints(array $tasks)
-	{
-		return array_reduce(
-			$tasks,
-			function($sum, $task)
-			{
-				return $sum + $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')];
-			},
-			0
-		);
 	}
 
 	private function fetchTasks(PhabricatorAPI $phabricator)
 	{
-		return $phabricator->queryTasksByProject($this->phid);
+		return (new TaskDataFetcher($phabricator))->fetchProjectTasks($this->phid);
 	}
 
 	private function fetchSnapshotData(PhabricatorAPI $phabricator, array $tasks)
@@ -141,24 +139,6 @@ class Sprint extends Eloquent {
 			'tasks' => $tasks,
 			'transactions' => $transactions,
 		];
-	}
-
-	private function filterIgnoredColumns(array $tasks, array $transactions, PhabricatorAPI $phabricator)
-	{
-		$columnRepository = new \Phragile\ProjectColumnRepository(
-			$this->phid,
-			$transactions,
-			$phabricator
-		);
-		$statuses = (new \Phragile\Factory\StatusDispatcherFactory(
-			$this,
-			$columnRepository,
-			$transactions
-		))->getStatusDispatcher();
-
-		return array_filter($tasks, function($task) use($statuses) {
-			return !in_array($statuses->getStatus($task), $this->project->getIgnoredColumns());
-		});
 	}
 
 	/**

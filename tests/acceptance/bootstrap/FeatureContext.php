@@ -6,6 +6,7 @@ use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
 use PHPUnit_Framework_Assert as PHPUnit;
+use Phragile\TaskDataFetcher;
 
 /**
  * Defines application features from the specific context.
@@ -475,7 +476,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	private function getOrCreateTaskForSprint($sprintPHID)
 	{
 		$phabricator = App::make('phabricator');
-		$tasks = $phabricator->queryTasksByProject($sprintPHID);
+		$tasks = (new TaskDataFetcher($phabricator))->fetchProjectTasks($sprintPHID);
 
 		if ($tasks) return array_values($tasks)[0];
 

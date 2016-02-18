@@ -12,12 +12,15 @@ class Task {
 	private $assigneeName;
 	private $cssClass;
 
-	function __construct($attributes)
+	/**
+	 * @param array $attributes - containing 'title', 'priority', 'points', 'status', 'closed', 'id', 'assigneePHID'
+	 */
+	function __construct(array $attributes)
 	{
 		$fields = ['title', 'priority', 'points', 'status', 'closed', 'id', 'assigneePHID'];
 		foreach ($fields as $field)
 		{
-			if (!key_exists($field, $attributes))
+			if (!array_key_exists($field, $attributes))
 			{
 				throw new \InvalidArgumentException("The $field field is missing.");
 			}
