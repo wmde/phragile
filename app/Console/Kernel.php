@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel {
 	protected $commands = [
 		'App\Console\Commands\Inspire',
 		'App\Console\Commands\CreateSnapshots',
+		'App\Console\Commands\MigrateSnapshots',
 	];
 
 	/**
