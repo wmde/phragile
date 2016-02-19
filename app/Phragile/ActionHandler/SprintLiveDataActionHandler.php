@@ -4,6 +4,7 @@ namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
 use Phragile\SettingsAwareTransactionFilter;
+use Phragile\TaskDataFetcher;
 use Phragile\TransactionLoader;
 use Sprint;
 use Phragile\Factory\SprintDataFactory;
@@ -38,7 +39,7 @@ class SprintLiveDataActionHandler {
 
 	private function getSprintDataFactory(Sprint $sprint)
 	{
-		$tasks = $this->phabricatorAPI->queryTasksByProject($sprint->phid);
+		$tasks = (new TaskDataFetcher($this->phabricatorAPI))->fetchProjectTasks($sprint->phid);
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];

@@ -47,12 +47,20 @@ class PhabricatorAPI {
 		)['data']);
 	}
 
-	public function queryTasksByProject($projectPHID)
+	/**
+	 * Uses maniphest.search to search tasks for a project.
+	 * @param string $projectPHID
+	 * @param string $after - Cursor parameter to fetch the next page of tasks
+	 * @return array
+	 */
+	public function searchTasksByProjectPHID($projectPHID, $after)
 	{
 		return $this->client->callMethodSynchronous(
-			'maniphest.query',
+			'maniphest.search',
 			[
-				'projectPHIDs' => [$projectPHID]
+				'constraints' => ['projects' => [$projectPHID]],
+				'attachments' => ['projects' => true],
+				'after' => $after
 			]
 		);
 	}

@@ -4,6 +4,7 @@ use Phragile\BurndownChart;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\ClosedTimeDispatcher;
+use Phragile\Task;
 
 class BurndownChartTest extends TestCase {
 
@@ -46,14 +47,30 @@ class BurndownChartTest extends TestCase {
 		'1' => [
 			'id' => 1,
 			'closed' => true,
-			'story_points' => 8
+			'points' => 8
 		],
 		'2' => [
 			'id' => 2,
 			'closed' => true,
-			'story_points' => 2
+			'points' => 2
 		]
 	];
+
+	/**
+	 * @before
+	 */
+	public function initDummyTasks()
+	{
+		$this->tasks = array_map(function($taskData)
+		{
+			return new Task(array_merge($taskData, [
+				'title' => 'A Task',
+				'priority' => 'Normal',
+				'status' => 'Open',
+				'assigneePHID' => null,
+			]));
+		}, $this->tasks);
+	}
 
 	private $closedColumnPHIDs = ['123abc', 'abc123'];
 
@@ -264,11 +281,15 @@ class BurndownChartTest extends TestCase {
 	public function testOpenTaskTransactionsAreIgnored()
 	{
 		$burndown = $this->mockWithTransactions(
-			['500' => [
+			['500' => new Task([
+				'title' => 'A Task',
+				'priority' => 'Normal',
 				'id' => 500,
+				'status' => 'Open',
 				'closed' => false,
-				'story_points' => 5,
-			]],
+				'assigneePHID' => null,
+				'points' => 5,
+			])],
 			['500' => [[ // this transaction's task is not closed and should be ignored
 				'transactionType' => 'status',
 				'oldValue' => 'open',
