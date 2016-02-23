@@ -38,3 +38,8 @@ Feature: Sprint Snapshots
     Given I know the number of snapshots
     When I execute artisan "snapshots:create"
     Then I should have created one snapshot for each sprint
+
+  Scenario: Migrate snapshots from maniphest.query to maniphest.search
+    Given there is a snapshot in the maniphest.query format
+    When I execute artisan "snapshots:migrate"
+    Then the snapshot should be in the maniphest.search format

@@ -1,12 +1,12 @@
 <?php
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
-use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\MinkExtension\Context\MinkContext;
 use PHPUnit_Framework_Assert as PHPUnit;
+use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\TaskDataFetcher;
+use Phragile\TaskDataProcessor;
 
 /**
  * Defines application features from the specific context.
@@ -18,6 +18,8 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	private $selectedTask;
 	private $numberOfSprints;
 	private $numberOfProjects;
+	private $testSnapshot;
+	private $testSnapshotTitle;
 
 	public function __construct(array $params)
 	{
@@ -578,5 +580,32 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function iShouldSeeTheRememberedNumberOfSprintsPlus($number)
 	{
 		$this->assertPageContainsText('Sprints ' . ($this->numberOfSprints + $number));
+	}
+
+	/**
+	 * @Given there is a snapshot in the maniphest.query format
+	 */
+	public function thereIsASnapshotInTheManiphestQueryFormat()
+	{
+		$this->testSnapshotTitle = '[Phragile] Migration script for old snapshots';
+		$this->testSnapshot = new SprintSnapshot();
+		$this->testSnapshot->data = '{"transactions":[],"tasks":{"PHID-123123":{"id":"127180","phid":"PHID-TASK-4kvxc4re6xrshgxtfajl","authorPHID":"PHID-USER-t4sxxglz6yyrgxeib43i","ownerPHID":"PHID-USER-5dv7dcltvyvolwzbm2af","ccPHIDs":["PHID-USER-5dv7dcltvyvolwzbm2af","PHID-USER-fn7qnpccfbitivgtw2rt","PHID-USER-lltif2drabccdkwhet7x"],"status":"open","statusName":"Open","isClosed":false,"priority":"High","priorityColor":"red","title":"'
+		. $this->testSnapshotTitle
+		. '","description":"Snapshot data needs to be migrated to a new format since we are going to abandon maniphest.query in favor of maniphest.search.","projectPHIDs":["PHID-PROJ-ptnfbfyq36kkebaxugcz","PHID-PROJ-tazsyaydzpbd643tderv","PHID-PROJ-knyj2bgnrkrwu72n27bg"],"uri":"https:\/\/phabricator.wikimedia.org\/T127180","auxiliary":{"std:maniphest:security_topic":"default",'
+		. '"' . env('MANIPHEST_STORY_POINTS_FIELD') . '":12'
+		. '},"objectName":"T127180","dateCreated":"1455716487","dateModified":"1455880296","dependsOnTaskPHIDs":["PHID-TASK-tuaxg2zcafwmpoe2d5ys"]}}}';
+		$this->testSnapshot->save();
+	}
+
+	/**
+	 * @Then the snapshot should be in the maniphest.search format
+	 */
+	public function theSnapshotShouldBeInTheManiphestSearchFormat()
+	{
+		$snapshotTaskTitle = '[Phragile] Migration script for old snapshots';
+		$taskProcessor = (new TaskDataProcessor(new StatusByStatusFieldDispatcher(''), ['ignore_estimates' => false, 'ignored_columns' => []]));
+		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->data, true)['tasks']);
+		PHPUnit::assertSame($snapshotTaskTitle, $tasks[0]->getTitle());
+		PHPUnit::assertSame(12, $tasks[0]->getPoints());
 	}
 }
