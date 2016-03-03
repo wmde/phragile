@@ -17,7 +17,6 @@ use Phragile\Task;
 
 class SprintDataFactory {
 	private $sprint = null;
-	private $tasks = [];
 	private $transactions = [];
 	private $phabricatorAPI = null;
 
@@ -71,7 +70,7 @@ class SprintDataFactory {
 
 	public function getSprintBacklog()
 	{
-		$assignees = new AssigneeRepository($this->phabricatorAPI, $this->tasks);
+		$assignees = new AssigneeRepository($this->phabricatorAPI, $this->taskList->getTasks());
 
 		return array_map(function(Task $task) use($assignees)
 		{
