@@ -11,7 +11,7 @@ class AssigneeRepository {
 
 	/**
 	 * @param PhabricatorAPI $phabricator
-	 * @param array[] $tasks
+	 * @param Task[] $tasks
 	 */
 	public function __construct(PhabricatorAPI $phabricator, array $tasks)
 	{
@@ -21,11 +21,15 @@ class AssigneeRepository {
 		);
 	}
 
+	/**
+	 * @param Task[] $tasks
+	 * @return string[]
+	 */
 	private function extractUniqueAssignees(array $tasks)
 	{
-		return array_unique(array_map(function($task)
+		return array_unique(array_map(function(Task $task)
 		{
-			return $task['ownerPHID'];
+			return $task->getAssigneePHID();
 		}, $tasks));
 	}
 
@@ -49,4 +53,5 @@ class AssigneeRepository {
 	{
 		return isset($this->assignees[$phid]['userName']) ? $this->assignees[$phid]['userName'] : null;
 	}
+
 }
