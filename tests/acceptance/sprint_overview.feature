@@ -6,18 +6,17 @@ Feature: Sprint Overview
   Background:
     Given a sprint "Sprint 42" exists for the "Wikidata" project
 
-  Scenario: Sprint Backlog
-    Given it has the following tasks for the "Sprint 42" sprint:
+  Scenario Outline: See tasks on the Sprint Backlog
+    Given "Sprint 42" has a task with "<title>" "<priority>" and "<points>"
+    When I go to the "Sprint 42" sprint overview
+    Then I should see the task with "<title>" as title
+    And I should see the task with "<priority>" as priority
+    And I should see the task with "<points>" story points
+
+    Examples:
       | title         | priority |  points |
       | Fix things    | high     |  13     |
       | Implement XYZ | low      |  8      |
-    When I go to the "Sprint 42" sprint overview
-    Then I should see "Fix things"
-    And I should see "Implement XYZ"
-    And I should see "High"
-    And I should see "Low"
-    And I should see "13"
-    And I should see "8"
 
   Scenario: Assignees in Sprint Backlog
     Given I am logged in

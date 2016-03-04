@@ -224,17 +224,18 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Given it has the following tasks for the :sprint Sprint:
+	 * @Given :sprint has a task with :title :priority and :points
 	 */
-	public function itHasTheFollowingTasks($sprint, \Behat\Gherkin\Node\TableNode $table)
+	public function sprintHasATaskWith($sprint, $title, $priority, $points)
 	{
 		$sprintPHID = Sprint::where('title', $sprint)->first()->phid;
 		$phabricator = App::make('phabricator');
 
-		foreach ($table->getHash() as $task)
-		{
-			$phabricator->createTask($sprintPHID, $task);
-		}
+		$this->selectedTask = $phabricator->createTask($sprintPHID, [
+			'title' => $title,
+			'priority' => $priority,
+			'points' => $points
+		]);
 	}
 
 	/**
@@ -506,6 +507,30 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function iShouldSeeMyNameInTheTaskSRowOfTheSprintBacklog()
 	{
 		$this->assertElementContains('#t' . $this->selectedTask['id'], $this->params['phabricator_username']);
+	}
+
+	/**
+	 * @Then I should see the task with :title as title
+	 */
+	public function iShouldSeeTheTaskWithTitle($title)
+	{
+		$this->assertElementContains('#t' . $this->selectedTask['id'] . ' .title', $title);
+	}
+
+	/**
+	 * @Then I should see the task with :priority as priority
+	 */
+	public function iShouldSeeTheTaskWithPriority($priority)
+	{
+		$this->assertElementContains('#t' . $this->selectedTask['id'] . ' .priority', $priority);
+	}
+
+	/**
+	 * @Then I should see the task with :points story points
+	 */
+	public function iShouldSeeTheTaskWithStoryPoints($storyPoints)
+	{
+		$this->assertElementContains('#t' . $this->selectedTask['id'] . ' .points', $storyPoints);
 	}
 
 	/**
