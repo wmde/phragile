@@ -146,8 +146,8 @@
 					</td>
 
 					<?php $priorityValue = Config::get('phabricator.MANIPHEST_PRIORITIES')[strtolower($task->getPriority())] ?>
-					<td class="filter-backlog" data-column="priority" data-value="{{ $priorityValue }}">
-						<span class="priority hidden">{{ $priorityValue }}</span>
+					<td class="filter-backlog priority" data-column="priority" data-value="{{ $priorityValue }}">
+						<span class="hidden">{{ $priorityValue }}</span>
 						{{ $task->getPriority() }}
 					</td>
 					<td class="points">{{ $task->getPoints() }}</td>
