@@ -115,7 +115,7 @@ class Sprint extends Eloquent {
 			'sprint_id' => $this->id,
 			'data' => json_encode($data),
 			'total_points' => $sumOfTasks['total']['points'],
-			'task_count' => count($sumOfTasks['total']['tasks']),
+			'task_count' => $sumOfTasks['total']['tasks'],
 		]);
 	}
 
