@@ -18,7 +18,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 
 	private function newPhabricatorAPI()
 	{
-		$phabricatorAPI = $this->getMockBuilder( PhabricatorAPI::class )
+		$phabricatorAPI = $this->getMockBuilder(PhabricatorAPI::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$phabricatorAPI->method('queryPHIDs')->will($this->returnCallback(function()

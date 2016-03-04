@@ -85,7 +85,7 @@ class SprintsController extends Controller {
 			Flash::error(implode(' ', $validation->messages()->all()));
 		} elseif ($sprint->save())
 		{
-			Flash::success( 'The sprint settings have been updated' );
+			Flash::success('The sprint settings have been updated');
 			return Redirect::route('sprint_path', ['sprint' => $sprint->phabricator_id]);
 		} else
 		{
