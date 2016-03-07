@@ -7,6 +7,7 @@ use PHPUnit_Framework_Assert as PHPUnit;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\TaskDataFetcher;
 use Phragile\TaskDataProcessor;
+use Symfony\Component\Console\Input\StringInput;
 
 /**
  * Defines application features from the specific context.
@@ -397,7 +398,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iExecuteArtisan($command)
 	{
-		Artisan::call($command);
+		Artisan::handle(new StringInput($command));
 	}
 
 	/**
