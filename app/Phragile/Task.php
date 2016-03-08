@@ -15,7 +15,7 @@ class Task {
 	/**
 	 * @param array $attributes - containing 'title', 'priority', 'points', 'status', 'closed', 'id', 'assigneePHID'
 	 */
-	function __construct(array $attributes)
+	public function __construct(array $attributes)
 	{
 		$fields = ['title', 'priority', 'points', 'status', 'closed', 'id', 'assigneePHID'];
 		foreach ($fields as $field)

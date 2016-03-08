@@ -86,8 +86,10 @@ class Sprint extends Eloquent {
 	{
 		$days = [];
 
-		for ($day = strtotime($this->sprint_start);
-			 $day <= strtotime($this->sprint_end);
+		$startTime = strtotime($this->sprint_start);
+		$endTime = strtotime($this->sprint_end);
+		for ($day = $startTime;
+			 $day <= $endTime;
 			 $day += 60*60*24)
 		{
 			$days[] = $day;

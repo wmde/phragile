@@ -49,7 +49,7 @@ class TaskList {
 
 	/**
 	 * @param int $id
-	 * @return array Task data
+	 * @return array|null Task data
 	 */
 	public function findTaskByID($id)
 	{
@@ -60,6 +60,7 @@ class TaskList {
 				return $task;
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -67,13 +68,18 @@ class TaskList {
 	 */
 	public function getClosedTaskIDs()
 	{
-		return array_map(function(Task $task)
-		{
-			return $task['id'];
-		}, array_filter($this->tasks, function($task)
+		return array_map(
+			function(Task $task)
 			{
-				return $task['closed'];
-			})
+				return $task['id'];
+			},
+			array_filter(
+				$this->tasks,
+				function($task)
+				{
+					return $task['closed'];
+				}
+			)
 		);
 	}
 }

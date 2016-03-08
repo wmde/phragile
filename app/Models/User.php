@@ -13,7 +13,8 @@ class User extends Eloquent implements AuthenticatableContract {
 
 	private $phabricatorURL;
 
-	public function setRememberToken($token) {
+	public function setRememberToken($token)
+	{
 		// Workaround: Auth::logout breaks with the default behavior since we're using OAuth.
 	}
 

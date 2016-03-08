@@ -13,7 +13,8 @@ class SprintLiveDataActionHandler {
 
 	private $phabricatorAPI;
 
-	public function __construct(PhabricatorAPI $phabricatorAPI) {
+	public function __construct(PhabricatorAPI $phabricatorAPI)
+	{
 		$this->phabricatorAPI = $phabricatorAPI;
 	}
 

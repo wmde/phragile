@@ -13,7 +13,8 @@ class TaskDataProcessorTest extends TestCase
 			['ignored_columns' => [], 'ignore_estimates' => false]
 		))->process($this->taskRawData);
 
-		for ($i = 0; $i < count($this->taskRawData); $i++)
+		$taskRawDataNum = count($this->taskRawData);
+		for ($i = 0; $i < $taskRawDataNum; $i++)
 		{
 			$rawTask = $this->taskRawData[$i];
 			$task = $tasks[$i];
@@ -74,7 +75,8 @@ class TaskDataProcessorTest extends TestCase
 			['ignored_columns' => [], 'ignore_estimates' => true]
 		))->process($this->taskRawData);
 
-		for ($i = 0; $i < count($this->taskRawData); $i++)
+		$taskRawDataNum = count($this->taskRawData);
+		for ($i = 0; $i < $taskRawDataNum; $i++)
 		{
 			$this->assertSame(1, $tasks[$i]->getPoints());
 		}

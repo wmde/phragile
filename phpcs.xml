@@ -7,14 +7,17 @@
     <rule ref="Generic.Classes" />
     <rule ref="Generic.CodeAnalysis" />
     <rule ref="Generic.ControlStructures" />
+    <rule ref="Generic.ControlStructures.InlineControlStructure.NotAllowed">
+        <severity>0</severity>
+    </rule>
 
     <rule ref="Generic.Files.ByteOrderMark" />
     <rule ref="Generic.Files.EndFileNewline" />
     <rule ref="Generic.Files.LineEndings" />
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="120" />
-            <property name="absoluteLineLimit" value="120" />
+            <property name="lineLimit" value="150" />
+            <property name="absoluteLineLimit" value="150" />
         </properties>
     </rule>
     <rule ref="Generic.Files.OneClassPerFile" />
@@ -59,6 +62,10 @@
     <rule ref="PSR1" />
     <!-- TODO: create variation of this sniff that allows underscores in test methods -->
     <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+        <severity>0</severity>
+    </rule>
+    <!-- Laravel doesn't use namespaces bu default, ignoring for now. -->
+    <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <severity>0</severity>
     </rule>
 

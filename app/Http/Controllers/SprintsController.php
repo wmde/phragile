@@ -45,8 +45,11 @@ class SprintsController extends Controller {
 		}
 	}
 
+	// @codingStandardsIgnoreStart
+	// PHPCS complains due to unused parameter
 	public function create(Project $project)
 	{
+		// @codingStandardsIgnoreEnd
 		$user = Auth::user();
 		$user->setPhabricatorURL(env('PHABRICATOR_URL'));
 
