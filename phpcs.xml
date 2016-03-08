@@ -67,6 +67,7 @@
     </rule>
 
     <rule ref="PSR2.Classes.PropertyDeclaration" />
+    <rule ref="PSR2.ControlStructures.ControlStructureSpacing" />
     <rule ref="PSR2.ControlStructures.ElseIfDeclaration" />
     <rule ref="PSR2.Namespaces" />
 
