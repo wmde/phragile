@@ -61,7 +61,7 @@
     <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
         <severity>0</severity>
     </rule>
-    <!-- Laravel doesn't use namespaces bu default, ignoring for now. -->
+    <!-- Laravel doesn't use namespaces by default, ignoring for now. -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <severity>0</severity>
     </rule>
