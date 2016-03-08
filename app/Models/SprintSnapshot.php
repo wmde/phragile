@@ -25,7 +25,8 @@ class SprintSnapshot extends Eloquent {
 
 	public function getData()
 	{
-		if ($this->data === null) {
+		if ($this->data === null)
+		{
 			$this->data = self::find($this->id)->data;
 		}
 

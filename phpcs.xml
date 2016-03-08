@@ -98,5 +98,7 @@
         <severity>0</severity>
     </rule>
 
+    <rule ref="vendor/pragmarx/laravelcs/Standards/Laravel/Sniffs/ControlStructures" />
+
     <rule ref="Zend.Files.ClosingTag" />
 </ruleset>

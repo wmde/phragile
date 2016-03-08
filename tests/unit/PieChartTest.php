@@ -20,7 +20,7 @@ class PieChartTest extends TestCase {
 	{
 		$chart = new PieChart($tasksPerStatus, new StatusCssClassService(false));
 
-		foreach($chart->getData() as $data)
+		foreach ($chart->getData() as $data)
 		{
 			$this->assertArrayHasKey('cssClass', $data);
 		}

@@ -106,7 +106,7 @@ class SprintStoreActionHandler {
 		{
 			$phabricatorProject = $this->userPhabricatorAPI->createProject($this->sprint->title, [$this->user->phid]);
 			$this->sprint->connectWithPhabricatorProject($phabricatorProject);
-		} catch(\ConduitClientException $e)
+		} catch (\ConduitClientException $e)
 		{
 			$this->connectIfPhabricatorProjectExists($e->getMessage());
 		}

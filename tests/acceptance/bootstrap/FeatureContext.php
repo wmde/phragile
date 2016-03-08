@@ -76,7 +76,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		try
 		{
 			$this->pressButton('Authorize Access');
-		} catch(Behat\Mink\Exception\ElementNotFoundException $e)
+		} catch (Behat\Mink\Exception\ElementNotFoundException $e)
 		{
 			// Absence of this button just means that the user has authorized Phragile before.
 			return;
@@ -361,7 +361,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		try
 		{
 			$this->aSprintExistsForTheProject($sprintTitle, $projectTitle);
-		} catch(Exception $e)
+		} catch (Exception $e)
 		{
 			if (!str_contains($e->getMessage(), 'Project name is already used'))
 			{
