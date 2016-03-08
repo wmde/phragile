@@ -16,7 +16,9 @@ class MigrateSnapshots extends Command {
 		$batchSize = intval($this->input->getOption('batchSize'));
 
 		if (!$this->input->getOption('force')) {
-			$confirmation = $this->confirm('Do you really want to migrate ' . $snapshotCount . ' snapshots in batches of ' . $batchSize . '?');
+			$confirmation = $this->confirm(
+				'Do you really want to migrate ' . $snapshotCount . ' snapshots in batches of ' . $batchSize . '?'
+			);
 			if ( !$confirmation) {
 				$this->line('Migration aborted.');
 				return;

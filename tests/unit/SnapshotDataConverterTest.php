@@ -38,7 +38,8 @@ class SnapshotDataConverterTest extends TestCase {
 			'priority' => 'High',
 			'priorityColor' => 'red',
 			'title' => '[Phragile] Migration script for old snapshots',
-			'description' => 'Snapshot data needs to be migrated to a new format since we are going to abandon maniphest.query in favor of maniphest.search.',
+			'description' => 'Snapshot data needs to be migrated to a new format since we are going to
+				abandon maniphest.query in favor of maniphest.search.',
 			'projectPHIDs' => [
 				'PHID-PROJ-ptnfbfyq36kkebaxugcz',
 				'PHID-PROJ-tazsyaydzpbd643tderv',

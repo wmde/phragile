@@ -628,7 +628,9 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function theSnapshotShouldBeInTheManiphestSearchFormat()
 	{
 		$snapshotTaskTitle = '[Phragile] Migration script for old snapshots';
-		$taskProcessor = new TaskDataProcessor(new StatusByStatusFieldDispatcher(''), ['ignore_estimates' => false, 'ignored_columns' => []]);
+		$taskProcessor = new TaskDataProcessor(
+			new StatusByStatusFieldDispatcher(''), ['ignore_estimates' => false, 'ignored_columns' => []]
+		);
 		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->getData(), true)['tasks']);
 		PHPUnit::assertSame($snapshotTaskTitle, $tasks[0]->getTitle());
 		PHPUnit::assertSame(12, $tasks[0]->getPoints());
@@ -663,7 +665,8 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 				"priority":"High",
 				"priorityColor":"red",
 				"title":"' . $this->testSnapshotTitle . '",
-				"description":"Snapshot data needs to be migrated to a new format since we are going to abandon maniphest.query in favor of maniphest.search.",
+				"description":"Snapshot data needs to be migrated to a new format since we are going to '
+		. 'abandon maniphest.query in favor of maniphest.search.",
 				"projectPHIDs":["PHID-PROJ-ptnfbfyq36kkebaxugcz","PHID-PROJ-tazsyaydzpbd643tderv","PHID-PROJ-knyj2bgnrkrwu72n27bg"],
 				"uri":"https:\/\/phabricator.wikimedia.org\/T127180",
 				"auxiliary":{

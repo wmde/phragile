@@ -15,7 +15,9 @@ class BurndownChart {
 	 * @param array $transactions - an associative array that maps an array of transactions to task IDs
 	 * @param ClosedTimeDispatcher $closedTimeDispatcher - an associative array that maps an array of transactions to task IDs
 	 */
-	public function __construct(\Sprint $sprint, TaskList $tasks, array $transactions, ClosedTimeDispatcher $closedTimeDispatcher)
+	public function __construct(
+		\Sprint $sprint, TaskList $tasks, array $transactions, ClosedTimeDispatcher $closedTimeDispatcher
+	)
 	{
 		$this->sprint = $sprint;
 		$this->tasks = $tasks;
