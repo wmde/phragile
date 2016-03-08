@@ -22,7 +22,7 @@ class Task {
 		{
 			if (!array_key_exists($field, $attributes))
 			{
-				throw new \InvalidArgumentException("The $field field is missing.");
+				throw new \InvalidArgumentException('The ' . $field . ' field is missing.');
 			}
 
 			$this->$field = $attributes[$field];

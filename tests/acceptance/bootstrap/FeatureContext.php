@@ -150,7 +150,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		if (!App::make('phabricator')->queryProjectByTitle($title))
 		{
-			throw new Exception("Project '$title' does not exist.");
+			throw new Exception('Project "' . $title . '" does not exist.');
 		}
 	}
 
@@ -348,7 +348,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function iAmOnTheProjectPage($project)
 	{
 		$this->theProjectExists($project);
-		$this->visit("/projects/" . Project::where('title', $project)->first()->slug);
+		$this->visit('/projects/' . Project::where('title', $project)->first()->slug);
 	}
 
 	/**
@@ -573,7 +573,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iGoToTheSprintOverviewOfTheMissingSprint()
 	{
-		$this->visit("/sprints/$this->phabricatorProjectID");
+		$this->visit('/sprints/' . $this->phabricatorProjectID);
 	}
 
 	/**
