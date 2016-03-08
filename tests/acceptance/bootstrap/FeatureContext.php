@@ -7,6 +7,7 @@ use PHPUnit_Framework_Assert as PHPUnit;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\TaskDataFetcher;
 use Phragile\TaskDataProcessor;
+use Symfony\Component\Console\Input\StringInput;
 
 /**
  * Defines application features from the specific context.
@@ -397,7 +398,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	 */
 	public function iExecuteArtisan($command)
 	{
-		Artisan::call($command);
+		Artisan::handle(new StringInput($command));
 	}
 
 	/**
@@ -630,6 +631,18 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->data, true)['tasks']);
 		PHPUnit::assertSame($snapshotTaskTitle, $tasks[0]->getTitle());
 		PHPUnit::assertSame(12, $tasks[0]->getPoints());
+	}
+
+	/**
+	 * @Then the snapshot should still be in the maniphest.query format
+	 */
+	public function theSnapshotShouldStillBeInTheManiphestQueryFormat()
+	{
+		$snapshotTaskTitle = '[Phragile] Migration script for old snapshots';
+		$snapshot = json_decode($this->testSnapshot->fresh()->data, true);
+		$task = array_shift($snapshot['tasks']);
+		PHPUnit::assertSame($snapshotTaskTitle, $task['title']);
+		PHPUnit::assertSame(12, $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')]);
 	}
 
 	private function getManiphestQuerySnapshotData()
