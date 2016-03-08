@@ -20,7 +20,9 @@ class ScopeLineTest extends TestCase {
 		$scopeLine = new ScopeLine([], $numberOfPoints, $dateRange);
 
 		foreach ($scopeLine->getData() as $date => $points)
+		{
 			$this->assertSame($points, $numberOfPoints);
+		}
 	}
 
 	public function testShouldAlwaysUseLastSnapshot()

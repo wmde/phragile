@@ -363,7 +363,10 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 			$this->aSprintExistsForTheProject($sprintTitle, $projectTitle);
 		} catch(Exception $e)
 		{
-			if (!str_contains($e->getMessage(), 'Project name is already used')) throw $e;
+			if (!str_contains($e->getMessage(), 'Project name is already used'))
+			{
+				throw $e;
+			}
 		}
 
 		Sprint::where('title', $sprintTitle)->where('project_id', $project->id)->delete();
@@ -485,7 +488,10 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$phabricator = App::make('phabricator');
 		$tasks = (new TaskDataFetcher($phabricator))->fetchProjectTasks($sprintPHID);
 
-		if (!empty($tasks)) return array_values($tasks)[0];
+		if (!empty($tasks))
+		{
+			return array_values($tasks)[0];
+		}
 
 		return $phabricator->createTask($sprintPHID, [
 			'title' => 'automated test task',

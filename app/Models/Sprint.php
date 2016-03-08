@@ -70,7 +70,10 @@ class Sprint extends Eloquent {
 
 	private function getDays()
 	{
-		if ($this->days === null) $this->days = $this->computeDays();
+		if ($this->days === null)
+		{
+			$this->days = $this->computeDays();
+		}
 
 		return $this->days;
 	}

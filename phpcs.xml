@@ -7,9 +7,6 @@
     <rule ref="Generic.Classes" />
     <rule ref="Generic.CodeAnalysis" />
     <rule ref="Generic.ControlStructures" />
-    <rule ref="Generic.ControlStructures.InlineControlStructure.NotAllowed">
-        <severity>0</severity>
-    </rule>
 
     <rule ref="Generic.Files.ByteOrderMark" />
     <rule ref="Generic.Files.EndFileNewline" />
