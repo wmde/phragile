@@ -68,13 +68,18 @@ class TaskList {
 	 */
 	public function getClosedTaskIDs()
 	{
-		return array_map(function(Task $task)
-		{
-			return $task['id'];
-		}, array_filter($this->tasks, function($task)
+		return array_map(
+			function(Task $task)
 			{
-				return $task['closed'];
-		})
+				return $task['id'];
+			},
+			array_filter(
+				$this->tasks,
+				function($task)
+				{
+					return $task['closed'];
+				}
+			)
 		);
 	}
 }
