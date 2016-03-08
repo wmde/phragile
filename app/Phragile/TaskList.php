@@ -49,7 +49,7 @@ class TaskList {
 
 	/**
 	 * @param int $id
-	 * @return array Task data
+	 * @return array|null Task data
 	 */
 	public function findTaskByID($id)
 	{
@@ -60,6 +60,7 @@ class TaskList {
 				return $task;
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -73,7 +74,7 @@ class TaskList {
 		}, array_filter($this->tasks, function($task)
 			{
 				return $task['closed'];
-			})
+		})
 		);
 	}
 }

@@ -29,7 +29,7 @@ class SprintNotFoundActionHandler {
 		return \View::make('sprint.connect', [
 			'duration' => $duration,
 			'phabricatorProject' => $phabricatorProject,
-			'projects' => \Project::orderBy('title')->lists('title','id'),
+			'projects' => \Project::orderBy('title')->lists('title', 'id'),
 		]);
 	}
 

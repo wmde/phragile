@@ -16,7 +16,7 @@ class SprintSnapshotsController extends Controller {
 			'statusColors' => $factory->getStatusColors(),
 			'burnChartData' => $factory->getBurnChartData(),
 			'sprintBacklog' => $factory->getSprintBacklog(),
-			'projects' => Project::orderBy('title')->lists('title','id'),
+			'projects' => Project::orderBy('title')->lists('title', 'id'),
 			'project' => $snapshot->sprint->project
 		]);
 	}

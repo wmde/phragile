@@ -55,7 +55,8 @@ class PieChart {
 		$colorMap = [];
 		$colors = (new ColorGenerator())->generate(count($statuses), $base);
 
-		for ($i = 0; $i < count($statuses); $i++)
+		$statusesNum = count($statuses);
+		for ($i = 0; $i < $statusesNum; $i++)
 		{
 			$colorMap[$statuses[$i]] = $colors[$i];
 		}
@@ -69,8 +70,8 @@ class PieChart {
 	public function getStatusColors()
 	{
 		return $this->mapToCssClasses(array_merge(
-			$this->getColors($this->getStatusesByCssClass('closed'), PieChart::$GREEN),
-			$this->getColors($this->getStatusesByCssClass('open'), PieChart::$ORANGE)
+			$this->getColors($this->getStatusesByCssClass('closed'), self::$GREEN),
+			$this->getColors($this->getStatusesByCssClass('open'), self::$ORANGE)
 		));
 	}
 

@@ -77,11 +77,13 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		} catch(Behat\Mink\Exception\ElementNotFoundException $e)
 		{
 			// Absence of this button just means that the user has authorized Phragile before.
+			return;
 		} finally
 		{
 			$this->clickLink('Continue');
 			$this->setUserAuthToken();
 		}
+		return;
 	}
 
 	/**
@@ -406,7 +408,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$numberOfActiveSprints = count(array_filter(Sprint::all()->all(), function($sprint)
 			{
 				return $sprint->isActive();
-			}
+		}
 		));
 
 		PHPUnit::assertSame($this->numberOfSnapshots + $numberOfActiveSprints, SprintSnapshot::count());
@@ -614,11 +616,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		$this->testSnapshotTitle = '[Phragile] Migration script for old snapshots';
 		$this->testSnapshot = new SprintSnapshot();
-		$this->testSnapshot->data = '{"transactions":[],"tasks":{"PHID-123123":{"id":"127180","phid":"PHID-TASK-4kvxc4re6xrshgxtfajl","authorPHID":"PHID-USER-t4sxxglz6yyrgxeib43i","ownerPHID":"PHID-USER-5dv7dcltvyvolwzbm2af","ccPHIDs":["PHID-USER-5dv7dcltvyvolwzbm2af","PHID-USER-fn7qnpccfbitivgtw2rt","PHID-USER-lltif2drabccdkwhet7x"],"status":"open","statusName":"Open","isClosed":false,"priority":"High","priorityColor":"red","title":"'
-		. $this->testSnapshotTitle
-		. '","description":"Snapshot data needs to be migrated to a new format since we are going to abandon maniphest.query in favor of maniphest.search.","projectPHIDs":["PHID-PROJ-ptnfbfyq36kkebaxugcz","PHID-PROJ-tazsyaydzpbd643tderv","PHID-PROJ-knyj2bgnrkrwu72n27bg"],"uri":"https:\/\/phabricator.wikimedia.org\/T127180","auxiliary":{"std:maniphest:security_topic":"default",'
-		. '"' . env('MANIPHEST_STORY_POINTS_FIELD') . '":12'
-		. '},"objectName":"T127180","dateCreated":"1455716487","dateModified":"1455880296","dependsOnTaskPHIDs":["PHID-TASK-tuaxg2zcafwmpoe2d5ys"]}}}';
+		$this->testSnapshot->data = $this->getManiphestQuerySnapshotData();
 		$this->testSnapshot->save();
 	}
 
@@ -632,5 +630,37 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->data, true)['tasks']);
 		PHPUnit::assertSame($snapshotTaskTitle, $tasks[0]->getTitle());
 		PHPUnit::assertSame(12, $tasks[0]->getPoints());
+	}
+
+	private function getManiphestQuerySnapshotData()
+	{
+		return '{
+		"transactions":[],
+		"tasks":{
+			"PHID-123123":{
+				"id":"127180",
+				"phid":"PHID-TASK-4kvxc4re6xrshgxtfajl",
+				"authorPHID":"PHID-USER-t4sxxglz6yyrgxeib43i",
+				"ownerPHID":"PHID-USER-5dv7dcltvyvolwzbm2af",
+				"ccPHIDs":["PHID-USER-5dv7dcltvyvolwzbm2af","PHID-USER-fn7qnpccfbitivgtw2rt","PHID-USER-lltif2drabccdkwhet7x"],
+				"status":"open",
+				"statusName":"Open",
+				"isClosed":false,
+				"priority":"High",
+				"priorityColor":"red",
+				"title":"' . $this->testSnapshotTitle . '",
+				"description":"Snapshot data needs to be migrated to a new format since we are going to abandon maniphest.query in favor of maniphest.search.",
+				"projectPHIDs":["PHID-PROJ-ptnfbfyq36kkebaxugcz","PHID-PROJ-tazsyaydzpbd643tderv","PHID-PROJ-knyj2bgnrkrwu72n27bg"],
+				"uri":"https:\/\/phabricator.wikimedia.org\/T127180",
+				"auxiliary":{
+					"std:maniphest:security_topic":"default",
+					"' . env('MANIPHEST_STORY_POINTS_FIELD') . '":12
+				},
+				"objectName":"T127180",
+				"dateCreated":"1455716487",
+				"dateModified":"1455880296",
+				"dependsOnTaskPHIDs":["PHID-TASK-tuaxg2zcafwmpoe2d5ys"]
+			}
+		}}';
 	}
 }
