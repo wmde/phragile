@@ -628,7 +628,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function theSnapshotShouldBeInTheManiphestSearchFormat()
 	{
 		$snapshotTaskTitle = '[Phragile] Migration script for old snapshots';
-		$taskProcessor = (new TaskDataProcessor(new StatusByStatusFieldDispatcher(''), ['ignore_estimates' => false, 'ignored_columns' => []]));
+		$taskProcessor = new TaskDataProcessor(new StatusByStatusFieldDispatcher(''), ['ignore_estimates' => false, 'ignored_columns' => []]);
 		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->getData(), true)['tasks']);
 		PHPUnit::assertSame($snapshotTaskTitle, $tasks[0]->getTitle());
 		PHPUnit::assertSame(12, $tasks[0]->getPoints());
