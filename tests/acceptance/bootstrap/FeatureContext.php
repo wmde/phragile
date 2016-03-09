@@ -629,7 +629,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	{
 		$snapshotTaskTitle = '[Phragile] Migration script for old snapshots';
 		$taskProcessor = (new TaskDataProcessor(new StatusByStatusFieldDispatcher(''), ['ignore_estimates' => false, 'ignored_columns' => []]));
-		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->data, true)['tasks']);
+		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->getData(), true)['tasks']);
 		PHPUnit::assertSame($snapshotTaskTitle, $tasks[0]->getTitle());
 		PHPUnit::assertSame(12, $tasks[0]->getPoints());
 	}
@@ -640,7 +640,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	public function theSnapshotShouldStillBeInTheManiphestQueryFormat()
 	{
 		$snapshotTaskTitle = '[Phragile] Migration script for old snapshots';
-		$snapshot = json_decode($this->testSnapshot->fresh()->data, true);
+		$snapshot = json_decode($this->testSnapshot->fresh()->getData(), true);
 		$task = array_shift($snapshot['tasks']);
 		PHPUnit::assertSame($snapshotTaskTitle, $task['title']);
 		PHPUnit::assertSame(12, $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')]);
