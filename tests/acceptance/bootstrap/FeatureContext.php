@@ -485,7 +485,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 		$phabricator = App::make('phabricator');
 		$tasks = (new TaskDataFetcher($phabricator))->fetchProjectTasks($sprintPHID);
 
-		if ($tasks) return array_values($tasks)[0];
+		if (!empty($tasks)) return array_values($tasks)[0];
 
 		return $phabricator->createTask($sprintPHID, [
 			'title' => 'automated test task',
