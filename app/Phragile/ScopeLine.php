@@ -47,7 +47,10 @@ class ScopeLine {
 	{
 		foreach ($this->dateRange as $date)
 		{
-			if (isset($this->snapshots[$date])) return $this->snapshots[$date]->getScope();
+			if (isset($this->snapshots[$date]))
+			{
+				return $this->snapshots[$date]->getScope();
+			}
 		}
 
 		return $this->pointsNumber;

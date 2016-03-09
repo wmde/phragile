@@ -1,7 +1,7 @@
 <?php
 
 class SprintSnapshot extends Eloquent {
-	protected $fillable =  ['data', 'sprint_id', 'created_at', 'total_points', 'task_count'];
+	protected $fillable = ['data', 'sprint_id', 'created_at', 'total_points', 'task_count'];
 
 	/**
 	 * @return Sprint
@@ -25,7 +25,8 @@ class SprintSnapshot extends Eloquent {
 
 	public function getData()
 	{
-		if ($this->data === null) {
+		if ($this->data === null)
+		{
 			$this->data = self::find($this->id)->data;
 		}
 

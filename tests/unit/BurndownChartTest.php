@@ -13,7 +13,9 @@ class BurndownChartTest extends TestCase {
 		return $this->mockWithTransactionsAndClosedTimeDispatcher($tasks, $transactions, new ClosedTimeByStatusFieldDispatcher());
 	}
 
-	private function mockWithTransactionsAndClosedTimeDispatcher(array $tasks, array $transactions, ClosedTimeDispatcher $dispatcher)
+	private function mockWithTransactionsAndClosedTimeDispatcher(
+		array $tasks, array $transactions, ClosedTimeDispatcher $dispatcher
+	)
 	{
 		$taskListMock = $this->getMockBuilder('Phragile\TaskList')
 			->disableOriginalConstructor()

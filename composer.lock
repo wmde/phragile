@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4e2496c0046525db153b2c34dff3e230",
-    "content-hash": "a77c522328b616227bfb2bd1b3961fe8",
+    "hash": "9970a9464a80fe365f167b7710218645",
+    "content-hash": "8266ca056681080b805d70e1dc43f482",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -3760,6 +3760,45 @@
             "time": "2015-10-02 06:51:40"
         },
         {
+            "name": "pragmarx/laravelcs",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/antonioribeiro/laravelcs.git",
+                "reference": "9be66937b1dae089a11c42b63a70c6e1b40c5525"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/antonioribeiro/laravelcs/zipball/9be66937b1dae089a11c42b63a70c6e1b40c5525",
+                "reference": "9be66937b1dae089a11c42b63a70c6e1b40c5525",
+                "shasum": ""
+            },
+            "require": {
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Antonio Carlos Ribeiro",
+                    "email": "acr@antoniocarlosribeiro.com",
+                    "role": "Creator"
+                }
+            ],
+            "description": "PHP_CodeSniffer custom Sniff for Laravel coding standard",
+            "keywords": [
+                "PHP_CodeSniffer",
+                "code",
+                "laravel",
+                "sniffer",
+                "standards"
+            ],
+            "time": "2014-12-14 18:47:14"
+        },
+        {
             "name": "sebastian/comparator",
             "version": "1.2.0",
             "source": {
@@ -4535,7 +4574,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "behat/behat": 5,
-        "laracasts/behat-laravel-extension": 20
+        "laracasts/behat-laravel-extension": 20,
+        "pragmarx/laravelcs": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

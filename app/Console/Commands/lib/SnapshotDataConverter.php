@@ -17,7 +17,9 @@ class SnapshotDataConverter {
 
 	private function convertToManiphestSearchResponse(array $task)
 	{
-		$points = isset($task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')]) ? $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')] : 0;
+		$points = isset(
+			$task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')]
+		) ? $task['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')] : 0;
 		return [
 			'id' => (int)$task['id'],
 			'type' => 'TASK',

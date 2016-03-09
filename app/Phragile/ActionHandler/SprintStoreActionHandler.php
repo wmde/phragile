@@ -37,7 +37,10 @@ class SprintStoreActionHandler {
 
 	private function validate()
 	{
-		if ($this->previousActionFailed()) return;
+		if ($this->previousActionFailed())
+		{
+			return;
+		}
 
 		$validation = $this->sprint->validate();
 		if ($validation->fails())
@@ -49,7 +52,10 @@ class SprintStoreActionHandler {
 
 	private function trySprintCreationFromPhabricatorID()
 	{
-		if ($this->previousActionFailed() || !ctype_digit($this->sprint->title)) return;
+		if ($this->previousActionFailed() || !ctype_digit($this->sprint->title))
+		{
+			return;
+		}
 
 		if ($this->sprintWithPhabricatorIDExists())
 		{
@@ -75,7 +81,10 @@ class SprintStoreActionHandler {
 
 	private function connectUserToPhabricator()
 	{
-		if ($this->previousActionFailed()) return;
+		if ($this->previousActionFailed())
+		{
+			return;
+		}
 
 		if ($this->user->apiTokenValid())
 		{
@@ -88,13 +97,16 @@ class SprintStoreActionHandler {
 
 	private function createCorrespondingPhabricatorProject()
 	{
-		if ($this->previousActionFailed()) return;
+		if ($this->previousActionFailed())
+		{
+			return;
+		}
 
 		try
 		{
 			$phabricatorProject = $this->userPhabricatorAPI->createProject($this->sprint->title, [$this->user->phid]);
 			$this->sprint->connectWithPhabricatorProject($phabricatorProject);
-		} catch(\ConduitClientException $e)
+		} catch (\ConduitClientException $e)
 		{
 			$this->connectIfPhabricatorProjectExists($e->getMessage());
 		}
@@ -105,7 +117,10 @@ class SprintStoreActionHandler {
 		if (str_contains($errorMessage, ['Project name is already used', 'Project name generates the same hashtag']))
 		{
 			$this->connectWithPhabricatorProject();
-		} else $this->redirectBackWithError('Could not create a Phabricator project for this sprint.');
+		} else
+		{
+			$this->redirectBackWithError('Could not create a Phabricator project for this sprint.');
+		}
 	}
 
 	private function connectWithPhabricatorProject()
@@ -129,7 +144,10 @@ class SprintStoreActionHandler {
 
 	private function save($successMsg, $errorMsg)
 	{
-		if ($this->previousActionFailed()) return;
+		if ($this->previousActionFailed())
+		{
+			return;
+		}
 
 		if ($this->sprint->save())
 		{

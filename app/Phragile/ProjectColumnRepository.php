@@ -28,7 +28,10 @@ class ProjectColumnRepository {
 		$this->initialize();
 		foreach ($this->projectColumns as $phid => $column)
 		{
-			if ($column['name'] === $name) return $phid;
+			if ($column['name'] === $name)
+			{
+				return $phid;
+			}
 		}
 		return null;
 	}

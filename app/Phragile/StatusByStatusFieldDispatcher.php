@@ -21,9 +21,16 @@ class StatusByStatusFieldDispatcher implements StatusDispatcher {
 
 	public function getStatus(array $task)
 	{
-		if ($this->isTaskInReview($task)) return 'patch to review';
-		elseif ($this->isTaskBeingDone($task)) return 'doing';
-		else return $task['fields']['status']['value'];
+		if ($this->isTaskInReview($task))
+		{
+			return 'patch to review';
+		} elseif ($this->isTaskBeingDone($task))
+		{
+			return 'doing';
+		} else
+		{
+			return $task['fields']['status']['value'];
+		}
 	}
 
 	public function isClosed(array $task)

@@ -15,9 +15,13 @@ class MigrateSnapshots extends Command {
 		$snapshotCount = SprintSnapshot::count();
 		$batchSize = intval($this->input->getOption('batchSize'));
 
-		if (!$this->input->getOption('force')) {
-			$confirmation = $this->confirm('Do you really want to migrate ' . $snapshotCount . ' snapshots in batches of ' . $batchSize . '?');
-			if ( !$confirmation) {
+		if (!$this->input->getOption('force'))
+		{
+			$confirmation = $this->confirm(
+				'Do you really want to migrate ' . $snapshotCount . ' snapshots in batches of ' . $batchSize . '?'
+			);
+			if (!$confirmation)
+			{
 				$this->line('Migration aborted.');
 				return;
 			}
@@ -25,7 +29,8 @@ class MigrateSnapshots extends Command {
 
 		$this->line('Migration in progress:');
 		$i = 0;
-		while (count($snapshots = $this->getSnapshotsPart($batchSize, $batchSize * $i)) !== 0) {
+		while (count($snapshots = $this->getSnapshotsPart($batchSize, $batchSize * $i)) !== 0)
+		{
 			foreach ($snapshots as $snapshot)
 			{
 				$snapshotData = json_decode($snapshot->data, true);
@@ -44,7 +49,8 @@ class MigrateSnapshots extends Command {
 
 	private function getMigrationProgress( $batchSize, $iteration, $snapshotCount)
 	{
-		if ($batchSize * $iteration >= $snapshotCount) {
+		if ($batchSize * $iteration >= $snapshotCount)
+		{
 			return 100;
 		}
 		return round($batchSize / $snapshotCount * $iteration, 2) * 100;

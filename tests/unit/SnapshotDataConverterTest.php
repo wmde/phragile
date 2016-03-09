@@ -5,7 +5,7 @@ class SnapshotDataConverterTest extends TestCase {
 	public function testGivenManiphestQueryData_ReturnsManiphestSearchData()
 	{
 		$customField = 'WMDE:storypoints';
-		$this->queryTaskData['0']['auxiliary']["std:maniphest:$customField"] = 'foo';
+		$this->queryTaskData['0']['auxiliary']['std:maniphest:' . $customField] = 'foo';
 		$this->queryTaskData['0']['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')] = '5';
 		$convertedData = (new SnapshotDataConverter($this->queryTaskData))->convert();
 
@@ -17,7 +17,7 @@ class SnapshotDataConverterTest extends TestCase {
 		$this->assertSame($this->searchTaskData[0]['fields']['status']['value'], $convertedData[0]['fields']['status']['value']);
 		$this->assertSame($this->searchTaskData[0]['fields']['priority']['name'], $convertedData[0]['fields']['priority']['name']);
 		$this->assertSame($this->searchTaskData[0]['fields']['points'], $convertedData[0]['fields']['points']);
-		$this->assertSame('foo', $convertedData[0]['fields']["custom.$customField"]);
+		$this->assertSame('foo', $convertedData[0]['fields']['custom.' . $customField]);
 		$this->assertSame($this->queryTaskData['0']['projectPHIDs'], $convertedData[0]['attachments']['projects']['projectPHIDs']);
 	}
 
@@ -38,7 +38,8 @@ class SnapshotDataConverterTest extends TestCase {
 			'priority' => 'High',
 			'priorityColor' => 'red',
 			'title' => '[Phragile] Migration script for old snapshots',
-			'description' => 'Snapshot data needs to be migrated to a new format since we are going to abandon maniphest.query in favor of maniphest.search.',
+			'description' => 'Snapshot data needs to be migrated to a new format since we are going to
+				abandon maniphest.query in favor of maniphest.search.',
 			'projectPHIDs' => [
 				'PHID-PROJ-ptnfbfyq36kkebaxugcz',
 				'PHID-PROJ-tazsyaydzpbd643tderv',

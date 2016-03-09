@@ -7,7 +7,8 @@ class ClosedTimeByStatusFieldDispatcher implements ClosedTimeDispatcher {
 
 	public function isClosingTransaction(array $transaction)
 	{
-		if ($transaction['transactionType'] === 'status') {
+		if ($transaction['transactionType'] === 'status')
+		{
 			return in_array($transaction['oldValue'], self::$STATUS_OPEN) &&
 			       !in_array($transaction['newValue'], self::$STATUS_OPEN);
 		}

@@ -3,21 +3,18 @@
 	- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml
 	- https://github.com/squizlabs/PHP_CodeSniffer/tree/master/CodeSniffer/Standards
 -->
-<ruleset name="MediaWiki">
+<ruleset name="Phragile">
     <rule ref="Generic.Classes" />
     <rule ref="Generic.CodeAnalysis" />
     <rule ref="Generic.ControlStructures" />
-    <rule ref="Generic.ControlStructures.InlineControlStructure.NotAllowed">
-        <severity>0</severity>
-    </rule>
 
     <rule ref="Generic.Files.ByteOrderMark" />
     <rule ref="Generic.Files.EndFileNewline" />
     <rule ref="Generic.Files.LineEndings" />
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="150" />
-            <property name="absoluteLineLimit" value="150" />
+            <property name="lineLimit" value="125" />
+            <property name="absoluteLineLimit" value="125" />
         </properties>
     </rule>
     <rule ref="Generic.Files.OneClassPerFile" />
@@ -64,12 +61,13 @@
     <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
         <severity>0</severity>
     </rule>
-    <!-- Laravel doesn't use namespaces bu default, ignoring for now. -->
+    <!-- Laravel doesn't use namespaces by default, ignoring for now. -->
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
         <severity>0</severity>
     </rule>
 
     <rule ref="PSR2.Classes.PropertyDeclaration" />
+    <rule ref="PSR2.ControlStructures.ControlStructureSpacing" />
     <rule ref="PSR2.ControlStructures.ElseIfDeclaration" />
     <rule ref="PSR2.Namespaces" />
 
@@ -81,12 +79,16 @@
     <rule ref="Squiz.Functions.FunctionDuplicateArgument" />
     <rule ref="Squiz.Functions.GlobalFunction" />
     <rule ref="Squiz.Scope" />
+    <rule ref="Squiz.Strings.DoubleQuoteUsage" />
     <rule ref="Squiz.WhiteSpace.CastSpacing" />
     <rule ref="Squiz.WhiteSpace.LanguageConstructSpacing" />
     <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing" />
 
-    <!-- https://github.com/squizlabs/PHP_CodeSniffer/issues/348 -->
-    <!--<rule ref="Squiz.WhiteSpace.OperatorSpacing" />-->
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true" />
+        </properties>
+    </rule>
 
     <rule ref="Squiz.WhiteSpace.ScopeClosingBrace" />
     <rule ref="Squiz.WhiteSpace.ScopeKeywordSpacing" />
@@ -95,6 +97,8 @@
     <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines">
         <severity>0</severity>
     </rule>
+
+    <rule ref="vendor/pragmarx/laravelcs/Standards/Laravel/Sniffs/ControlStructures" />
 
     <rule ref="Zend.Files.ClosingTag" />
 </ruleset>
