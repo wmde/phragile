@@ -49,7 +49,7 @@ class TaskList {
 
 	/**
 	 * @param int $id
-	 * @return array|null Task data
+	 * @return Task|null Task data
 	 */
 	public function findTaskByID($id)
 	{
