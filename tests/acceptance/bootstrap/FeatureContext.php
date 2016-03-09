@@ -17,6 +17,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	private $params;
 	private $phabricatorProjectID;
 	private $selectedTask;
+	private $numberOfSnapshots;
 	private $numberOfSprints;
 	private $numberOfProjects;
 	private $testSnapshot;
