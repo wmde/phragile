@@ -57,6 +57,10 @@ rewrite rule example
         try_files $uri $uri/ /index.php?$args;
     }
 
+## Upgrading
+
+Please read the [UPGRADE.md](UPGRADE.md) for documentation on how to upgrade from one release to another.
+
 ## Tests
 ### Acceptance tests
 1. Copy `behat_custom.yml.example` to `behat_custom.yml` and edit the file according to the instructions
