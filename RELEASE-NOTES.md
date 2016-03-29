@@ -1,5 +1,10 @@
 # Phragile release notes
 
+## Version 2.0.0 (2016-03-29)
+* Support Phabricator Projects v3
+* Use maniphest.search instead of maniphest.query
+* Provide migration script for snapshot conversion
+
 ## Version 1.1 (2016-02-15)
 
 * Restrict deleting snapshots to admins only
