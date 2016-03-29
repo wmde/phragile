@@ -10,7 +10,7 @@ Sprint overviews for your Phabricator projects!
 ## About
 With Phragile you can log in using your Phabricator account to create sprints for your projects on Phabricator. Phragile will then automatically generate burndown charts, pie charts and a sortable and filterable sprint backlog for you.
 
-Built by [Jakob Warkotsch](https://github.com/jakobw) as a thesis project at [Freie Universität Berlin](http://fu-berlin.de) in cooperation with [Wikimedia Deutschland](http://wikimedia.de).
+Built with ♥ in Berlin by [Wikimedia Deutschland](http://wikimedia.de).
 
 ## Issue Tracker
 If you find a bug or want to propose a new feature please report it on [Phabricator](https://phabricator.wikimedia.org/maniphest/task/create/?projects=phragile).
