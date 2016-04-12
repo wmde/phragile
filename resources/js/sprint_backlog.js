@@ -19,7 +19,12 @@
             var values = item.values();
 
             for (var c in currentFilters) {
-                if (values[c].trim() != currentFilters[c]) {
+                var isPriority = c === 'priority',
+                    priorityValue = $('<div/>').append(values[c]).find('span').text().trim(),
+                    priorityMatches = priorityValue == currentFilters[c],
+                    fieldMatches = values[c].trim() == currentFilters[c];
+
+                if (isPriority && !priorityMatches || !isPriority && !fieldMatches) {
                     return false;
                 }
             }
