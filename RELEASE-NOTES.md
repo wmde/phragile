@@ -1,6 +1,7 @@
 # Phragile release notes
 
 ## Version 2.0.0 (2016-03-29)
+* Phragile requires Phabricator >=2016 Week 8
 * Support Phabricator Projects v3
 * Use maniphest.search instead of maniphest.query
 * Provide migration script for snapshot conversion
