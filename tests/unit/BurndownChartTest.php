@@ -180,25 +180,23 @@ class BurndownChartTest extends TestCase {
 			$this->tasks,
 			[
 				'1' => [[
-					'transactionType' => 'projectcolumn',
-					'oldValue' => [
-						'columnPHIDs' => ['anyNotClosed'],
-						'projectPHID' => $this->testProjectPHID,
-					],
-					'newValue' => [
-						'columnPHIDs' => [$this->closedColumnPHIDs[1]],
-					],
+					'transactionType' => 'core:columns',
+					'oldValue' => null,
+					'newValue' => [[
+						'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
+						'columnPHID' => $this->closedColumnPHIDs[1],
+						'boardPHID' => $this->testProjectPHID,
+					]],
 					'dateCreated' => '1418040000', // Dec 8
 				]],
 				'2' => [[
-					'transactionType' => 'projectcolumn',
-					'oldValue' => [
-						'columnPHIDs' => ['anyNotClosed'],
-						'projectPHID' => $this->testProjectPHID,
-					],
-					'newValue' => [
-						'columnPHIDs' => [$this->closedColumnPHIDs[0]],
-					],
+					'transactionType' => 'core:columns',
+					'oldValue' => null,
+					'newValue' => [[
+						'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
+						'columnPHID' => $this->closedColumnPHIDs[0],
+						'boardPHID' => $this->testProjectPHID,
+					]],
 					'dateCreated' => '1418050000', // Dec 8
 				]]
 			]
@@ -214,39 +212,30 @@ class BurndownChartTest extends TestCase {
 			[
 				'1' => [
 					[
-						'transactionType' => 'projectcolumn',
-						'oldValue' => [
-							'columnPHIDs' => ['anyNotClosed'],
-							'projectPHID' => $this->testProjectPHID,
-						],
-						'newValue' => [
-							'columnPHIDs' => [$this->closedColumnPHIDs[1]],
-							'projectPHID' => $this->testProjectPHID,
-						],
+						'transactionType' => 'core:columns',
+						'newValue' => [[
+							'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
+							'columnPHID' => $this->closedColumnPHIDs[1],
+							'boardPHID' => $this->testProjectPHID,
+						]],
 						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 10:00:00')->format('U'),
 					],
 					[
-						'transactionType' => 'projectcolumn',
-						'oldValue' => [
-							'columnPHIDs' => [$this->closedColumnPHIDs[1]],
-							'projectPHID' => $this->testProjectPHID,
-						],
-						'newValue' => [
-							'columnPHIDs' => ['anyNotClosed'],
-							'projectPHID' => $this->testProjectPHID,
-						],
+						'transactionType' => 'core:columns',
+						'newValue' => [[
+							'fromColumnPHIDs' => [$this->closedColumnPHIDs[1] => $this->closedColumnPHIDs[1]],
+							'columnPHID' => 'anyNotClosed',
+							'boardPHID' => $this->testProjectPHID,
+						]],
 						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 12:00:00')->format('U'),
 					],
 					[
-						'transactionType' => 'projectcolumn',
-						'oldValue' => [
-							'columnPHIDs' => ['anyNotClosed'],
-							'projectPHID' => $this->testProjectPHID,
-						],
-						'newValue' => [
-							'columnPHIDs' => [$this->closedColumnPHIDs[1]],
-							'projectPHID' => $this->testProjectPHID,
-						],
+						'transactionType' => 'core:columns',
+						'newValue' => [[
+							'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
+							'columnPHID' => $this->closedColumnPHIDs[1],
+							'boardPHID' => $this->testProjectPHID,
+						]],
 						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '09.12.2014 10:00:00')->format('U'),
 					],
 				],

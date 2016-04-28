@@ -60,10 +60,10 @@ class ProjectColumnRepository {
 	{
 		return array_reduce($transactions, function($columns, $transaction)
 		{
-			if ($transaction['transactionType'] === 'projectcolumn' && $transaction['oldValue']['projectPHID'] === $this->projectPHID)
+			if ($transaction['transactionType'] === 'core:columns' && $transaction['newValue'][0]['boardPHID'] === $this->projectPHID)
 			{
-				$columns[] = $transaction['newValue']['columnPHIDs'][0];
-				$columns[] = reset($transaction['oldValue']['columnPHIDs']);
+				$columns[] = $transaction['newValue'][0]['columnPHID'];
+				$columns[] = reset($transaction['newValue'][0]['fromColumnPHIDs']);
 			}
 
 			return $columns;

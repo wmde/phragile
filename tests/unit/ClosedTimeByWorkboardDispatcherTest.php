@@ -11,15 +11,12 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done']);
 		$this->assertFalse($dispatcher->isClosingTransaction([
-			'transactionType' => 'projectcolumn',
-			'oldValue' => [
-				'columnPHIDs' => ['PHID-123todo'],
-				'projectPHID' => 'PHID-666',
-			],
-			'newValue' => [
-				'columnPHIDs' => ['PHID-123done'],
-				'projectPHID' => 'PHID-666',
-			],
+			'transactionType' => 'core:columns',
+			'newValue' => [[
+				'fromColumnPHIDs' => ['PHID-123todo' => 'PHID-123todo'],
+				'columnPHID' => 'PHID-123done',
+				'boardPHID' => 'PHID-666',
+			]],
 		]));
 	}
 
@@ -37,15 +34,12 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done']);
 		$this->assertTrue($dispatcher->isClosingTransaction([
-			'transactionType' => 'projectcolumn',
-			'oldValue' => [
-				'columnPHIDs' => ['PHID-123todo'],
-				'projectPHID' => 'PHID-123',
-			],
-			'newValue' => [
-				'columnPHIDs' => ['PHID-123done'],
-				'projectPHID' => 'PHID-123',
-			],
+			'transactionType' => 'core:columns',
+			'newValue' => [[
+				'fromColumnPHIDs' => ['PHID-123todo' => 'PHID-123todo'],
+				'columnPHID' => 'PHID-123done',
+				'boardPHID' => 'PHID-123',
+			]],
 		]));
 	}
 
@@ -53,15 +47,12 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done']);
 		$this->assertFalse($dispatcher->isClosingTransaction([
-			'transactionType' => 'projectcolumn',
-			'oldValue' => [
-				'columnPHIDs' => ['PHID-123todo'],
-				'projectPHID' => 'PHID-123',
-			],
-			'newValue' => [
-				'columnPHIDs' => ['PHID-123doing'],
-				'projectPHID' => 'PHID-123',
-			],
+			'transactionType' => 'core:columns',
+			'newValue' => [[
+				'fromColumnPHIDs' => ['PHID-123todo' => 'PHID-123todo'],
+				'columnPHID' => 'PHID-123doing',
+				'boardPHID' => 'PHID-123',
+			]],
 		]));
 	}
 
@@ -69,15 +60,12 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done']);
 		$this->assertTrue($dispatcher->isClosingTransaction([
-			'transactionType' => 'projectcolumn',
-			'oldValue' => [
-				'columnPHIDs' => [],
-				'projectPHID' => 'PHID-123',
-			],
-			'newValue' => [
-				'columnPHIDs' => ['PHID-123done'],
-				'projectPHID' => 'PHID-123',
-			],
+			'transactionType' => 'core:columns',
+			'newValue' => [[
+				'fromColumnPHIDs' => [],
+				'columnPHID' => 'PHID-123done',
+				'boardPHID' => 'PHID-123',
+			]],
 		]));
 	}
 
@@ -85,15 +73,12 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done']);
 		$this->assertFalse($dispatcher->isClosingTransaction([
-			'transactionType' => 'projectcolumn',
-			'oldValue' => [
-				'columnPHIDs' => [],
-				'projectPHID' => 'PHID-123',
-			],
-			'newValue' => [
-				'columnPHIDs' => ['PHID-123todo'],
-				'projectPHID' => 'PHID-123',
-			],
+			'transactionType' => 'core:columns',
+			'newValue' => [[
+				'fromColumnPHIDs' => [],
+				'columnPHID' => 'PHID-123todo',
+				'boardPHID' => 'PHID-123',
+			]],
 		]));
 	}
 
@@ -101,15 +86,12 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done','PHID-123wontfix']);
 		$this->assertFalse($dispatcher->isClosingTransaction([
-			'transactionType' => 'projectcolumn',
-			'oldValue' => [
-				'columnPHIDs' => ['PHID-123done'],
-				'projectPHID' => 'PHID-123',
-			],
-			'newValue' => [
-				'columnPHIDs' => ['PHID-123wontfix'],
-				'projectPHID' => 'PHID-123',
-			],
+			'transactionType' => 'core:columns',
+			'newValue' => [[
+				'fromColumnPHIDs' => ['PHID-123done' => 'PHID-123done'],
+				'columnPHID' => 'PHID-123wontfix',
+				'boardPHID' => 'PHID-123',
+			]],
 		]));
 	}
 
@@ -117,15 +99,12 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 	{
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done']);
 		$this->assertFalse($dispatcher->isClosingTransaction([
-			'transactionType' => 'projectcolumn',
-			'oldValue' => [
-				'columnPHIDs' => ['PHID-123todo'],
-				'projectPHID' => 'PHID-123',
-			],
-			'newValue' => [
-				'columnPHIDs' => ['PHID-123doing'],
-				'projectPHID' => 'PHID-123',
-			],
+			'transactionType' => 'core:columns',
+			'newValue' => [[
+				'fromColumnPHIDs' => ['PHID-123todo' => 'PHID-123todo'],
+				'columnPHID' => 'PHID-123doing',
+				'boardPHID' => 'PHID-123',
+			]],
 		]));
 	}
 

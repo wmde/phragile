@@ -23,7 +23,7 @@ class TransactionFilter {
 
 	protected function isWorkboardTransaction(array $transaction)
 	{
-		return $transaction['transactionType'] === 'projectcolumn';
+		return $transaction['transactionType'] === 'core:columns';
 	}
 
 	protected function isStatusTransaction(array $transaction)
