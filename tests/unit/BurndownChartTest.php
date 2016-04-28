@@ -181,7 +181,6 @@ class BurndownChartTest extends TestCase {
 			[
 				'1' => [[
 					'transactionType' => 'core:columns',
-					'oldValue' => null,
 					'newValue' => [[
 						'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
 						'columnPHID' => $this->closedColumnPHIDs[1],
@@ -191,7 +190,6 @@ class BurndownChartTest extends TestCase {
 				]],
 				'2' => [[
 					'transactionType' => 'core:columns',
-					'oldValue' => null,
 					'newValue' => [[
 						'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
 						'columnPHID' => $this->closedColumnPHIDs[0],
