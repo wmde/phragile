@@ -34,9 +34,9 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	{
 		return array_reduce($taskTransactions, function($column, $transaction)
 		{
-			return $transaction['transactionType'] === 'projectcolumn'
-				&& $transaction['oldValue']['projectPHID'] === $this->sprint->phid
-				? $transaction['newValue']['columnPHIDs'][0]
+			return $transaction['transactionType'] === 'core:columns'
+				&& $transaction['newValue'][0]['boardPHID'] === $this->sprint->phid
+				? $transaction['newValue'][0]['columnPHID']
 				: $column;
 		});
 	}
