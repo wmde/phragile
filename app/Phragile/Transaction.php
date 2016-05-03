@@ -12,6 +12,7 @@ abstract class Transaction {
 		return $this->timestamp;
 	}
 
+	// TODO: would getSnapshotData be a better name?
 	abstract public function getTransactionData();
 
 }

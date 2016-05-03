@@ -1,5 +1,6 @@
 <?php
 
+use Phragile\TransactionSnapshotDataProcessor;
 use Phragile\Factory\SprintDataFactory;
 
 class SprintSnapshotsController extends Controller {
@@ -58,11 +59,13 @@ class SprintSnapshotsController extends Controller {
 	private function getSprintDataFactory(SprintSnapshot $snapshot)
 	{
 		$sprintData = json_decode($snapshot->getData(), true);
+		$processor = new TransactionSnapshotDataProcessor();
 		return new SprintDataFactory(
 			$snapshot->sprint,
 			$sprintData['tasks'],
-			$sprintData['transactions'],
+			$processor->process($sprintData['transactions']),
 			App::make('phabricator')
 		);
 	}
+
 }

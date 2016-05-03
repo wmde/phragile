@@ -12,7 +12,7 @@ class BurndownChart {
 	/**
 	 * @param \Sprint $sprint
 	 * @param TaskList $tasks
-	 * @param array $transactions - an associative array that maps an array of transactions to task IDs
+	 * @param Transaction[] $transactions - an associative array that maps an array of transactions to task IDs
 	 * @param ClosedTimeDispatcher $closedTimeDispatcher - an associative array that maps an array of transactions to task IDs
 	 */
 	public function __construct(
@@ -57,11 +57,12 @@ class BurndownChart {
 	{
 		return array_reduce(
 			$transactions,
-			function($time, $transaction)
+			function($time, Transaction $transaction)
 			{
 				if ($this->closedTimeDispatcher->isClosingTransaction($transaction))
 				{
-					return $transaction['dateCreated'];
+					//return $transaction['dateCreated'];
+					return $transaction->getTimestamp();
 				} else
 				{
 					return $time;

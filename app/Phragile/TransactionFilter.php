@@ -1,6 +1,7 @@
 <?php
 namespace Phragile;
 
+// TODO: rename to e.g. TransactionDataFilter
 class TransactionFilter {
 	/**
 	 * Filters out irrelevant transactions

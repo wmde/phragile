@@ -1,5 +1,6 @@
 <?php
 
+use Phragile\ColumnChangeTransaction;
 use Phragile\PhabricatorAPI;
 use Phragile\ProjectColumnRepository;
 use Phragile\StatusByWorkboardDispatcher;
@@ -106,8 +107,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	{
 		$sprint = $this->newSprint();
 		$task = ['id' => 'fooTask'];
-		$transaction = $this->getFirstTransaction();
-		$transaction['newValue'][0]['boardPHID'] = 'PHID-SOME-OTHER-PROJ-PHID';
+		$transaction = $this->getTransactionForAnotherProject();
 		$dispatcher = $this->newDispatcher($sprint, ['fooTask' => [$transaction]]);
 		$this->assertEquals('backlog', $dispatcher->getStatus($task));
 		$this->assertFalse($dispatcher->isClosed($task));
@@ -115,41 +115,42 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 
 	private function getFirstTransaction()
 	{
-		return [
-			'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
-			'transactionType' => 'core:columns',
-			'newValue' => [[
-				'fromColumnPHIDs' => [$this->getColumnPhid('to do') => $this->getColumnPhid('to do')],
-				'columnPHID' => $this->getColumnPhid('done'),
-				'boardPHID' => 'PHID-123',
-			]]
-		];
+		return new ColumnChangeTransaction(
+			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'PHID-123',
+			$this->getColumnPhid('to do'),
+			$this->getColumnPhid('done')
+		);
 	}
 
 	private function getSecondTransaction()
 	{
-		return [
-			'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
-			'transactionType' => 'core:columns',
-			'newValue' => [[
-				'fromColumnPHIDs' => [$this->getColumnPhid('done') => $this->getColumnPhid('done')],
-				'columnPHID' => $this->getColumnPhid('to do'),
-				'boardPHID' => 'PHID-123',
-			]]
-		];
+		return new ColumnChangeTransaction(
+			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
+			'PHID-123',
+			$this->getColumnPhid('done'),
+			$this->getColumnPhid('to do')
+		);
 	}
 
 	private function getThirdTransaction()
 	{
-		return [
-			'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
-			'transactionType' => 'core:columns',
-			'newValue' => [[
-				'fromColumnPHIDs' => [$this->getColumnPhid('to do') => $this->getColumnPhid('to do')],
-				'columnPHID' => $this->getColumnPhid('done'),
-				'boardPHID' => 'PHID-123',
-			]]
-		];
+		return new ColumnChangeTransaction(
+			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
+			'PHID-123',
+			$this->getColumnPhid('to do'),
+			$this->getColumnPhid('done')
+		);
+	}
+
+	private function getTransactionForAnotherProject()
+	{
+		return new ColumnChangeTransaction(
+			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'PHID-SOME-OTHER-PROJECT-PHID',
+			$this->getColumnPhid('to do'),
+			$this->getColumnPhid('done')
+		);
 	}
 
 	private function getColumnPhid($name)

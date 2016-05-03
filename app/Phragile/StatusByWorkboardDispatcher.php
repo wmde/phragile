@@ -2,6 +2,7 @@
 namespace Phragile;
 
 class StatusByWorkboardDispatcher implements StatusDispatcher {
+	// TODO: $transactions field not needed?
 	private $transactions = [];
 	private $columns = null;
 	private $sprint = null;
@@ -32,11 +33,11 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 
 	private function findCurrentColumn(array $taskTransactions)
 	{
-		return array_reduce($taskTransactions, function($column, $transaction)
+		return array_reduce($taskTransactions, function($column, Transaction $transaction)
 		{
-			return $transaction['transactionType'] === 'core:columns'
-				&& $transaction['newValue'][0]['boardPHID'] === $this->sprint->phid
-				? $transaction['newValue'][0]['columnPHID']
+			return $transaction instanceof ColumnChangeTransaction
+				&& $transaction->getWorkboardPHID() === $this->sprint->phid
+				? $transaction->getNewColumnPHID()
 				: $column;
 		});
 	}
