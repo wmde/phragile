@@ -17,10 +17,19 @@ class ColumnChangeTransactionTest extends PHPUnit_Framework_TestCase {
 			'01.01.2016',
 			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
 		);
-
 	}
 
-	// TODO: tests for no old column case!
+	public function testConstructorNoOldColumn()
+	{
+		$transaction = new ColumnChangeTransaction('1451638800', 'PHID-PROJ-123', null, 'PHID-PCOL-123');
+		$this->assertEquals('PHID-PROJ-123', $transaction->getWorkboardPHID());
+		$this->assertNull($transaction->getOldColumnPHID());
+		$this->assertEquals('PHID-PCOL-123', $transaction->getNewColumnPHID());
+		$this->assertEquals(
+			'01.01.2016',
+			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
+		);
+	}
 
 	public function testGetTransactionData()
 	{

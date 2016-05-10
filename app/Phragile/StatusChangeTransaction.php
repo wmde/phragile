@@ -10,7 +10,7 @@ class StatusChangeTransaction extends Transaction {
 	private $oldStatus;
 
 	/**
-	 * @var string TODO: or could this be also null?
+	 * @var string
 	 */
 	private $newStatus;
 

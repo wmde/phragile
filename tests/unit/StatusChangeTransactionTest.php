@@ -18,7 +18,16 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
-	// TODO: add tests for case when there is no old status (first status change)
+	public function testOldStatusCanBeNull()
+	{
+		$transaction = new StatusChangeTransaction('1451638800', null, 'open');
+		$this->assertNull($transaction->getOldStatus());
+		$this->assertEquals('open', $transaction->getNewStatus());
+		$this->assertEquals(
+			'01.01.2016',
+			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
+		);
+	}
 
 	public function testGetTransactionData()
 	{
