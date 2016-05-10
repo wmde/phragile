@@ -115,42 +115,42 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 
 	private function getFirstTransaction()
 	{
-		return new ColumnChangeTransaction(
-			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
-			'PHID-123',
-			$this->getColumnPhid('to do'),
-			$this->getColumnPhid('done')
-		);
+		return new ColumnChangeTransaction([
+			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'workboardPHID' => 'PHID-123',
+			'oldColumnPHID' => $this->getColumnPhid('to do'),
+			'newColumnPHID' => $this->getColumnPhid('done'),
+		]);
 	}
 
 	private function getSecondTransaction()
 	{
-		return new ColumnChangeTransaction(
-			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
-			'PHID-123',
-			$this->getColumnPhid('done'),
-			$this->getColumnPhid('to do')
-		);
+		return new ColumnChangeTransaction([
+			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
+			'workboardPHID' => 'PHID-123',
+			'oldColumnPHID' => $this->getColumnPhid('done'),
+			'newColumnPHID' => $this->getColumnPhid('to do'),
+		]);
 	}
 
 	private function getThirdTransaction()
 	{
-		return new ColumnChangeTransaction(
-			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
-			'PHID-123',
-			$this->getColumnPhid('to do'),
-			$this->getColumnPhid('done')
-		);
+		return new ColumnChangeTransaction([
+			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
+			'workboardPHID' => 'PHID-123',
+			'oldColumnPHID' => $this->getColumnPhid('to do'),
+			'newColumnPHID' => $this->getColumnPhid('done'),
+		]);
 	}
 
 	private function getTransactionForAnotherProject()
 	{
-		return new ColumnChangeTransaction(
-			DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
-			'PHID-SOME-OTHER-PROJECT-PHID',
-			$this->getColumnPhid('to do'),
-			$this->getColumnPhid('done')
-		);
+		return new ColumnChangeTransaction([
+			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'workboardPHID' => 'PHID-SOME-OTHER-PROJECT-PHID',
+			'oldColumnPHID' => $this->getColumnPhid('to do'),
+			'newColumnPHID' => $this->getColumnPhid('done'),
+		]);
 	}
 
 	private function getColumnPhid($name)

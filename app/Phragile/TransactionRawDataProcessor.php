@@ -21,19 +21,19 @@ class TransactionRawDataProcessor {
 		{
 			if ($this->isColumnChangeTransaction($singleTransactionData))
 			{
-				$transactions[] = new ColumnChangeTransaction(
-					$this->getTransactionTimestamp($singleTransactionData),
-					$this->getWorkboardPHID($singleTransactionData),
-					$this->getOldColumnPHID($singleTransactionData),
-					$this->getNewColumnPHID($singleTransactionData)
-				);
+				$transactions[] = new ColumnChangeTransaction([
+					'timestamp' => $this->getTransactionTimestamp($singleTransactionData),
+					'workboardPHID' => $this->getWorkboardPHID($singleTransactionData),
+					'oldColumnPHID' => $this->getOldColumnPHID($singleTransactionData),
+					'newColumnPHID' => $this->getNewColumnPHID($singleTransactionData),
+				]);
 			} elseif ($this->isStatusChangeTransaction($singleTransactionData))
 			{
-				$transactions[] = new StatusChangeTransaction(
-					$this->getTransactionTimestamp($singleTransactionData),
-					$this->getOldStatus($singleTransactionData),
-					$this->getNewStatus($singleTransactionData)
-				);
+				$transactions[] = new StatusChangeTransaction([
+					'timestamp' => $this->getTransactionTimestamp($singleTransactionData),
+					'oldStatus' => $this->getOldStatus($singleTransactionData),
+					'newStatus' => $this->getNewStatus($singleTransactionData),
+				]);
 			} elseif ($this->isMergedIntoTransaction($singleTransactionData))
 			{
 				$transactions[] = new MergedIntoTransaction(

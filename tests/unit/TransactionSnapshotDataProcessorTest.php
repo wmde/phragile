@@ -41,8 +41,17 @@ class TransactionSnapshotDataProcessorTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals([
 				'fooTask' => [
-					new ColumnChangeTransaction('1451638800', 'PHID-PROJ-123', 'PHID-PCOL-123', 'PHID-PCOL-456'),
-					new StatusChangeTransaction('1451642400', 'open', 'resolved')
+					new ColumnChangeTransaction([
+						'timestamp' => '1451638800',
+						'workboardPHID' => 'PHID-PROJ-123',
+						'oldColumnPHID' => 'PHID-PCOL-123',
+						'newColumnPHID' => 'PHID-PCOL-456',
+					]),
+					new StatusChangeTransaction([
+						'timestamp' => '1451642400',
+						'oldStatus' => 'open',
+						'newStatus' => 'resolved',
+					])
 				],
 				'bazTask' => [
 					new MergedIntoTransaction('1451646000')

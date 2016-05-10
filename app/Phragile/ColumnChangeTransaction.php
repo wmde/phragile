@@ -19,19 +19,27 @@ class ColumnChangeTransaction extends Transaction {
 	 */
 	private $newColumnPHID;
 
-	// TODO: use array of values instead of n positional params?
 	/**
-	 * @param string $timestamp
-	 * @param string $workboardPHID
-	 * @param string|false $oldColumnPHID
-	 * @param string $newColumnPHID
+	 * @param array $attributes associative array with keys:
+	 *        - 'timestamp' string
+	 *        - 'workboardPHID' string
+	 *        - 'oldColumnPHID' string|false false means no old column (initial setting of the column)
+	 *        - 'newColumnPHID' string
 	 */
-	public function __construct($timestamp, $workboardPHID, $oldColumnPHID, $newColumnPHID)
+	public function __construct(array $attributes)
 	{
-		$this->timestamp = $timestamp;
-		$this->workboardPHID = $workboardPHID;
-		$this->oldColumnPHID = $oldColumnPHID;
-		$this->newColumnPHID = $newColumnPHID;
+		$fields = ['timestamp', 'workboardPHID', 'oldColumnPHID', 'newColumnPHID'];
+		foreach ($fields as $field)
+		{
+			if (!array_key_exists($field, $attributes))
+			{
+				throw new \InvalidArgumentException('The ' . $field . ' field is missing.');
+			}
+		}
+		$this->timestamp = $attributes['timestamp'];
+		$this->workboardPHID = $attributes['workboardPHID'];
+		$this->oldColumnPHID = $attributes['oldColumnPHID'];
+		$this->newColumnPHID = $attributes['newColumnPHID'];
 	}
 
 	public function getWorkboardPHID()

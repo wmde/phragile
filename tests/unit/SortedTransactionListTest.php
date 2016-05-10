@@ -12,24 +12,24 @@ class SortedTransactionListTest extends PHPUnit_Framework_TestCase {
 	{
 		$transactions = [
 			'fooTask' => [
-				new ColumnChangeTransaction(
-					DateTime::createFromFormat('d.m.Y', '02.01.2016')->format('U'),
-					'PHID-PROJ-AWESOME',
-					'PHID-doing',
-					'PHID-done'
-				),
-				new ColumnChangeTransaction(
-					DateTime::createFromFormat('d.m.Y', '01.01.2016')->format('U'),
-					'PHID-PROJ-AWESOME',
-					'PHID-backlog',
-					'PHID-doing'
-				),
-				new ColumnChangeTransaction(
-					DateTime::createFromFormat('d.m.Y', '03.01.2016')->format('U'),
-					'PHID-PROJ-AWESOME',
-					'PHID-doing',
-					'PHID-done'
-				),
+				new ColumnChangeTransaction([
+					'timestamp' => DateTime::createFromFormat('d.m.Y', '02.01.2016')->format('U'),
+					'workboardPHID' => 'PHID-PROJ-AWESOME',
+					'oldColumnPHID' => 'PHID-doing',
+					'newColumnPHID' => 'PHID-done',
+				]),
+				new ColumnChangeTransaction([
+					'timestamp' => DateTime::createFromFormat('d.m.Y', '01.01.2016')->format('U'),
+					'workboardPHID' => 'PHID-PROJ-AWESOME',
+					'oldColumnPHID' => 'PHID-backlog',
+					'newColumnPHID' => 'PHID-doing',
+				]),
+				new ColumnChangeTransaction([
+					'timestamp' => DateTime::createFromFormat('d.m.Y', '03.01.2016')->format('U'),
+					'workboardPHID' => 'PHID-PROJ-AWESOME',
+					'oldColumnPHID' => 'PHID-doing',
+					'newColumnPHID' => 'PHID-done',
+				]),
 			]
 		];
 		$sortedTransactions = (new SortedTransactionList($transactions))->getTransactions();

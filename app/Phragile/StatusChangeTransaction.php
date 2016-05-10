@@ -14,13 +14,25 @@ class StatusChangeTransaction extends Transaction {
 	 */
 	private $newStatus;
 
-	// TODO: consider switching to array of values instead of 2 (or more) params
-	// $trans = new StatusChangeTransaction(null, 'doing') is not really nice
-	public function __construct($timestamp, $oldStatus, $newStatus)
+	/**
+	 * @param array $attributes associative array with keys:
+	 *        - 'timestamp' string
+	 *        - 'oldStatus' string|null null means no old status (initial setting of the status)
+	 *        - 'newStatus' string
+	 */
+	public function __construct(array $attributes)
 	{
-		$this->timestamp = $timestamp;
-		$this->oldStatus = $oldStatus;
-		$this->newStatus = $newStatus;
+		$fields = ['timestamp', 'oldStatus', 'newStatus'];
+		foreach ($fields as $field)
+		{
+			if (!array_key_exists($field, $attributes))
+			{
+				throw new \InvalidArgumentException('The ' . $field . ' field is missing.');
+			}
+		}
+		$this->timestamp = $attributes['timestamp'];
+		$this->oldStatus = $attributes['oldStatus'];
+		$this->newStatus = $attributes['newStatus'];
 	}
 
 	public function getOldStatus()

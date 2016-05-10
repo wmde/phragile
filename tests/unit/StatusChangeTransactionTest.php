@@ -9,7 +9,11 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 {
 	public function testConstructorsSetsFields()
 	{
-		$transaction = new StatusChangeTransaction('1451638800', 'open', 'resolved');
+		$transaction = new StatusChangeTransaction([
+			'timestamp' => '1451638800',
+			'oldStatus' => 'open',
+			'newStatus' => 'resolved',
+		]);
 		$this->assertEquals('open', $transaction->getOldStatus());
 		$this->assertEquals('resolved', $transaction->getNewStatus());
 		$this->assertEquals(
@@ -20,7 +24,11 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 
 	public function testOldStatusCanBeNull()
 	{
-		$transaction = new StatusChangeTransaction('1451638800', null, 'open');
+		$transaction = new StatusChangeTransaction([
+			'timestamp' => '1451638800',
+			'oldStatus' => null,
+			'newStatus' => 'open',
+		]);
 		$this->assertNull($transaction->getOldStatus());
 		$this->assertEquals('open', $transaction->getNewStatus());
 		$this->assertEquals(
@@ -29,9 +37,42 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 		);
 	}
 
+	public function incompleteAttributes()
+	{
+		$completeAttributes = [
+			'timestamp' => '1451638800',
+			'oldStatus' => 'open',
+			'newStatus' => 'resolved',
+		];
+		$attributeCombinations = [];
+
+		foreach (array_keys($completeAttributes) as $key)
+		{
+			$combination = $completeAttributes;
+			unset($combination[$key]);
+			$attributeCombinations[] = [$key, $combination];
+		}
+
+		return $attributeCombinations;
+	}
+
+	/**
+	 * @dataProvider incompleteAttributes
+	 */
+	public function testThrowsExceptionWithMissingAttributes($missingField, $incompleteAttributes)
+	{
+		$expectedExceptionMessage = 'The ' . $missingField  . ' field is missing';
+		$this->setExpectedException(InvalidArgumentException::class, $expectedExceptionMessage);
+		new StatusChangeTransaction($incompleteAttributes);
+	}
+
 	public function testGetTransactionData()
 	{
-		$transaction = new StatusChangeTransaction('1451638800', 'open', 'resolved');
+		$transaction = new StatusChangeTransaction([
+			'timestamp' => '1451638800',
+			'oldStatus' => 'open',
+			'newStatus' => 'resolved',
+		]);
 		$this->assertEquals(
 			[
 				'type' => 'statusChange',

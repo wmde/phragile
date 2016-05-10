@@ -26,19 +26,19 @@ class TransactionSnapshotDataProcessor {
 		}
 		if ($snapshotTransaction['type'] === 'columnChange')
 		{
-			return new ColumnChangeTransaction(
-				$snapshotTransaction['timestamp'],
-				$snapshotTransaction['workboardPHID'],
-				$snapshotTransaction['oldColumnPHID'],
-				$snapshotTransaction['newColumnPHID']
-			);
+			return new ColumnChangeTransaction([
+				'timestamp' => $snapshotTransaction['timestamp'],
+				'workboardPHID' => $snapshotTransaction['workboardPHID'],
+				'oldColumnPHID' => $snapshotTransaction['oldColumnPHID'],
+				'newColumnPHID' => $snapshotTransaction['newColumnPHID'],
+			]);
 		} elseif ($snapshotTransaction['type'] === 'statusChange')
 		{
-			return new StatusChangeTransaction(
-				$snapshotTransaction['timestamp'],
-				$snapshotTransaction['oldStatus'],
-				$snapshotTransaction['newStatus']
-			);
+			return new StatusChangeTransaction([
+				'timestamp' => $snapshotTransaction['timestamp'],
+				'oldStatus' => $snapshotTransaction['oldStatus'],
+				'newStatus' => $snapshotTransaction['newStatus']
+			]);
 		} elseif ($snapshotTransaction['type'] === 'mergedInto')
 		{
 			return new MergedIntoTransaction($snapshotTransaction['timestamp']);
