@@ -9,7 +9,8 @@ use Phragile\ClosedTimeDispatcher;
 use Phragile\ColumnChangeTransaction;
 use Phragile\MergeAndCloseTransaction;
 use Phragile\StatusChangeTransaction;
-use Phragile\Task;
+use Phragile\Domain\Task as DomainTask;
+use Phragile\Presentation\Task;
 
 class BurndownChartTest extends TestCase {
 
@@ -50,33 +51,38 @@ class BurndownChartTest extends TestCase {
 
 	private $testProjectPHID = 'PHID-123';
 
-	private $tasks = [
-		'1' => [
-			'id' => 1,
-			'closed' => true,
-			'points' => 8
-		],
-		'2' => [
-			'id' => 2,
-			'closed' => true,
-			'points' => 2
-		]
-	];
-
-	/**
-	 * @before
-	 */
-	public function initDummyTasks()
+	private function getTasks()
 	{
-		$this->tasks = array_map(function($taskData)
-		{
-			return new Task(array_merge($taskData, [
-				'title' => 'A Task',
-				'priority' => 'Normal',
-				'status' => 'Open',
-				'assigneePHID' => null,
-			]));
-		}, $this->tasks);
+		return [
+			'1' => new Task(
+				new DomainTask([
+					'id' => '1',
+					'title' => 'A Task',
+					'status' => 'open',
+					'priority' => 'Normal',
+					'points' => 8,
+					'assigneePHID' => null,
+					'projectPHIDs' => [],
+				]),
+				'Done',
+				Task::CLOSED_TASK,
+				8
+			),
+			'2' => new Task(
+				new DomainTask([
+					'id' => '2',
+					'title' => 'Another Task',
+					'status' => 'open',
+					'priority' => 'Normal',
+					'points' => 2,
+					'assigneePHID' => null,
+					'projectPHIDs' => [],
+				]),
+				'Done',
+				Task::CLOSED_TASK,
+				2
+			),
+		];
 	}
 
 	private $closedColumnPHIDs = ['123abc', 'abc123'];
@@ -84,7 +90,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayAddsStoryPoints()
 	{
 		$burndown = $this->mockWithTransactions(
-			$this->tasks,
+			$this->getTasks(),
 			[
 				'1' => [
 					new StatusChangeTransaction([
@@ -109,7 +115,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayDetectsBefore()
 	{
 		$burndown = $this->mockWithTransactions(
-			$this->tasks,
+			$this->getTasks(),
 			['1' => [new StatusChangeTransaction([
 				'timestamp' => '1415664000', // Nov 11
 				'oldStatus' => 'open',
@@ -123,7 +129,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayIgnoresClosedToClosedTransaction()
 	{
 		$burndown = $this->mockWithTransactions(
-			['1' => $this->tasks['1']],
+			['1' => $this->getTasks()['1']],
 			[
 				'1' => [
 					new StatusChangeTransaction([
@@ -148,7 +154,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayOverridesTimeWhenClosedReopenedAndClosedAgain()
 	{
 		$burndown = $this->mockWithTransactions(
-			['1' => $this->tasks['1']],
+			['1' => $this->getTasks()['1']],
 			[
 				'1' => [
 					new StatusChangeTransaction([
@@ -178,7 +184,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayIgnoresStatusChangeInWorkboardMode()
 	{
 		$burndown = $this->mockWithTransactionsInWorkboardMode(
-			$this->tasks,
+			$this->getTasks(),
 			[
 				'1' => [new ColumnChangeTransaction([
 					'timestamp' => '1418040000', // Dec 8
@@ -201,7 +207,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayConsidersMostRecentColumnChangeInWorkboardMode()
 	{
 		$burndown = $this->mockWithTransactionsInWorkboardMode(
-			$this->tasks,
+			$this->getTasks(),
 			[
 				'1' => [
 					new ColumnChangeTransaction([
@@ -233,7 +239,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayAddsStoryPointsInWorkboardMode()
 	{
 		$burndown = $this->mockWithTransactionsInWorkboardMode(
-			$this->tasks,
+			$this->getTasks(),
 			[
 				'1' => [new StatusChangeTransaction([
 					'timestamp' => '1418040000', // Dec 8
@@ -254,15 +260,20 @@ class BurndownChartTest extends TestCase {
 	public function testOpenTaskTransactionsAreIgnored()
 	{
 		$burndown = $this->mockWithTransactions(
-			['500' => new Task([
-				'title' => 'A Task',
-				'priority' => 'Normal',
-				'id' => 500,
-				'status' => 'Open',
-				'closed' => false,
-				'assigneePHID' => null,
-				'points' => 5,
-			])],
+			['500' => new Task(
+				new DomainTask([
+					'title' => 'A Task',
+					'priority' => 'Normal',
+					'id' => 500,
+					'status' => 'Open',
+					'assigneePHID' => null,
+					'projectPHIDs' => [],
+					'points' => 5,
+				]),
+				'Doing',
+				Task::OPEN_TASK,
+				5
+			)],
 			['500' => [new StatusChangeTransaction([
 				'timestamp' => '1415664000', // Nov 11
 				'oldStatus' => 'open',
@@ -276,7 +287,7 @@ class BurndownChartTest extends TestCase {
 	public function testClosedPerDayDetectsMergedTasks()
 	{
 		$burndown = $this->mockWithTransactions(
-			$this->tasks,
+			$this->getTasks(),
 			[
 				'1' => [new MergeAndCloseTransaction(
 					'1418040000' // Dec 8

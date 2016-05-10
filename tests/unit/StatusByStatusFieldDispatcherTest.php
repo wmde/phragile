@@ -3,52 +3,45 @@
 namespace Phragile\Tests;
 
 use Phragile\StatusByStatusFieldDispatcher;
+use Phragile\Domain\Task;
 
 class StatusByStatusFieldDispatcherTest extends TestCase {
+
+	private function newTask(array $attributes)
+	{
+		$defaults = [
+			'id' => 101,
+			'title' => 'A Test Task',
+			'priority' => 'Normal',
+			'status' => 'open',
+			'points' => 1,
+			'projectPHIDs' => [],
+			'assigneePHID' => null,
+		];
+		return new Task(array_merge($defaults, $attributes));
+	}
+
 	public function taskWithCorrectStatusProvider()
 	{
 		return [
 			[
-				[
-					'fields' => [
-						'status' => ['value' => 'open'],
-						'ownerPHID' => null,
-					],
-					'attachments' => ['projects' => ['projectPHIDs' => []]]
-				],
+				$this->newTask(['status' => 'open', 'projectPHIDs' => [],'assigneePHID' => null]),
 				'open',
 				false
 			],
 			[
-				[
-					'fields' => [
-						'status' => ['value' => 'resolved'],
-						'ownerPHID' => null,
-					],
-					'attachments' => ['projects' => ['projectPHIDs' => []]]
-				],
+
+				$this->newTask(['status' => 'resolved', 'projectPHIDs' => [],'assigneePHID' => null]),
 				'resolved',
 				true
 			],
 			[
-				[
-					'fields' => [
-						'status' => ['value' => 'resolved'],
-						'ownerPHID' => null,
-					],
-					'attachments' => ['projects' => ['projectPHIDs' => [$this->reviewTagPHID]]]
-				],
+				$this->newTask(['status' => 'resolved', 'projectPHIDs' => [$this->reviewTagPHID],'assigneePHID' => null]),
 				'resolved',
 				true
 			],
 			[
-				[
-					'fields' => [
-						'status' => ['value' => 'open'],
-						'ownerPHID' => null,
-					],
-					'attachments' => ['projects' => ['projectPHIDs' => [$this->reviewTagPHID]]]
-				],
+				$this->newTask(['status' => 'open', 'projectPHIDs' => [$this->reviewTagPHID],'assigneePHID' => null]),
 				'patch to review',
 				false
 			],

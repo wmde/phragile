@@ -2,6 +2,8 @@
 
 namespace Phragile;
 
+use Phragile\Presentation\Task;
+
 class TaskList {
 	private $tasks = null;
 

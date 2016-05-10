@@ -1,8 +1,10 @@
 <?php
 use Phragile\Factory\StatusDispatcherFactory;
 use Phragile\ProjectColumnRepository;
+use Phragile\Domain\Task;
 use Phragile\TaskDataFetcher;
-use Phragile\TaskDataProcessor;
+use Phragile\TaskRawDataProcessor;
+use Phragile\TaskPresenter;
 use Phragile\TaskList;
 use Phragile\Transaction;
 use Phragile\TransactionRawDataProcessor;
@@ -112,17 +114,19 @@ class Sprint extends Eloquent {
 		$phabricator = App::make('phabricator');
 		$rawTaskData = $this->fetchTasks($phabricator);
 		$rawTransactionData = $this->fetchTransactionData($phabricator, $rawTaskData);
+		$taskDataProcessor = new TaskRawDataProcessor();
 		$transactionDataProcessor = new TransactionRawDataProcessor();
+		$tasks = $taskDataProcessor->process($rawTaskData);
 		$transactions = $transactionDataProcessor->process($rawTransactionData);
 		$columns = new ProjectColumnRepository($this->phid, $transactions, $phabricator);
-		$tasks = (new TaskDataProcessor(
+		$presentationTask = (new TaskPresenter(
 			(new StatusDispatcherFactory($this, $columns, $transactions))->getStatusDispatcher(),
 			['ignore_estimates' => $this->ignore_estimates, 'ignored_columns' => $this->project->getIgnoredColumns()]
-		))->process($rawTaskData);
-		$sumOfTasks = (new TaskList($tasks))->getTasksPerStatus();
+		))->render($tasks);
+		$sumOfTasks = (new TaskList($presentationTask))->getTasksPerStatus();
 
 		$data = [
-			'tasks' => $rawTaskData, // TODO: why not be bold and also store only converted task data here?
+			'tasks' => $this->getSnapshotTaskData($tasks),
 			'transactions' => $this->getSnapshotTransactionData($transactions)
 		];
 
@@ -149,6 +153,16 @@ class Sprint extends Eloquent {
 			new TransactionFilter(),
 			$phabricator
 		))->load($taskIDs);
+	}
+
+	private function getSnapshotTaskData(array $tasks)
+	{
+		return array_map(
+			function(Task $task) {
+				return $task->getData();
+			},
+			$tasks
+		);
 	}
 
 	private function getSnapshotTransactionData(array $transactions)

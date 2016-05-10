@@ -1,6 +1,8 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\Task;
+
 class StatusByStatusFieldDispatcher implements StatusDispatcher {
 	private $reviewTagPHID = null;
 
@@ -9,17 +11,17 @@ class StatusByStatusFieldDispatcher implements StatusDispatcher {
 		$this->reviewTagPHID = $reviewTagPHID;
 	}
 
-	private function isTaskInReview(array $task)
+	private function isTaskInReview(Task $task)
 	{
-		return !$this->isClosed($task) && in_array($this->reviewTagPHID, $task['attachments']['projects']['projectPHIDs']);
+		return !$this->isClosed($task) && in_array($this->reviewTagPHID, $task->getProjectPHIDs());
 	}
 
-	private function isTaskBeingDone(array $task)
+	private function isTaskBeingDone(Task $task)
 	{
-		return !$this->isClosed($task) && !is_null($task['fields']['ownerPHID']);
+		return !$this->isClosed($task) && !is_null($task->getAssigneePHID());
 	}
 
-	public function getStatus(array $task)
+	public function getStatus(Task $task)
 	{
 		if ($this->isTaskInReview($task))
 		{
@@ -29,12 +31,12 @@ class StatusByStatusFieldDispatcher implements StatusDispatcher {
 			return 'doing';
 		} else
 		{
-			return $task['fields']['status']['value'];
+			return $task->getStatus();
 		}
 	}
 
-	public function isClosed(array $task)
+	public function isClosed(Task $task)
 	{
-		return in_array($task['fields']['status']['value'], ['resolved', 'declined', 'invalid']);
+		return in_array($task->getStatus(), ['resolved', 'declined', 'invalid']);
 	}
 }
