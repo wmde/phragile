@@ -25,7 +25,7 @@ class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
 		$dispatcher = new ClosedTimeByWorkboardDispatcher('PHID-123', ['PHID-123done']);
 		$this->assertFalse($dispatcher->isClosingTransaction(new StatusChangeTransaction(
 			'1451638800',
-			'', // TODO: shouldn't this be null?
+			null,
 			'open'
 		)));
 	}

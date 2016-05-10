@@ -19,7 +19,7 @@ class ProjectColumnRepositoryTest extends PHPUnit_Framework_TestCase {
 	{
 		$transactions =	[
 			'task1' => [
-				new \Phragile\ColumnChangeTransaction(
+				new ColumnChangeTransaction(
 					DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
 					'PHID-PROJ-FOO',
 					'PHID-123abc',

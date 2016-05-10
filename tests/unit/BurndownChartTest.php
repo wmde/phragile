@@ -184,7 +184,7 @@ class BurndownChartTest extends TestCase {
 					'anyNotClosed',
 					$this->closedColumnPHIDs[1]
 				)],
-				'2' => [new \Phragile\ColumnChangeTransaction(
+				'2' => [new ColumnChangeTransaction(
 					'1418050000', // Dec 8
 					$this->testProjectPHID,
 					'anyNotClosed',
