@@ -33,17 +33,20 @@ class SortedTransactionListTest extends PHPUnit_Framework_TestCase {
 			]
 		];
 		$sortedTransactions = (new SortedTransactionList($transactions))->getTransactions();
+		$this->assertArrayHasKey('fooTask', $sortedTransactions);
+		/** @var ColumnChangeTransaction[] $fooTaskTransactions */
+		$fooTaskTransactions = $sortedTransactions['fooTask'];
 		$this->assertEquals(
 			'01.01.2016',
-			DateTime::createFromFormat('U', $sortedTransactions['fooTask'][0]->getTimestamp())->format('d.m.Y')
+			DateTime::createFromFormat('U', $fooTaskTransactions[0]->getTimestamp())->format('d.m.Y')
 		);
 		$this->assertEquals(
 			'02.01.2016',
-			DateTime::createFromFormat('U', $sortedTransactions['fooTask'][1]->getTimestamp())->format('d.m.Y')
+			DateTime::createFromFormat('U', $fooTaskTransactions[1]->getTimestamp())->format('d.m.Y')
 		);
 		$this->assertEquals(
 			'03.01.2016',
-			DateTime::createFromFormat('U', $sortedTransactions['fooTask'][2]->getTimestamp())->format('d.m.Y')
+			DateTime::createFromFormat('U', $fooTaskTransactions[2]->getTimestamp())->format('d.m.Y')
 		);
 	}
 
