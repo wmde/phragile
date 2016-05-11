@@ -8,8 +8,8 @@ class SnapshotTaskDataConverterTest extends TestCase {
 	public function testGivenManiphestQueryData_ReturnsManiphestSearchData()
 	{
 		$customField = 'WMDE:storypoints';
-		$this->queryTaskData['0']['auxiliary']['std:maniphest:' . $customField] = 'foo';
-		$this->queryTaskData['0']['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')] = '5';
+		$this->queryTaskData['PHID-TASK-4kvxc4re6xrshgxtfajl']['auxiliary']['std:maniphest:' . $customField] = 'foo';
+		$this->queryTaskData['PHID-TASK-4kvxc4re6xrshgxtfajl']['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')] = '5';
 		$convertedData = (new SnapshotTaskDataConverter)->convert($this->queryTaskData);
 
 		$this->assertSame($this->searchTaskData[0]['id'], $convertedData[0]['id']);
@@ -21,11 +21,14 @@ class SnapshotTaskDataConverterTest extends TestCase {
 		$this->assertSame($this->searchTaskData[0]['fields']['priority']['name'], $convertedData[0]['fields']['priority']['name']);
 		$this->assertSame($this->searchTaskData[0]['fields']['points'], $convertedData[0]['fields']['points']);
 		$this->assertSame('foo', $convertedData[0]['fields']['custom.' . $customField]);
-		$this->assertSame($this->queryTaskData['0']['projectPHIDs'], $convertedData[0]['attachments']['projects']['projectPHIDs']);
+		$this->assertSame(
+			$this->queryTaskData['PHID-TASK-4kvxc4re6xrshgxtfajl']['projectPHIDs'],
+			$convertedData[0]['attachments']['projects']['projectPHIDs']
+		);
 	}
 
 	private $queryTaskData = [
-		'0' => [
+		'PHID-TASK-4kvxc4re6xrshgxtfajl' => [
 			'id' => '127180',
 			'phid' => 'PHID-TASK-4kvxc4re6xrshgxtfajl',
 			'authorPHID' => 'PHID-USER-t4sxxglz6yyrgxeib43i',
