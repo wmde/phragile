@@ -158,7 +158,7 @@ class Sprint extends Eloquent {
 		{
 			$snapshotData[$taskID] = array_map(function(Transaction $transaction)
 			{
-				return $transaction->getTransactionData();
+				return $transaction->getData();
 			}, $taskTransactions);
 		}
 		return $snapshotData;

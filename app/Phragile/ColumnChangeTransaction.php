@@ -59,7 +59,7 @@ class ColumnChangeTransaction extends Transaction {
 		return $this->newColumnPHID;
 	}
 
-	public function getTransactionData()
+	public function getData()
 	{
 		return [
 			'type' => self::TYPE,

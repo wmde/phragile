@@ -80,7 +80,7 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 				'oldStatus' => 'open',
 				'newStatus' => 'resolved',
 			],
-			$transaction->getTransactionData()
+			$transaction->getData()
 		);
 	}
 

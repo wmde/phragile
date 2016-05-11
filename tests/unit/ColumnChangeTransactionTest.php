@@ -87,7 +87,7 @@ class ColumnChangeTransactionTest extends PHPUnit_Framework_TestCase {
 				'oldColumnPHID' => 'PHID-PCOL-123',
 				'newColumnPHID' => 'PHID-PCOL-456',
 			],
-			$transaction->getTransactionData()
+			$transaction->getData()
 		);
 	}
 

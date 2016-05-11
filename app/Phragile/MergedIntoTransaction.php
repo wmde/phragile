@@ -11,7 +11,7 @@ class MergedIntoTransaction extends Transaction {
 		$this->timestamp = $timestamp;
 	}
 
-	public function getTransactionData()
+	public function getData()
 	{
 		return [
 			'type' => self::TYPE,

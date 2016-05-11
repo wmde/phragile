@@ -24,7 +24,7 @@ class MergedIntoTransactionTest extends PHPUnit_Framework_TestCase {
 				'type' => 'mergedInto',
 				'timestamp' => '1451638800',
 			],
-			$transaction->getTransactionData()
+			$transaction->getData()
 		);
 	}
 
