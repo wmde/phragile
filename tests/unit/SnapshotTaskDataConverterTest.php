@@ -5,12 +5,18 @@ namespace Phragile\Tests;
 use App\Console\Commands\Lib\SnapshotTaskDataConverter;
 
 class SnapshotTaskDataConverterTest extends TestCase {
+	public function testNeedsConversionRecognizesManiphestQueryData()
+	{
+		$converter = new SnapshotTaskDataConverter();
+		$this->assertTrue($converter->needsConversion($this->queryTaskData));
+	}
+
 	public function testGivenManiphestQueryData_ReturnsManiphestSearchData()
 	{
 		$customField = 'WMDE:storypoints';
 		$this->queryTaskData['PHID-TASK-4kvxc4re6xrshgxtfajl']['auxiliary']['std:maniphest:' . $customField] = 'foo';
 		$this->queryTaskData['PHID-TASK-4kvxc4re6xrshgxtfajl']['auxiliary'][env('MANIPHEST_STORY_POINTS_FIELD')] = '5';
-		$convertedData = (new SnapshotTaskDataConverter)->convert($this->queryTaskData);
+		$convertedData = (new SnapshotTaskDataConverter())->convert($this->queryTaskData);
 
 		$this->assertSame($this->searchTaskData[0]['id'], $convertedData[0]['id']);
 		$this->assertSame($this->searchTaskData[0]['phid'], $convertedData[0]['phid']);

@@ -9,6 +9,17 @@ class SnapshotTaskDataConverter {
 		return array_values(array_map(array($this, 'convertToManiphestSearchResponse'), $taskData));
 	}
 
+	public function needsConversion(array $taskData)
+	{
+		return $this->taskDataIsInManiphestQueryFormat($taskData);
+	}
+
+	private function taskDataIsInManiphestQueryFormat(array $taskData)
+	{
+		// task array in maniphest.query response is PHID-indexed
+		return array_keys($taskData) !== range(0, count($taskData) - 1);
+	}
+
 	private function convertToManiphestSearchResponse(array $task)
 	{
 		$points = isset(

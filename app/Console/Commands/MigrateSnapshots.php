@@ -35,7 +35,7 @@ class MigrateSnapshots extends Command {
 			foreach ($snapshots as $snapshot)
 			{
 				$snapshotData = json_decode($snapshot->data, true);
-				if ($snapshotData['tasks'] && $this->isManiphestQueryFormat($snapshotData['tasks']))
+				if ($snapshotData['tasks'] && $taskConverter->needsConversion($snapshotData['tasks']))
 				{
 					$snapshotData['tasks'] = $taskConverter->convert($snapshotData['tasks']);
 					$snapshot->data = json_encode($snapshotData);
@@ -60,11 +60,6 @@ class MigrateSnapshots extends Command {
 	private function getSnapshotsPart($limit, $offset)
 	{
 		return SprintSnapshot::take($limit)->skip($offset)->get();
-	}
-
-	private function isManiphestQueryFormat(array $taskData)
-	{
-		return array_keys($taskData) !== range(0, count($taskData) - 1);
 	}
 
 	/**
