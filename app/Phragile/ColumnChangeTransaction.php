@@ -4,6 +4,8 @@ namespace Phragile;
 
 class ColumnChangeTransaction extends Transaction {
 
+	const TYPE = 'columnChange';
+
 	/**
 	 * @var string
 	 */
@@ -60,8 +62,7 @@ class ColumnChangeTransaction extends Transaction {
 	public function getTransactionData()
 	{
 		return [
-			'type' => 'columnChange', // TODO: this string should be moved to some constant,
-			//                        //so it there is no need to type it in in other places. But constant of what? Transaction::sth?
+			'type' => self::TYPE,
 			'timestamp' => $this->timestamp,
 			'workboardPHID' => $this->workboardPHID,
 			'oldColumnPHID' => $this->oldColumnPHID,

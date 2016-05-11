@@ -24,7 +24,7 @@ class TransactionSnapshotDataProcessor {
 		{
 			return false;
 		}
-		if ($snapshotTransaction['type'] === 'columnChange')
+		if ($snapshotTransaction['type'] === ColumnChangeTransaction::TYPE)
 		{
 			return new ColumnChangeTransaction([
 				'timestamp' => $snapshotTransaction['timestamp'],
@@ -32,14 +32,14 @@ class TransactionSnapshotDataProcessor {
 				'oldColumnPHID' => $snapshotTransaction['oldColumnPHID'],
 				'newColumnPHID' => $snapshotTransaction['newColumnPHID'],
 			]);
-		} elseif ($snapshotTransaction['type'] === 'statusChange')
+		} elseif ($snapshotTransaction['type'] === StatusChangeTransaction::TYPE)
 		{
 			return new StatusChangeTransaction([
 				'timestamp' => $snapshotTransaction['timestamp'],
 				'oldStatus' => $snapshotTransaction['oldStatus'],
 				'newStatus' => $snapshotTransaction['newStatus']
 			]);
-		} elseif ($snapshotTransaction['type'] === 'mergedInto')
+		} elseif ($snapshotTransaction['type'] === MergedIntoTransaction::TYPE)
 		{
 			return new MergedIntoTransaction($snapshotTransaction['timestamp']);
 		}

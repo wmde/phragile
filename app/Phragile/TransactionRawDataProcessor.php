@@ -4,6 +4,10 @@ namespace Phragile;
 
 class TransactionRawDataProcessor {
 
+	const COLUMN_CHANGE_TRANSACTION = 'core:columns';
+	const STATUS_CHANGE_TRANSACTION = 'status';
+	const MERGED_INTO_TRANSACTION = 'mergedinto';
+
 	public function process(array $rawData)
 	{
 		$transactions = [];
@@ -47,19 +51,19 @@ class TransactionRawDataProcessor {
 	private function isColumnChangeTransaction(array $rawData)
 	{
 		return array_key_exists('transactionType', $rawData)
-			&& $rawData['transactionType'] === 'core:columns';
+			&& $rawData['transactionType'] === self::COLUMN_CHANGE_TRANSACTION;
 	}
 
 	private function isStatusChangeTransaction(array $rawData)
 	{
 		return array_key_exists('transactionType', $rawData)
-			&& $rawData['transactionType'] === 'status';
+			&& $rawData['transactionType'] === self::STATUS_CHANGE_TRANSACTION;
 	}
 
 	private function isMergedIntoTransaction(array $rawData)
 	{
 		return array_key_exists('transactionType', $rawData)
-		&& $rawData['transactionType'] === 'mergedinto';
+		&& $rawData['transactionType'] === self::MERGED_INTO_TRANSACTION;
 	}
 
 	private function getTransactionTimestamp(array $rawData)

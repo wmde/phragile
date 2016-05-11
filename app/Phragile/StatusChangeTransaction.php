@@ -4,6 +4,8 @@ namespace Phragile;
 
 class StatusChangeTransaction extends Transaction {
 
+	const TYPE = 'statusChange';
+
 	/**
 	 * @var string|null
 	 */
@@ -48,7 +50,7 @@ class StatusChangeTransaction extends Transaction {
 	public function getTransactionData()
 	{
 		return [
-			'type' => 'statusChange', // TODO: same thing as in ColumnChangeTransaction::getTransactionData
+			'type' => self::TYPE,
 			'timestamp' => $this->timestamp,
 			'oldStatus' => $this->oldStatus,
 			'newStatus' => $this->newStatus,

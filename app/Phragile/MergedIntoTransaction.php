@@ -4,6 +4,8 @@ namespace Phragile;
 
 class MergedIntoTransaction extends Transaction {
 
+	const TYPE = 'mergedInto';
+
 	public function __construct($timestamp)
 	{
 		$this->timestamp = $timestamp;
@@ -12,7 +14,7 @@ class MergedIntoTransaction extends Transaction {
 	public function getTransactionData()
 	{
 		return [
-			'type' => 'mergedInto', // TODO: same thing as in ColumnChangeTransaction::getTransactionData
+			'type' => self::TYPE,
 			'timestamp' => $this->timestamp,
 		];
 	}

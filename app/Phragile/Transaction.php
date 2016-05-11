@@ -4,6 +4,8 @@ namespace Phragile;
 
 abstract class Transaction {
 
+	const TYPE = 'undefined';
+
 	// TODO: consider renaming the field to something more meaningful
 	protected $timestamp;
 

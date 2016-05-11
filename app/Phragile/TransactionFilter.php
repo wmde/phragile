@@ -24,12 +24,12 @@ class TransactionFilter {
 
 	protected function isWorkboardTransaction(array $transaction)
 	{
-		return $transaction['transactionType'] === 'core:columns';
+		return $transaction['transactionType'] === TransactionRawDataProcessor::COLUMN_CHANGE_TRANSACTION;
 	}
 
 	protected function isStatusTransaction(array $transaction)
 	{
-		return $transaction['transactionType'] === 'status'
-		    || $transaction['transactionType'] === 'mergedinto';
+		return $transaction['transactionType'] === TransactionRawDataProcessor::STATUS_CHANGE_TRANSACTION
+		    || $transaction['transactionType'] === TransactionRawDataProcessor::MERGED_INTO_TRANSACTION;
 	}
 }
