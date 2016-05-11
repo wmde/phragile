@@ -9,7 +9,7 @@ use SprintSnapshot;
 class MigrateSnapshots extends Command {
 
 	protected $name = 'snapshots:migrate';
-	protected $description = 'This command migrates all snapshots from the maniphest.query format to maniphest.search JSON.';
+	protected $description = 'Migrate all snapshots created with Phragile versions 1 and 2.';
 
 	public function fire()
 	{
