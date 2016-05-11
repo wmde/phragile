@@ -2,17 +2,11 @@
 
 namespace App\Console\Commands\Lib;
 
-class SnapshotDataConverter {
-	private $taskData;
+class SnapshotTaskDataConverter {
 
-	public function __construct(array $taskData)
+	public function convert(array $taskData)
 	{
-		$this->taskData = $taskData;
-	}
-
-	public function convert()
-	{
-		return array_values(array_map(array($this, 'convertToManiphestSearchResponse'), $this->taskData));
+		return array_values(array_map(array($this, 'convertToManiphestSearchResponse'), $taskData));
 	}
 
 	private function convertToManiphestSearchResponse(array $task)

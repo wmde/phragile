@@ -1,6 +1,6 @@
 <?php namespace App\Console\Commands;
 
-use App\Console\Commands\Lib\SnapshotDataConverter;
+use App\Console\Commands\Lib\SnapshotTaskDataConverter;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use SprintSnapshot;
@@ -27,6 +27,7 @@ class MigrateSnapshots extends Command {
 			}
 		}
 
+		$taskConverter = new SnapshotTaskDataConverter();
 		$this->line('Migration in progress:');
 		$i = 0;
 		while (count($snapshots = $this->getSnapshotsPart($batchSize, $batchSize * $i)) !== 0)
@@ -36,7 +37,7 @@ class MigrateSnapshots extends Command {
 				$snapshotData = json_decode($snapshot->data, true);
 				if ($snapshotData['tasks'] && $this->isManiphestQueryFormat($snapshotData['tasks']))
 				{
-					$snapshotData['tasks'] = (new SnapshotDataConverter($snapshotData['tasks']))->convert();
+					$snapshotData['tasks'] = $taskConverter->convert($snapshotData['tasks']);
 					$snapshot->data = json_encode($snapshotData);
 					$snapshot->save();
 				}
