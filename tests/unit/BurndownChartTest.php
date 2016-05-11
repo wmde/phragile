@@ -11,6 +11,7 @@ use Phragile\Domain\MergeAndCloseTransaction;
 use Phragile\Domain\StatusChangeTransaction;
 use Phragile\Domain\Task as DomainTask;
 use Phragile\Presentation\Task;
+use Phragile\Presentation\TaskList;
 
 class BurndownChartTest extends TestCase {
 
@@ -23,7 +24,7 @@ class BurndownChartTest extends TestCase {
 		array $tasks, array $transactions, ClosedTimeDispatcher $dispatcher
 	)
 	{
-		$taskListMock = $this->getMockBuilder('Phragile\TaskList')
+		$taskListMock = $this->getMockBuilder(TaskList::class)
 			->disableOriginalConstructor()
 			->getMock();
 		$taskListMock->method('getTasks')->willReturn($tasks);

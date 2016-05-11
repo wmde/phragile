@@ -1,10 +1,11 @@
 <?php
 
-namespace Phragile\Tests;
+namespace Phragile\Tests\Presentation;
 
 use Phragile\Domain\Task as DomainTask;
 use Phragile\Presentation\Task;
-use Phragile\TaskList;
+use Phragile\Presentation\TaskList;
+use Phragile\Tests\TestCase;
 
 class TaskListTest extends TestCase {
 

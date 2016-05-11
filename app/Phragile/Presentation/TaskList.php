@@ -1,8 +1,6 @@
 <?php
 
-namespace Phragile;
-
-use Phragile\Presentation\Task;
+namespace Phragile\Presentation;
 
 class TaskList {
 	private $tasks = null;

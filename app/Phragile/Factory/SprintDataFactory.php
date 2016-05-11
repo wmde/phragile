@@ -6,7 +6,7 @@ use Phragile\PieChart;
 use Phragile\ProjectColumnRepository;
 use Phragile\PhabricatorAPI;
 use Phragile\StatusCssClassService;
-use Phragile\TaskList;
+use Phragile\Presentation\TaskList;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\AssigneeRepository;
