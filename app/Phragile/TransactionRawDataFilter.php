@@ -1,10 +1,9 @@
 <?php
 namespace Phragile;
 
-// TODO: rename to e.g. TransactionDataFilter
-class TransactionFilter {
+class TransactionRawDataFilter {
 	/**
-	 * Filters out irrelevant transactions
+	 * Filters out irrelevant transactions fetched from Phabricator
 	 *
 	 * @param array $transactions
 	 * @return array $transactions
