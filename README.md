@@ -35,8 +35,10 @@ For more information see the [product backlog](https://github.com/wmde/phragile/
 ### Preparation
 
 * [Install Phabricator](https://secure.phabricator.com/book/phabricator/article/installation_guide/)
-    
-    Phragile >=2.0.0 requires Phabricator release from 2016 Week 8 or newer
+
+    Phragile >= 3.0.0 requires Phabricator release 2016 Week 15 or newer.
+
+    Phragile >= 2.0.0 requires Phabricator release from 2016 Week 8 or newer.
 
 * [Activate Phabricator OAuth](https://github.com/wmde/phragile/wiki/Activating-Phabricator-OAuth)
 * Add a  custom field for story points to http://yourphabricator/config/edit/maniphest.custom-field-definitions/   
