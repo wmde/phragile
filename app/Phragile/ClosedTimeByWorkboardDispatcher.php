@@ -1,6 +1,9 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\Transaction;
+
 class ClosedTimeByWorkboardDispatcher implements ClosedTimeDispatcher {
 	private $phid = null;
 	private $closedColumnPHIDs = [];

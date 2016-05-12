@@ -2,7 +2,7 @@
 
 namespace Phragile\Tests;
 
-use Phragile\ColumnChangeTransaction;
+use Phragile\Domain\ColumnChangeTransaction;
 use Phragile\SortedTransactionList;
 
 /**

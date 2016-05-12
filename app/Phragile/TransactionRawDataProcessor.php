@@ -2,6 +2,10 @@
 
 namespace Phragile;
 
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\MergeAndCloseTransaction;
+use Phragile\Domain\StatusChangeTransaction;
+
 class TransactionRawDataProcessor {
 
 	const COLUMN_CHANGE_TRANSACTION = 'core:columns';

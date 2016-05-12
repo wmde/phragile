@@ -1,7 +1,9 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\ColumnChangeTransaction;
 use Phragile\Domain\Task;
+use Phragile\Domain\Transaction;
 
 class StatusByWorkboardDispatcher implements StatusDispatcher {
 

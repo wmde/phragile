@@ -1,11 +1,11 @@
 <?php
 
-namespace Phragile\Tests;
+namespace Phragile\Tests\Domain;
 
-use Phragile\MergeAndCloseTransaction;
+use Phragile\Domain\MergeAndCloseTransaction;
 
 /**
- * @covers Phragile\MergeAndCloseTransaction
+ * @covers Phragile\Domain\MergeAndCloseTransaction
  */
 class MergeAndCloseTransactionTest extends \PHPUnit_Framework_TestCase {
 

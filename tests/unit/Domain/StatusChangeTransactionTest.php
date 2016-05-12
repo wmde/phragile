@@ -1,11 +1,11 @@
 <?php
 
-namespace Phragile\Tests;
+namespace Phragile\Tests\Domain;
 
-use Phragile\StatusChangeTransaction;
+use Phragile\Domain\StatusChangeTransaction;
 
 /**
- * @covers Phragile\StatusChangeTransaction
+ * @covers Phragile\Domain\StatusChangeTransaction
  */
 class StatusChangeTransactionTest extends \PHPUnit_Framework_TestCase
 {

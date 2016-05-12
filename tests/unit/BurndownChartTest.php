@@ -6,9 +6,9 @@ use Phragile\BurndownChart;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\ClosedTimeDispatcher;
-use Phragile\ColumnChangeTransaction;
-use Phragile\MergeAndCloseTransaction;
-use Phragile\StatusChangeTransaction;
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\MergeAndCloseTransaction;
+use Phragile\Domain\StatusChangeTransaction;
 use Phragile\Domain\Task as DomainTask;
 use Phragile\Presentation\Task;
 

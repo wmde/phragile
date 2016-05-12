@@ -13,14 +13,14 @@ use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
 use Phragile\ScopeLine;
 use Phragile\TaskPresenter;
-use Phragile\Transaction;
 use Phragile\Domain\Task as DomainTask;
+use Phragile\Domain\Transaction;
 use Phragile\Presentation\Task as PresentationTask;
 
 class SprintDataFactory {
 	private $sprint = null;
 	/**
-	 * @var Transaction[]
+	 * @var \Phragile\Domain\Transaction[]
 	 */
 	private $transactions = [];
 	private $phabricatorAPI = null;

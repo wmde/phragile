@@ -2,6 +2,8 @@
 
 namespace Phragile;
 
+use Phragile\Domain\Transaction;
+
 class SortedTransactionList {
 	/**
 	 * @var Transaction[]

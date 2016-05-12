@@ -6,7 +6,7 @@ use Phragile\TaskDataFetcher;
 use Phragile\TaskRawDataProcessor;
 use Phragile\TaskPresenter;
 use Phragile\TaskList;
-use Phragile\Transaction;
+use Phragile\Domain\Transaction;
 use Phragile\TransactionRawDataProcessor;
 use Phragile\TransactionLoader;
 use Phragile\TransactionFilter;

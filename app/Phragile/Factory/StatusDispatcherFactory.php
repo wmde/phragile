@@ -6,6 +6,7 @@ use Phragile\StatusDispatcher;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\StatusByWorkboardDispatcher;
 use Phragile\SortedTransactionList;
+use Phragile\Domain\Transaction;
 
 class StatusDispatcherFactory
 {

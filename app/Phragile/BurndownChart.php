@@ -1,6 +1,8 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\Transaction;
+
 class BurndownChart {
 	private $pointsClosedBeforeSprint = null;
 	private $pointsClosedPerDay = null;
