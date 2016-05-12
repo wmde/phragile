@@ -61,7 +61,6 @@ class BurndownChart {
 			{
 				if ($this->closedTimeDispatcher->isClosingTransaction($transaction))
 				{
-					//return $transaction['dateCreated'];
 					return $transaction->getTimestamp();
 				} else
 				{
