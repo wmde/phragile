@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\ColumnChangeTransaction;
 use Phragile\StatusChangeTransaction;
@@ -7,7 +9,7 @@ use Phragile\StatusChangeTransaction;
 /**
  * @covers Phragile\ClosedTimeByWorkboardDispatcher
  */
-class ClosedTimeByWorkboardDispatcherTest extends PHPUnit_Framework_TestCase {
+class ClosedTimeByWorkboardDispatcherTest extends \PHPUnit_Framework_TestCase {
 
 	public function testGivenColumnTransactionOfDifferentProject_isClosingTransactionReturnsFalse()
 	{

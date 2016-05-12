@@ -1,4 +1,7 @@
 <?php
+
+namespace Phragile\Tests;
+
 use Phragile\Task;
 
 class TaskTest extends TestCase {
@@ -31,7 +34,7 @@ class TaskTest extends TestCase {
 	 */
 	public function testThrowsExceptionWithMissingAttributes($incompleteAttributes)
 	{
-		$this->setExpectedException(InvalidArgumentException::class);
+		$this->setExpectedException(\InvalidArgumentException::class);
 		new Task($incompleteAttributes);
 	}
 

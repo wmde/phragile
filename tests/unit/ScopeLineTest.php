@@ -1,4 +1,7 @@
 <?php
+
+namespace Phragile\Tests;
+
 use Phragile\ScopeLine;
 
 class ScopeLineTest extends TestCase {
@@ -48,8 +51,8 @@ class ScopeLineTest extends TestCase {
 
 	public function newSnapshot($date, $fields, $sprint = null)
 	{
-		$snapshot = new SprintSnapshot($fields);
-		$snapshot->sprint = $sprint ?: new Sprint(['ignore_estimates' => false, 'title' => 'wat']);
+		$snapshot = new \SprintSnapshot($fields);
+		$snapshot->sprint = $sprint ?: new \Sprint(['ignore_estimates' => false, 'title' => 'wat']);
 		$snapshot->setCreatedAt($date);
 
 		return $snapshot;
@@ -78,7 +81,7 @@ class ScopeLineTest extends TestCase {
 
 	public function testShouldUseTaskCountBasedOnSettings()
 	{
-		$sprint = new Sprint(['ignore_estimates' => true, 'title' => 'sup']);
+		$sprint = new \Sprint(['ignore_estimates' => true, 'title' => 'sup']);
 		$duration = ['2015-01-01', '2015-01-02'];
 		$s1 = $this->newSnapshot($duration[0], ['total_points' => 5, 'task_count' => 2], $sprint);
 		$s2 = $this->newSnapshot($duration[1], ['total_points' => 8, 'task_count' => 3], $sprint);

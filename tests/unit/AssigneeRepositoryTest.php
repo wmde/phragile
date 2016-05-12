@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\AssigneeRepository;
 use Phragile\PhabricatorAPI;
 use Phragile\Task;
@@ -7,7 +9,7 @@ use Phragile\Task;
 /**
  * @covers Phragile\AssigneeRepository
  */
-class AssigneeRepositoryTest extends PHPUnit_Framework_TestCase {
+class AssigneeRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	private $users = [
 		'PHID-USER-abc666' => 'Dummy User',

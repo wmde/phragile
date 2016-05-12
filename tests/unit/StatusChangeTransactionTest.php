@@ -1,11 +1,13 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\StatusChangeTransaction;
 
 /**
  * @covers Phragile\StatusChangeTransaction
  */
-class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
+class StatusChangeTransactionTest extends \PHPUnit_Framework_TestCase
 {
 	public function testConstructorsSetsFields()
 	{
@@ -18,7 +20,7 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('resolved', $transaction->getNewStatus());
 		$this->assertEquals(
 			'01.01.2016',
-			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
+			\DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
 		);
 	}
 
@@ -33,7 +35,7 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('open', $transaction->getNewStatus());
 		$this->assertEquals(
 			'01.01.2016',
-			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
+			\DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
 		);
 	}
 
@@ -62,7 +64,7 @@ class StatusChangeTransactionTest extends PHPUnit_Framework_TestCase
 	public function testThrowsExceptionWithMissingAttributes($missingField, $incompleteAttributes)
 	{
 		$expectedExceptionMessage = 'The ' . $missingField  . ' field is missing';
-		$this->setExpectedException(InvalidArgumentException::class, $expectedExceptionMessage);
+		$this->setExpectedException(\InvalidArgumentException::class, $expectedExceptionMessage);
 		new StatusChangeTransaction($incompleteAttributes);
 	}
 

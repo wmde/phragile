@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\ColorGenerator;
 
 class ColorGeneratorTest extends TestCase {

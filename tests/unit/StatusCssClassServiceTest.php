@@ -1,4 +1,7 @@
 <?php
+
+namespace Phragile\Tests;
+
 use Phragile\StatusCssClassService;
 
 class StatusCssClassServiceTest extends TestCase {

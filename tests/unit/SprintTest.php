@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 class SprintTest extends TestCase {
 	public function dateCountProvider()
 	{
@@ -16,7 +18,7 @@ class SprintTest extends TestCase {
 	 */
 	public function testGetDaysReturnsCorrectNumberOfDays($start, $end, $numberOfDays)
 	{
-		$sprint = new Sprint(['sprint_start' => $start, 'sprint_end' => $end]);
+		$sprint = new \Sprint(['sprint_start' => $start, 'sprint_end' => $end]);
 
 		$this->assertCount(
 			$numberOfDays,
@@ -38,7 +40,7 @@ class SprintTest extends TestCase {
 	 */
 	public function testGetDaysIncrementsCorrectly($start, $end, $all)
 	{
-		$sprint = new Sprint(['sprint_start' => $start, 'sprint_end' => $end]);
+		$sprint = new \Sprint(['sprint_start' => $start, 'sprint_end' => $end]);
 
 		$this->assertSame($sprint->getFormattedDays('Y-m-d'), $all);
 	}
