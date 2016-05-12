@@ -30,6 +30,6 @@ class TransactionFilter {
 	protected function isStatusTransaction(array $transaction)
 	{
 		return $transaction['transactionType'] === TransactionRawDataProcessor::STATUS_CHANGE_TRANSACTION
-		    || $transaction['transactionType'] === TransactionRawDataProcessor::MERGED_INTO_TRANSACTION;
+		    || $transaction['transactionType'] === TransactionRawDataProcessor::MERGE_AND_CLOSE_TRANSACTION;
 	}
 }

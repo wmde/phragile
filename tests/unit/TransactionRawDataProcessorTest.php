@@ -1,7 +1,7 @@
 <?php
 
 use Phragile\ColumnChangeTransaction;
-use Phragile\MergedIntoTransaction;
+use Phragile\MergeAndCloseTransaction;
 use Phragile\StatusChangeTransaction;
 use Phragile\TransactionRawDataProcessor;
 
@@ -62,7 +62,7 @@ class TransactionRawDataProcessorTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('resolved', $transactions['taskFoo'][0]->getNewStatus());
 	}
 
-	public function testProcessMergedIntoTransaction()
+	public function testProcessMergeAndCloseTransaction()
 	{
 		$rawData = [
 			'taskFoo' => [[
@@ -78,7 +78,7 @@ class TransactionRawDataProcessorTest extends PHPUnit_Framework_TestCase {
 		$this->assertArrayHasKey('taskFoo', $transactions);
 
 		$this->assertCount(1, $transactions['taskFoo']);
-		$this->assertInstanceOf(MergedIntoTransaction::class, $transactions['taskFoo'][0]);
+		$this->assertInstanceOf(MergeAndCloseTransaction::class, $transactions['taskFoo'][0]);
 		$this->assertEquals('1451638800', $transactions['taskFoo'][0]->getTimestamp());
 	}
 

@@ -5,7 +5,7 @@ use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\ClosedTimeDispatcher;
 use Phragile\ColumnChangeTransaction;
-use Phragile\MergedIntoTransaction;
+use Phragile\MergeAndCloseTransaction;
 use Phragile\StatusChangeTransaction;
 use Phragile\Task;
 
@@ -276,7 +276,7 @@ class BurndownChartTest extends TestCase {
 		$burndown = $this->mockWithTransactions(
 			$this->tasks,
 			[
-				'1' => [new MergedIntoTransaction(
+				'1' => [new MergeAndCloseTransaction(
 					'1418040000' // Dec 8
 				)]
 			]

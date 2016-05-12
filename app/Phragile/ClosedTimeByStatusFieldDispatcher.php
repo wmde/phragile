@@ -13,6 +13,6 @@ class ClosedTimeByStatusFieldDispatcher implements ClosedTimeDispatcher {
 				!in_array($transaction->getNewStatus(), self::$STATUS_OPEN);
 		}
 
-		return $transaction instanceof MergedIntoTransaction;
+		return $transaction instanceof MergeAndCloseTransaction;
 	}
 }

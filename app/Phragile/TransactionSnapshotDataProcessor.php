@@ -39,9 +39,9 @@ class TransactionSnapshotDataProcessor {
 				'oldStatus' => $snapshotTransaction['oldStatus'],
 				'newStatus' => $snapshotTransaction['newStatus']
 			]);
-		} elseif ($snapshotTransaction['type'] === MergedIntoTransaction::TYPE)
+		} elseif ($snapshotTransaction['type'] === MergeAndCloseTransaction::TYPE)
 		{
-			return new MergedIntoTransaction($snapshotTransaction['timestamp']);
+			return new MergeAndCloseTransaction($snapshotTransaction['timestamp']);
 		}
 		return false;
 	}

@@ -6,7 +6,7 @@ class TransactionRawDataProcessor {
 
 	const COLUMN_CHANGE_TRANSACTION = 'core:columns';
 	const STATUS_CHANGE_TRANSACTION = 'status';
-	const MERGED_INTO_TRANSACTION = 'mergedinto';
+	const MERGE_AND_CLOSE_TRANSACTION = 'mergedinto';
 
 	public function process(array $rawData)
 	{
@@ -38,9 +38,9 @@ class TransactionRawDataProcessor {
 					'oldStatus' => $this->getOldStatus($singleTransactionData),
 					'newStatus' => $this->getNewStatus($singleTransactionData),
 				]);
-			} elseif ($this->isMergedIntoTransaction($singleTransactionData))
+			} elseif ($this->isMergeAndCloseTransaction($singleTransactionData))
 			{
-				$transactions[] = new MergedIntoTransaction(
+				$transactions[] = new MergeAndCloseTransaction(
 					$this->getTransactionTimestamp($singleTransactionData)
 				);
 			}
@@ -60,10 +60,10 @@ class TransactionRawDataProcessor {
 			&& $rawData['transactionType'] === self::STATUS_CHANGE_TRANSACTION;
 	}
 
-	private function isMergedIntoTransaction(array $rawData)
+	private function isMergeAndCloseTransaction(array $rawData)
 	{
 		return array_key_exists('transactionType', $rawData)
-		&& $rawData['transactionType'] === self::MERGED_INTO_TRANSACTION;
+		&& $rawData['transactionType'] === self::MERGE_AND_CLOSE_TRANSACTION;
 	}
 
 	private function getTransactionTimestamp(array $rawData)

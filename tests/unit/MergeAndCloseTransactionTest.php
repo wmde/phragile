@@ -1,15 +1,15 @@
 <?php
 
-use Phragile\MergedIntoTransaction;
+use Phragile\MergeAndCloseTransaction;
 
 /**
- * @covers Phragile\MergedIntoTransaction
+ * @covers Phragile\MergeAndCloseTransaction
  */
-class MergedIntoTransactionTest extends PHPUnit_Framework_TestCase {
+class MergeAndCloseTransactionTest extends PHPUnit_Framework_TestCase {
 
 	public function testConstructorSetsFields()
 	{
-		$transaction = new MergedIntoTransaction('1451638800');
+		$transaction = new MergeAndCloseTransaction('1451638800');
 		$this->assertEquals(
 			'01.01.2016',
 			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
@@ -18,10 +18,10 @@ class MergedIntoTransactionTest extends PHPUnit_Framework_TestCase {
 
 	public function testGetTransactionData()
 	{
-		$transaction = new MergedIntoTransaction('1451638800');
+		$transaction = new MergeAndCloseTransaction('1451638800');
 		$this->assertEquals(
 			[
-				'type' => 'mergedInto',
+				'type' => 'mergeAndClose',
 				'timestamp' => '1451638800',
 			],
 			$transaction->getData()

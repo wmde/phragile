@@ -1,7 +1,7 @@
 <?php
 
 use Phragile\ColumnChangeTransaction;
-use Phragile\MergedIntoTransaction;
+use Phragile\MergeAndCloseTransaction;
 use Phragile\StatusChangeTransaction;
 use Phragile\TransactionSnapshotDataProcessor;
 
@@ -31,7 +31,7 @@ class TransactionSnapshotDataProcessorTest extends PHPUnit_Framework_TestCase {
 			'bazTask' => [
 				[
 					'timestamp' => '1451646000', // 01.01.2016 12:00:00
-					'type' => 'mergedInto'
+					'type' => 'mergeAndClose'
 				],
 			],
 		];
@@ -54,7 +54,7 @@ class TransactionSnapshotDataProcessorTest extends PHPUnit_Framework_TestCase {
 					])
 				],
 				'bazTask' => [
-					new MergedIntoTransaction('1451646000')
+					new MergeAndCloseTransaction('1451646000')
 				]
 			], $transactions
 		);
