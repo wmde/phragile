@@ -6,6 +6,9 @@ class ProjectColumnRepository {
 	 * @var array|null maps workboard column PHIDs to a map of column data
 	 */
 	private $projectColumns = null;
+	/**
+	 * @var Transaction[]
+	 */
 	private $transactions;
 	private $phabricator;
 	private $projectPHID;
@@ -58,12 +61,12 @@ class ProjectColumnRepository {
 
 	private function findColumnPHIDs($columns, $transactions)
 	{
-		return array_reduce($transactions, function($columns, $transaction)
+		return array_reduce($transactions, function($columns, Transaction $transaction)
 		{
-			if ($transaction['transactionType'] === 'core:columns' && $transaction['newValue'][0]['boardPHID'] === $this->projectPHID)
+			if ($transaction instanceof ColumnChangeTransaction && $transaction->getWorkboardPHID() === $this->projectPHID)
 			{
-				$columns[] = $transaction['newValue'][0]['columnPHID'];
-				$columns[] = reset($transaction['newValue'][0]['fromColumnPHIDs']);
+				$columns[] = $transaction->getNewColumnPHID();
+				$columns[] = $transaction->getOldColumnPHID();
 			}
 
 			return $columns;

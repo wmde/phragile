@@ -4,6 +4,9 @@ use Phragile\BurndownChart;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\ClosedTimeDispatcher;
+use Phragile\ColumnChangeTransaction;
+use Phragile\MergeAndCloseTransaction;
+use Phragile\StatusChangeTransaction;
 use Phragile\Task;
 
 class BurndownChartTest extends TestCase {
@@ -81,18 +84,20 @@ class BurndownChartTest extends TestCase {
 		$burndown = $this->mockWithTransactions(
 			$this->tasks,
 			[
-				'1' => [[
-					'transactionType' => 'status',
-					'oldValue' => 'open',
-					'newValue' => 'resolved',
-					'dateCreated' => '1418040000', // Dec 8
-				]],
-				'2' => [[
-					'transactionType' => 'status',
-					'oldValue' => 'open',
-					'newValue' => 'resolved',
-					'dateCreated' => '1418050000', // Dec 8
-				]]
+				'1' => [
+					new StatusChangeTransaction([
+						'timestamp' => '1418040000', // Dec 8
+						'oldStatus' => 'open',
+						'newStatus' => 'resolved',
+					])
+				],
+				'2' => [
+					new StatusChangeTransaction([
+						'timestamp' => '1418050000',
+						'oldStatus' => 'open',
+						'newStatus' => 'resolved',
+					])
+				]
 			]
 		);
 
@@ -103,12 +108,11 @@ class BurndownChartTest extends TestCase {
 	{
 		$burndown = $this->mockWithTransactions(
 			$this->tasks,
-			['1' => [[
-				'transactionType' => 'status',
-				'oldValue' => 'open',
-				'newValue' => 'resolved',
-				'dateCreated' => '1415664000', // Nov 11
-			]]]
+			['1' => [new StatusChangeTransaction([
+				'timestamp' => '1415664000', // Nov 11
+				'oldStatus' => 'open',
+				'newStatus' => 'resolved',
+			])]]
 		);
 
 		$this->assertSame(8, $burndown->getPointsClosedBeforeSprint());
@@ -120,18 +124,16 @@ class BurndownChartTest extends TestCase {
 			['1' => $this->tasks['1']],
 			[
 				'1' => [
-					[
-						'transactionType' => 'status',
-						'oldValue' => 'open',
-						'newValue' => 'resolved',
-						'dateCreated' => '1418040000', // Dec 8
-					],
-					[
-						'transactionType' => 'status',
-						'oldValue' => 'resolved',
-						'newValue' => 'invalid',
-						'dateCreated' => '1418130000', // Dec 9
-					]
+					new StatusChangeTransaction([
+						'timestamp' => '1418040000', // Dec 8
+						'oldStatus' => 'open',
+						'newStatus' => 'resolved',
+					]),
+					new StatusChangeTransaction([
+						'timestamp' => '1418130000', // Dec 9
+						'oldStatus' => 'resolved',
+						'newStatus' => 'invalid',
+					])
 				]
 			]
 		);
@@ -147,24 +149,21 @@ class BurndownChartTest extends TestCase {
 			['1' => $this->tasks['1']],
 			[
 				'1' => [
-					[
-						'transactionType' => 'status',
-						'oldValue' => 'open',
-						'newValue' => 'resolved',
-						'dateCreated' => '1418040000', // Dec 8
-					],
-					[
-						'transactionType' => 'status',
-						'oldValue' => 'resolved',
-						'newValue' => 'open',
-						'dateCreated' => '1418050000',
-					],
-					[
-						'transactionType' => 'status',
-						'oldValue' => 'open',
-						'newValue' => 'resolved',
-						'dateCreated' => '1418130000', // Dec 9
-					]
+					new StatusChangeTransaction([
+						'timestamp' => '1418040000', // Dec 8
+						'oldStatus' => 'open',
+						'newStatus' => 'resolved',
+					]),
+					new StatusChangeTransaction([
+						'timestamp' => '1418050000',
+						'oldStatus' => 'resolved',
+						'newStatus' => 'open',
+					]),
+					new StatusChangeTransaction([
+						'timestamp' => '1418130000', // Dec 9
+						'oldStatus' => 'open',
+						'newStatus' => 'resolved',
+					])
 				]
 			]
 		);
@@ -179,24 +178,18 @@ class BurndownChartTest extends TestCase {
 		$burndown = $this->mockWithTransactionsInWorkboardMode(
 			$this->tasks,
 			[
-				'1' => [[
-					'transactionType' => 'core:columns',
-					'newValue' => [[
-						'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
-						'columnPHID' => $this->closedColumnPHIDs[1],
-						'boardPHID' => $this->testProjectPHID,
-					]],
-					'dateCreated' => '1418040000', // Dec 8
-				]],
-				'2' => [[
-					'transactionType' => 'core:columns',
-					'newValue' => [[
-						'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
-						'columnPHID' => $this->closedColumnPHIDs[0],
-						'boardPHID' => $this->testProjectPHID,
-					]],
-					'dateCreated' => '1418050000', // Dec 8
-				]]
+				'1' => [new ColumnChangeTransaction([
+					'timestamp' => '1418040000', // Dec 8
+					'workboardPHID' => $this->testProjectPHID,
+					'oldColumnPHID' => 'anyNotClosed',
+					'newColumnPHID' => $this->closedColumnPHIDs[1],
+				])],
+				'2' => [new ColumnChangeTransaction([
+					'timestamp' => '1418050000', // Dec 8
+					'workboardPHID' => $this->testProjectPHID,
+					'oldColumnPHID' => 'anyNotClosed',
+					'newColumnPHID' => $this->closedColumnPHIDs[0],
+				])]
 			]
 		);
 
@@ -209,33 +202,24 @@ class BurndownChartTest extends TestCase {
 			$this->tasks,
 			[
 				'1' => [
-					[
-						'transactionType' => 'core:columns',
-						'newValue' => [[
-							'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
-							'columnPHID' => $this->closedColumnPHIDs[1],
-							'boardPHID' => $this->testProjectPHID,
-						]],
-						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 10:00:00')->format('U'),
-					],
-					[
-						'transactionType' => 'core:columns',
-						'newValue' => [[
-							'fromColumnPHIDs' => [$this->closedColumnPHIDs[1] => $this->closedColumnPHIDs[1]],
-							'columnPHID' => 'anyNotClosed',
-							'boardPHID' => $this->testProjectPHID,
-						]],
-						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 12:00:00')->format('U'),
-					],
-					[
-						'transactionType' => 'core:columns',
-						'newValue' => [[
-							'fromColumnPHIDs' => ['anyNotClosed' => 'anyNotClosed'],
-							'columnPHID' => $this->closedColumnPHIDs[1],
-							'boardPHID' => $this->testProjectPHID,
-						]],
-						'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '09.12.2014 10:00:00')->format('U'),
-					],
+					new ColumnChangeTransaction([
+						'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 10:00:00')->format('U'),
+						'workboardPHID' => $this->testProjectPHID,
+						'oldColumnPHID' => 'anyNotClosed',
+						'newColumnPHID' => $this->closedColumnPHIDs[1],
+					]),
+					new ColumnChangeTransaction([
+						'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 12:00:00')->format('U'),
+						'workboardPHID' => $this->testProjectPHID,
+						'oldColumnPHID' => $this->closedColumnPHIDs[1],
+						'newColumnPHID' => 'anyNotClosed',
+					]),
+					new ColumnChangeTransaction([
+						'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '09.12.2014 10:00:00')->format('U'),
+						'workboardPHID' => $this->testProjectPHID,
+						'oldColumnPHID' => 'anyNotClosed',
+						'newColumnPHID' => $this->closedColumnPHIDs[1],
+					]),
 				],
 			]
 		);
@@ -249,18 +233,16 @@ class BurndownChartTest extends TestCase {
 		$burndown = $this->mockWithTransactionsInWorkboardMode(
 			$this->tasks,
 			[
-				'1' => [[
-					'transactionType' => 'status',
-					'oldValue' => 'open',
-					'newValue' => 'resolved',
-					'dateCreated' => '1418040000', // Dec 8
-				]],
-				'2' => [[
-					'transactionType' => 'status',
-					'oldValue' => 'open',
-					'newValue' => 'resolved',
-					'dateCreated' => '1418050000', // Dec 8
-				]]
+				'1' => [new StatusChangeTransaction([
+					'timestamp' => '1418040000', // Dec 8
+					'oldStatus' => 'open',
+					'newStatus' => 'resolved',
+				])],
+				'2' => [new StatusChangeTransaction([
+					'timestamp' => '1418050000', // Dec 8
+					'oldStatus' => 'open',
+					'newStatus' => 'resolved',
+				])]
 			]
 		);
 
@@ -279,12 +261,11 @@ class BurndownChartTest extends TestCase {
 				'assigneePHID' => null,
 				'points' => 5,
 			])],
-			['500' => [[ // this transaction's task is not closed and should be ignored
-				'transactionType' => 'status',
-				'oldValue' => 'open',
-				'newValue' => 'resolved',
-				'dateCreated' => '1415664000', // Nov 11
-			]]]
+			['500' => [new StatusChangeTransaction([
+				'timestamp' => '1415664000', // Nov 11
+				'oldStatus' => 'open',
+				'newStatus' => 'resolved',
+			])]]
 		);
 
 		$this->assertNull($burndown->getPointsClosedBeforeSprint());
@@ -295,10 +276,9 @@ class BurndownChartTest extends TestCase {
 		$burndown = $this->mockWithTransactions(
 			$this->tasks,
 			[
-				'1' => [[
-					        'transactionType' => 'mergedinto',
-					        'dateCreated' => '1418040000', // Dec 8
-				        ]],
+				'1' => [new MergeAndCloseTransaction(
+					'1418040000' // Dec 8
+				)]
 			]
 		);
 

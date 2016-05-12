@@ -1,6 +1,7 @@
 <?php
 
 use Phragile\PhabricatorAPI;
+use Phragile\ColumnChangeTransaction;
 use Phragile\ProjectColumnRepository;
 
 /**
@@ -18,30 +19,18 @@ class ProjectColumnRepositoryTest extends PHPUnit_Framework_TestCase {
 	{
 		$transactions =	[
 			'task1' => [
-				[
-					'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
-					'transactionType' => 'projectcolumn',
-					'oldValue' => [
-						'columnPHIDs' => ['PHID-123abc'],
-						'projectPHID' => 'PHID-PROJ-FOO',
-					],
-					'newValue' => [
-						'columnPHIDs' => ['PHID-abc123'],
-						'projectPHID' => 'PHID-PROJ-FOO',
-					]
-				],
-				[
-					'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '02.01.2016 10:00:00')->format('U'),
-					'transactionType' => 'projectcolumn',
-					'oldValue' => [
-						'columnPHIDs' => ['PHID-abc123'],
-						'projectPHID' => 'PHID-PROJ-FOO',
-					],
-					'newValue' => [
-						'columnPHIDs' => ['PHID-321cba'],
-						'projectPHID' => 'PHID-PROJ-FOO',
-					]
-				],
+				new ColumnChangeTransaction([
+					'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+					'workboardPHID' => 'PHID-PROJ-FOO',
+					'oldColumnPHID' => 'PHID-123abc',
+					'newColumnPHID' => 'PHID-abc123',
+				]),
+				new ColumnChangeTransaction([
+					'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '02.01.2016 10:00:00')->format('U'),
+					'workboardPHID' => 'PHID-PROJ-FOO',
+					'oldColumnPHID' => 'PHID-abc123',
+					'newColumnPHID' => 'PHID-321cba',
+				]),
 			],
 		];
 		return new ProjectColumnRepository('PHID-PROJ-FOO', $transactions, $this->newPhabricatorAPI());

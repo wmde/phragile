@@ -2,5 +2,5 @@
 namespace Phragile;
 
 interface ClosedTimeDispatcher {
-	public function isClosingTransaction(array $transaction);
+	public function isClosingTransaction(Transaction $transaction);
 }

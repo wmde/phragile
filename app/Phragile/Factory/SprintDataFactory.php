@@ -17,6 +17,9 @@ use Phragile\Task;
 
 class SprintDataFactory {
 	private $sprint = null;
+	/**
+	 * @var Transaction[]
+	 */
 	private $transactions = [];
 	private $phabricatorAPI = null;
 

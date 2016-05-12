@@ -11,12 +11,12 @@ class ClosedTimeByWorkboardDispatcher implements ClosedTimeDispatcher {
 		$this->closedColumnPHIDs = $closedColumnPHIDs;
 	}
 
-	public function isClosingTransaction(array $transaction)
+	public function isClosingTransaction(Transaction $transaction)
 	{
-		return $transaction['transactionType'] === 'core:columns'
-			&& $transaction['newValue'][0]['boardPHID'] === $this->phid
-			&& in_array($transaction['newValue'][0]['columnPHID'], $this->closedColumnPHIDs)
-			&& (empty($transaction['newValue'][0]['fromColumnPHIDs'])
-				|| !in_array(reset($transaction['newValue'][0]['fromColumnPHIDs']), $this->closedColumnPHIDs));
+		return $transaction instanceof ColumnChangeTransaction
+			&& $transaction->getWorkboardPHID() === $this->phid
+			&& in_array($transaction->getNewColumnPHID(), $this->closedColumnPHIDs)
+			&& ($transaction->getOldColumnPHID() === false
+				|| !in_array($transaction->getOldColumnPHID(), $this->closedColumnPHIDs));
 	}
 }

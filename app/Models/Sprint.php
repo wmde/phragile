@@ -4,6 +4,8 @@ use Phragile\ProjectColumnRepository;
 use Phragile\TaskDataFetcher;
 use Phragile\TaskDataProcessor;
 use Phragile\TaskList;
+use Phragile\Transaction;
+use Phragile\TransactionRawDataProcessor;
 use Phragile\TransactionLoader;
 use Phragile\TransactionFilter;
 use Phragile\PhabricatorAPI;
@@ -101,6 +103,7 @@ class Sprint extends Eloquent {
 		return $days;
 	}
 
+	// TODO: consider moving createSnapshot to separate class?
 	/**
 	 * @return SprintSnapshot
 	 */
@@ -108,13 +111,20 @@ class Sprint extends Eloquent {
 	{
 		$phabricator = App::make('phabricator');
 		$rawTaskData = $this->fetchTasks($phabricator);
-		$data = $this->fetchSnapshotData($phabricator, $rawTaskData);
-		$columns = new ProjectColumnRepository($this->phid, $data['transactions'], $phabricator);
+		$rawTransactionData = $this->fetchTransactionData($phabricator, $rawTaskData);
+		$transactionDataProcessor = new TransactionRawDataProcessor();
+		$transactions = $transactionDataProcessor->process($rawTransactionData);
+		$columns = new ProjectColumnRepository($this->phid, $transactions, $phabricator);
 		$tasks = (new TaskDataProcessor(
-			(new StatusDispatcherFactory($this, $columns, $data['transactions']))->getStatusDispatcher(),
+			(new StatusDispatcherFactory($this, $columns, $transactions))->getStatusDispatcher(),
 			['ignore_estimates' => $this->ignore_estimates, 'ignored_columns' => $this->project->getIgnoredColumns()]
 		))->process($rawTaskData);
 		$sumOfTasks = (new TaskList($tasks))->getTasksPerStatus();
+
+		$data = [
+			'tasks' => $rawTaskData, // TODO: why not be bold and also store only converted task data here?
+			'transactions' => $this->getSnapshotTransactionData($transactions)
+		];
 
 		return SprintSnapshot::create([
 			'sprint_id' => $this->id,
@@ -129,21 +139,29 @@ class Sprint extends Eloquent {
 		return (new TaskDataFetcher($phabricator))->fetchProjectTasks($this->phid);
 	}
 
-	private function fetchSnapshotData(PhabricatorAPI $phabricator, array $tasks)
+	private function fetchTransactionData(PhabricatorAPI $phabricator, array $tasks)
 	{
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactions = (new TransactionLoader(
+		return (new TransactionLoader(
 			new TransactionFilter(),
 			$phabricator
 		))->load($taskIDs);
+	}
 
-		return [
-			'tasks' => $tasks,
-			'transactions' => $transactions,
-		];
+	private function getSnapshotTransactionData(array $transactions)
+	{
+		$snapshotData = [];
+		foreach ($transactions as $taskID => $taskTransactions)
+		{
+			$snapshotData[$taskID] = array_map(function(Transaction $transaction)
+			{
+				return $transaction->getData();
+			}, $taskTransactions);
+		}
+		return $snapshotData;
 	}
 
 	/**

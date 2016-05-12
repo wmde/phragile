@@ -1,6 +1,7 @@
 <?php
 namespace Phragile;
 
+// TODO: rename to e.g. TransactionDataFetcher?
 class TransactionLoader {
 	private $transactionFilter;
 	private $phabricatorAPI;

@@ -5,6 +5,7 @@ namespace Phragile\ActionHandler;
 use Phragile\PhabricatorAPI;
 use Phragile\SettingsAwareTransactionFilter;
 use Phragile\TaskDataFetcher;
+use Phragile\TransactionRawDataProcessor;
 use Phragile\TransactionLoader;
 use Sprint;
 use Phragile\Factory\SprintDataFactory;
@@ -45,6 +46,7 @@ class SprintLiveDataActionHandler {
 		{
 			return $task['id'];
 		}, $tasks);
+		$transactionDataProcessor = new TransactionRawDataProcessor();
 		$transactionLoader = new TransactionLoader(
 			new SettingsAwareTransactionFilter($sprint->project->workboard_mode),
 			$this->phabricatorAPI
@@ -53,7 +55,7 @@ class SprintLiveDataActionHandler {
 		return new SprintDataFactory(
 			$sprint,
 			$tasks,
-			$transactionLoader->load($taskIDs),
+			$transactionDataProcessor->process($transactionLoader->load($taskIDs)),
 			$this->phabricatorAPI
 		);
 	}

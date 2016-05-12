@@ -11,6 +11,9 @@ class StatusDispatcherFactory
 {
 	private $sprint = null;
 	private $projectColumnRepository = null;
+	/**
+	 * @var Transaction[]
+	 */
 	private $transactions = [];
 
 	public function __construct(\Sprint $sprint, ProjectColumnRepository $projectColumnRepository, array $transactions)

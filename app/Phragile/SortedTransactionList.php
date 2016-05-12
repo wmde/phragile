@@ -3,8 +3,14 @@
 namespace Phragile;
 
 class SortedTransactionList {
+	/**
+	 * @var Transaction[]
+	 */
 	private $transactions = [];
 
+	/**
+	 * @param Transaction[] $transactions
+	 */
 	public function __construct(array $transactions)
 	{
 		$this->transactions = $this->sortTaskTransactions($transactions);
@@ -27,9 +33,9 @@ class SortedTransactionList {
 
 	private function sortChronologically(array $transactions)
 	{
-		usort($transactions, function($t1, $t2)
+		usort($transactions, function(Transaction $t1, Transaction $t2)
 		{
-			return ($t1['dateCreated'] < $t2['dateCreated']) ? -1 : 1;
+			return $t1->getTimestamp() < $t2->getTimestamp() ? -1 : 1;
 		});
 
 		return $transactions;
