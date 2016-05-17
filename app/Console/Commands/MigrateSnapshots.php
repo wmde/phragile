@@ -1,6 +1,7 @@
 <?php namespace App\Console\Commands;
 
-use App\Console\Commands\Lib\SnapshotDataConverter;
+use App\Console\Commands\Lib\SnapshotTaskDataConverter;
+use App\Console\Commands\Lib\SnapshotTransactionDataConverter;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use SprintSnapshot;
@@ -8,7 +9,7 @@ use SprintSnapshot;
 class MigrateSnapshots extends Command {
 
 	protected $name = 'snapshots:migrate';
-	protected $description = 'This command migrates all snapshots from the maniphest.query format to maniphest.search JSON.';
+	protected $description = 'Migrate all snapshots created with Phragile versions 1 and 2.';
 
 	public function fire()
 	{
@@ -27,6 +28,8 @@ class MigrateSnapshots extends Command {
 			}
 		}
 
+		$taskConverter = new SnapshotTaskDataConverter();
+		$transactionConverter = new SnapshotTransactionDataConverter();
 		$this->line('Migration in progress:');
 		$i = 0;
 		while (count($snapshots = $this->getSnapshotsPart($batchSize, $batchSize * $i)) !== 0)
@@ -34,9 +37,19 @@ class MigrateSnapshots extends Command {
 			foreach ($snapshots as $snapshot)
 			{
 				$snapshotData = json_decode($snapshot->data, true);
-				if ($snapshotData['tasks'] && $this->isManiphestQueryFormat($snapshotData['tasks']))
+				$converted = false;
+				if ($snapshotData['tasks'] && $taskConverter->needsConversion($snapshotData['tasks']))
 				{
-					$snapshotData['tasks'] = (new SnapshotDataConverter($snapshotData['tasks']))->convert();
+					$snapshotData['tasks'] = $taskConverter->convert($snapshotData['tasks']);
+					$converted = true;
+				}
+				if ($snapshotData['transactions'] && $transactionConverter->needsConversion($snapshotData['transactions']))
+				{
+					$snapshotData['transactions'] = $transactionConverter->convert($snapshotData['transactions']);
+					$converted = true;
+				}
+				if ($converted)
+				{
 					$snapshot->data = json_encode($snapshotData);
 					$snapshot->save();
 				}
@@ -59,11 +72,6 @@ class MigrateSnapshots extends Command {
 	private function getSnapshotsPart($limit, $offset)
 	{
 		return SprintSnapshot::take($limit)->skip($offset)->get();
-	}
-
-	private function isManiphestQueryFormat(array $taskData)
-	{
-		return array_keys($taskData) !== range(0, count($taskData) - 1);
 	}
 
 	/**

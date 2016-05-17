@@ -4,9 +4,11 @@ use Behat\Behat\Context\Context;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\MinkExtension\Context\MinkContext;
 use PHPUnit_Framework_Assert as PHPUnit;
-use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\TaskDataFetcher;
-use Phragile\TaskDataProcessor;
+use Phragile\TransactionSnapshotDataProcessor;
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\Task;
+use Phragile\Domain\Transaction;
 use Symfony\Component\Console\Input\StringInput;
 
 /**
@@ -629,17 +631,42 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	}
 
 	/**
-	 * @Then the snapshot should be in the maniphest.search format
+	 * @Given there is a snapshot in the maniphest.search format
 	 */
-	public function theSnapshotShouldBeInTheManiphestSearchFormat()
+	public function thereIsASnapshotInTheManiphestSearchFormat()
 	{
-		$snapshotTaskTitle = '[Phragile] Migration script for old snapshots';
-		$taskProcessor = new TaskDataProcessor(
-			new StatusByStatusFieldDispatcher(''), ['ignore_estimates' => false, 'ignored_columns' => []]
-		);
-		$tasks = $taskProcessor->process(json_decode($this->testSnapshot->fresh()->getData(), true)['tasks']);
-		PHPUnit::assertSame($snapshotTaskTitle, $tasks[0]->getTitle());
+		$this->testSnapshotTitle = '[Phragile] Migration script for old snapshots';
+		$this->testSnapshot = new SprintSnapshot();
+		$this->testSnapshot->data = $this->getManiphestSearchSnapshotData();
+		$this->testSnapshot->save();
+	}
+
+	/**
+	 * @Then the snapshot should be in Phragile format
+	 */
+	public function theSnapshotShouldBeInPhragileFormat()
+	{
+		$snapshotData = json_decode($this->testSnapshot->fresh()->getData(), true);
+		$this->assertSnapshotDataInPhragileFormat($snapshotData);
+	}
+
+	private function assertSnapshotDataInPhragileFormat(array $snapshotData)
+	{
+		$tasks = $this->getTasksFromSnapshotData($snapshotData['tasks']);
+		$transactions = (new TransactionSnapshotDataProcessor())->process($snapshotData['transactions']);
+
+		PHPUnit::assertContainsOnlyInstancesOf(Task::class, $tasks);
+		PHPUnit::assertSame('[Phragile] Migration script for old snapshots', $tasks[0]->getTitle());
 		PHPUnit::assertSame(12, $tasks[0]->getPoints());
+		PHPUnit::assertSame(127180, $tasks[0]->getId());
+
+		PHPUnit::assertArrayHasKey('127180', $transactions);
+		PHPUnit::assertContainsOnlyInstancesOf(Transaction::class, $transactions['127180']);
+		PHPUnit::assertCount(3, $transactions['127180']);
+		PHPUnit::assertInstanceOf(ColumnChangeTransaction::class, $transactions['127180'][0]);
+		PHPUnit::assertSame('PHID-PROJ-we3kvpoegtfzytlzsbq5', $transactions['127180'][0]->getWorkboardPHID());
+		PHPUnit::assertSame('PHID-PCOL-4hyhg5eihidfzexjxo6l', $transactions['127180'][0]->getOldColumnPHID());
+		PHPUnit::assertSame('PHID-PCOL-babqxkbnh75r3dyxmuys', $transactions['127180'][0]->getNewColumnPHID());
 	}
 
 	/**
@@ -657,7 +684,7 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 	private function getManiphestQuerySnapshotData()
 	{
 		return '{
-		"transactions":[],
+		"transactions":' . $this->getTestSnapshotTransactionData() . ',
 		"tasks":{
 			"PHID-123123":{
 				"id":"127180",
@@ -686,4 +713,112 @@ class FeatureContext extends MinkContext implements Context, SnippetAcceptingCon
 			}
 		}}';
 	}
+
+	private function getManiphestSearchSnapshotData()
+	{
+		return '{
+		"transactions":' . $this->getTestSnapshotTransactionData() . ',
+		"tasks":[
+			{
+				"id":127180,
+				"type":"TASK",
+				"phid":"PHID-TASK-4kvxc4re6xrshgxtfajl",
+				"fields":{
+					"name":"' . $this->testSnapshotTitle . '",
+					"authorPHID":"PHID-USER-t4sxxglz6yyrgxeib43i",
+					"ownerPHID":"PHID-USER-5dv7dcltvyvolwzbm2af",
+					"status":{
+						"value":"pen",
+						"name":"Open",
+						"color":null
+					},
+					"priority":{
+						"value":80,
+						"subpriority":0,
+						"name":"High",
+						"color":"red"
+					},
+					"points":12,
+					"spacedPHID":"PHID-SPCE-6l6g5p53yi3mypnlpxjw",
+					"dateCreated":"1455716487",
+					"dateModified":"1455880296",
+					"policy":{
+						"view":"public",
+						"edit":"users"
+					},
+					"custom.security_topic":"default",
+					"custom.external_reference":null
+				},
+				"attachments":{
+					"projects":{
+						"projectPHIDs":[
+							"PHID-PROJ-ptnfbfyq36kkebaxugcz",
+							"PHID-PROJ-tazsyaydzpbd643tderv",
+							"PHID-PROJ-knyj2bgnrkrwu72n27bg"
+						]
+					}
+				}
+			}
+		]}';
+	}
+
+	private function getTestSnapshotTransactionData()
+	{
+		return '{
+		"127180":[
+			{
+				"taskID":"127180",
+				"transactionID":"615",
+				"transactionPHID":"PHID-XACT-TASK-thuit5jaapizdv3",
+				"transactionType":"core:columns",
+				"oldValue":null,
+				"newValue":[
+					{
+						"columnPHID":"PHID-PCOL-babqxkbnh75r3dyxmuys",
+						"boardPHID":"PHID-PROJ-we3kvpoegtfzytlzsbq5",
+						"fromColumnPHIDs":{
+							"PHID-PCOL-4hyhg5eihidfzexjxo6l":"PHID-PCOL-4hyhg5eihidfzexjxo6l"
+						}
+					}
+				],
+				"comments":null,
+				"authorPHID":"PHID-USER-4evwbszqu47ukghwqpyo",
+				"dateCreated":"1461852396"
+			},
+			{
+				"taskID":"127180",
+				"transactionID":"85",
+				"transactionPHID":"PHID-XACT-TASK-fa4mch7cmvs56yp",
+				"transactionType":"status",
+				"oldValue":null,
+				"newValue":"open",
+				"comments":null,
+				"authorPHID":"PHID-USER-4evwbszqu47ukghwqpyo",
+				"dateCreated":"1436877423"
+			},
+			{
+				"taskID":"127180",
+				"transactionID":"87",
+				"transactionPHID":"PHID-XACT-TASK-gnhol6bzawe4fgi",
+				"transactionType":"mergedinto",
+				"oldValue":null,
+				"newValue":"PHID-TASK-kbqbuddlt65redxoce6g",
+				"comments":null,
+				"authorPHID":"PHID-USER-4evwbszqu47ukghwqpyo",
+				"dateCreated":"1462366409"
+			}
+		]}';
+	}
+
+	private function getTasksFromSnapshotData(array $snapshotTaskData)
+	{
+		return array_map(
+			function(array $taskData)
+			{
+				return new Task($taskData);
+			},
+			$snapshotTaskData
+		);
+	}
+
 }
