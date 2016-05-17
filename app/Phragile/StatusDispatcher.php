@@ -1,16 +1,18 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\Task;
+
 interface StatusDispatcher {
 	/**
-	 * @param array $task
+	 * @param Task $task
 	 * @return string $status
 	 */
-	public function getStatus(array $task);
+	public function getStatus(Task $task);
 
 	/**
-	 * @param array $task
+	 * @param Task $task
 	 * @return boolean
 	 */
-	public function isClosed(array $task);
+	public function isClosed(Task $task);
 }

@@ -1,8 +1,12 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\Task;
+use Phragile\Domain\Transaction;
+
 class StatusByWorkboardDispatcher implements StatusDispatcher {
-	private $transactions = [];
+
 	private $columns = null;
 	private $sprint = null;
 
@@ -14,14 +18,13 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 	public function __construct(\Sprint $sprint, SortedTransactionList $transactions, ProjectColumnRepository $columns)
 	{
 		$this->sprint = $sprint;
-		$this->transactions = $transactions->getTransactions();
-		$this->taskColumnPHIDs = $this->extractColumnIDs($this->transactions);
+		$this->taskColumnPHIDs = $this->extractColumnIDs($transactions->getTransactions());
 		$this->columns = $columns;
 	}
 
-	public function getStatus(array $task)
+	public function getStatus(Task $task)
 	{
-		$phid = isset($this->taskColumnPHIDs[$task['id']]) ? $this->taskColumnPHIDs[$task['id']] : null;
+		$phid = isset($this->taskColumnPHIDs[$task->getId()]) ? $this->taskColumnPHIDs[$task->getId()] : null;
 		return $this->columns->getColumnName($phid) ?: $this->sprint->project->getDefaultColumn();
 	}
 
@@ -32,16 +35,16 @@ class StatusByWorkboardDispatcher implements StatusDispatcher {
 
 	private function findCurrentColumn(array $taskTransactions)
 	{
-		return array_reduce($taskTransactions, function($column, $transaction)
+		return array_reduce($taskTransactions, function($column, Transaction $transaction)
 		{
-			return $transaction['transactionType'] === 'core:columns'
-				&& $transaction['newValue'][0]['boardPHID'] === $this->sprint->phid
-				? $transaction['newValue'][0]['columnPHID']
+			return $transaction instanceof ColumnChangeTransaction
+				&& $transaction->getWorkboardPHID() === $this->sprint->phid
+				? $transaction->getNewColumnPHID()
 				: $column;
 		});
 	}
 
-	public function isClosed(array $task)
+	public function isClosed(Task $task)
 	{
 		return in_array(
 			$this->getStatus($task),

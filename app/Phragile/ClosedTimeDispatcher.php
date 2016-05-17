@@ -1,6 +1,8 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\Transaction;
+
 interface ClosedTimeDispatcher {
-	public function isClosingTransaction(array $transaction);
+	public function isClosingTransaction(Transaction $transaction);
 }

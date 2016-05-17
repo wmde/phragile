@@ -7,6 +7,16 @@ When upgrading Phragile to a newer version **always** run
 
 after updating the files in the root directory of your application.
 
+## From earlier releases to release 3.0.0
+
+Snapshots created with Phragile versions earlier than 3.0.0 must be migrated in order to be used with Phragile 3.0.0.
+In order to migrate snapshots
+
+* make a backup of Phragile database
+* run migration snapshot migration command:
+
+        php artisan snapshots:migrate
+
 ## From 1.1 release to 2.0.0
 
 ### Migrate your Snapshots

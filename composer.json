@@ -51,9 +51,9 @@
 		}
 	},
 	"autoload-dev": {
-		"classmap": [
-			"tests/TestCase.php"
-		]
+		"psr-4": {
+			"Phragile\\Tests\\": "tests"
+		}
 	},
 	"scripts": {
 		"post-install-cmd": [

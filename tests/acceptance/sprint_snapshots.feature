@@ -39,10 +39,15 @@ Feature: Sprint Snapshots
     When I execute artisan "snapshots:create"
     Then I should have created one snapshot for each sprint
 
-  Scenario: Migrate snapshots from maniphest.query to maniphest.search
+  Scenario: Migrate snapshots from maniphest.query to Phragile's own format
     Given there is a snapshot in the maniphest.query format
     When I execute artisan "snapshots:migrate --force -q"
-    Then the snapshot should be in the maniphest.search format
+    Then the snapshot should be in Phragile format
+
+  Scenario: Migrate snapshots from maniphest.search to Phragile's own format
+    Given there is a snapshot in the maniphest.search format
+    When I execute artisan "snapshots:migrate --force -q"
+    Then the snapshot should be in Phragile format
 
   Scenario: Migrate snapshots from maniphest.query to maniphest.search with batchSize 0
     Given there is a snapshot in the maniphest.query format

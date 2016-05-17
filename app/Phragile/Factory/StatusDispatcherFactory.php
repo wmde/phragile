@@ -6,11 +6,15 @@ use Phragile\StatusDispatcher;
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\StatusByWorkboardDispatcher;
 use Phragile\SortedTransactionList;
+use Phragile\Domain\Transaction;
 
 class StatusDispatcherFactory
 {
 	private $sprint = null;
 	private $projectColumnRepository = null;
+	/**
+	 * @var Transaction[]
+	 */
 	private $transactions = [];
 
 	public function __construct(\Sprint $sprint, ProjectColumnRepository $projectColumnRepository, array $transactions)

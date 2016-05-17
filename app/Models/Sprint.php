@@ -1,9 +1,13 @@
 <?php
 use Phragile\Factory\StatusDispatcherFactory;
 use Phragile\ProjectColumnRepository;
+use Phragile\Domain\Task;
 use Phragile\TaskDataFetcher;
-use Phragile\TaskDataProcessor;
-use Phragile\TaskList;
+use Phragile\TaskRawDataProcessor;
+use Phragile\Presentation\TaskList;
+use Phragile\TaskPresenter;
+use Phragile\Domain\Transaction;
+use Phragile\TransactionRawDataProcessor;
 use Phragile\TransactionLoader;
 use Phragile\TransactionFilter;
 use Phragile\PhabricatorAPI;
@@ -101,6 +105,7 @@ class Sprint extends Eloquent {
 		return $days;
 	}
 
+	// TODO: consider moving createSnapshot to separate class?
 	/**
 	 * @return SprintSnapshot
 	 */
@@ -108,13 +113,22 @@ class Sprint extends Eloquent {
 	{
 		$phabricator = App::make('phabricator');
 		$rawTaskData = $this->fetchTasks($phabricator);
-		$data = $this->fetchSnapshotData($phabricator, $rawTaskData);
-		$columns = new ProjectColumnRepository($this->phid, $data['transactions'], $phabricator);
-		$tasks = (new TaskDataProcessor(
-			(new StatusDispatcherFactory($this, $columns, $data['transactions']))->getStatusDispatcher(),
+		$rawTransactionData = $this->fetchTransactionData($phabricator, $rawTaskData);
+		$taskDataProcessor = new TaskRawDataProcessor();
+		$transactionDataProcessor = new TransactionRawDataProcessor();
+		$tasks = $taskDataProcessor->process($rawTaskData);
+		$transactions = $transactionDataProcessor->process($rawTransactionData);
+		$columns = new ProjectColumnRepository($this->phid, $transactions, $phabricator);
+		$presentationTask = (new TaskPresenter(
+			(new StatusDispatcherFactory($this, $columns, $transactions))->getStatusDispatcher(),
 			['ignore_estimates' => $this->ignore_estimates, 'ignored_columns' => $this->project->getIgnoredColumns()]
-		))->process($rawTaskData);
-		$sumOfTasks = (new TaskList($tasks))->getTasksPerStatus();
+		))->render($tasks);
+		$sumOfTasks = (new TaskList($presentationTask))->getTasksPerStatus();
+
+		$data = [
+			'tasks' => $this->getSnapshotTaskData($tasks),
+			'transactions' => $this->getSnapshotTransactionData($transactions)
+		];
 
 		return SprintSnapshot::create([
 			'sprint_id' => $this->id,
@@ -129,21 +143,39 @@ class Sprint extends Eloquent {
 		return (new TaskDataFetcher($phabricator))->fetchProjectTasks($this->phid);
 	}
 
-	private function fetchSnapshotData(PhabricatorAPI $phabricator, array $tasks)
+	private function fetchTransactionData(PhabricatorAPI $phabricator, array $tasks)
 	{
 		$taskIDs = array_map(function($task)
 		{
 			return $task['id'];
 		}, $tasks);
-		$transactions = (new TransactionLoader(
+		return (new TransactionLoader(
 			new TransactionFilter(),
 			$phabricator
 		))->load($taskIDs);
+	}
 
-		return [
-			'tasks' => $tasks,
-			'transactions' => $transactions,
-		];
+	private function getSnapshotTaskData(array $tasks)
+	{
+		return array_map(
+			function(Task $task) {
+				return $task->getData();
+			},
+			$tasks
+		);
+	}
+
+	private function getSnapshotTransactionData(array $transactions)
+	{
+		$snapshotData = [];
+		foreach ($transactions as $taskID => $taskTransactions)
+		{
+			$snapshotData[$taskID] = array_map(function(Transaction $transaction)
+			{
+				return $transaction->getData();
+			}, $taskTransactions);
+		}
+		return $snapshotData;
 	}
 
 	/**

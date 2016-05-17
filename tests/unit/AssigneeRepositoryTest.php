@@ -1,13 +1,16 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\AssigneeRepository;
 use Phragile\PhabricatorAPI;
-use Phragile\Task;
+use Phragile\Domain\Task as DomainTask;
+use Phragile\Presentation\Task;
 
 /**
  * @covers Phragile\AssigneeRepository
  */
-class AssigneeRepositoryTest extends PHPUnit_Framework_TestCase {
+class AssigneeRepositoryTest extends \PHPUnit_Framework_TestCase {
 
 	private $users = [
 		'PHID-USER-abc666' => 'Dummy User',
@@ -31,15 +34,20 @@ class AssigneeRepositoryTest extends PHPUnit_Framework_TestCase {
 	private function newAssigneeRepository()
 	{
 		$tasks = [
-			new Task([
-				'id' => '123',
-				'title' => 'Simple Task',
-				'priority' => 'Normal',
-				'points' => 1,
-				'status' => 'Doing',
-				'closed' => false,
-				'assigneePHID' => 'PHID-USER-abc666'
-			]),
+			new Task(
+				new DomainTask([
+					'id' => '123',
+					'title' => 'Simple Task',
+					'priority' => 'Normal',
+					'points' => 1,
+					'status' => 'open',
+					'assigneePHID' => 'PHID-USER-abc666',
+					'projectPHIDs' => ['PHID-PROJ-123'],
+				]),
+				'Doing',
+				Task::OPEN_TASK,
+				1
+			),
 		];
 		return new AssigneeRepository($this->newPhabricatorAPI(), $tasks);
 	}

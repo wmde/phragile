@@ -1,6 +1,7 @@
 <?php
 namespace Phragile;
 
+// TODO: rename to e.g. TransactionDataFilter
 class TransactionFilter {
 	/**
 	 * Filters out irrelevant transactions
@@ -23,12 +24,12 @@ class TransactionFilter {
 
 	protected function isWorkboardTransaction(array $transaction)
 	{
-		return $transaction['transactionType'] === 'core:columns';
+		return $transaction['transactionType'] === TransactionRawDataProcessor::COLUMN_CHANGE_TRANSACTION;
 	}
 
 	protected function isStatusTransaction(array $transaction)
 	{
-		return $transaction['transactionType'] === 'status'
-		    || $transaction['transactionType'] === 'mergedinto';
+		return $transaction['transactionType'] === TransactionRawDataProcessor::STATUS_CHANGE_TRANSACTION
+		    || $transaction['transactionType'] === TransactionRawDataProcessor::MERGE_AND_CLOSE_TRANSACTION;
 	}
 }

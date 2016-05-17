@@ -1,9 +1,13 @@
 <?php
 
+namespace Phragile\Tests;
+
+use Phragile\Domain\ColumnChangeTransaction;
 use Phragile\PhabricatorAPI;
 use Phragile\ProjectColumnRepository;
 use Phragile\StatusByWorkboardDispatcher;
 use Phragile\SortedTransactionList;
+use Phragile\Domain\Task;
 
 /**
  * @covers Phragile\StatusByWorkboardDispatcher
@@ -33,17 +37,17 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 
 	private function newSprint()
 	{
-		$sprint = new Sprint([
+		$sprint = new \Sprint([
 			'phid' => 'PHID-123',
 		]);
-		$sprint->project = new Project([
+		$sprint->project = new \Project([
 			'closed_statuses' => 'done',
 			'default_column' => 'backlog',
 		]);
 		return $sprint;
 	}
 
-	private function newDispatcher(Sprint $sprint, array $transactions)
+	private function newDispatcher(\Sprint $sprint, array $transactions)
 	{
 		return new StatusByWorkboardDispatcher(
 			$sprint,
@@ -56,10 +60,23 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 		);
 	}
 
+	private function newTaskWithId($id)
+	{
+		return new Task([
+			'id' => $id,
+			'title' => 'A Title Task',
+			'priority' => 'Normal',
+			'status' => 'open',
+			'points' => 1,
+			'projectPHIDs' => ['PHID-123'],
+			'assigneePHID' => null,
+		]);
+	}
+
 	public function testGivenNoTransactionForTask_tasksStatusIsBasedOnProjectsDefaultColumn()
 	{
 		$sprint = $this->newSprint();
-		$task = ['id' => 'fooTask'];
+		$task = $this->newTaskWithId('fooTask');
 		$transactions = [];
 		$dispatcher = $this->newDispatcher($sprint, $transactions);
 		$this->assertEquals('backlog', $dispatcher->getStatus($task));
@@ -69,7 +86,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	public function testGivenSingleTransactionForTask_tasksStatusIsBasedOnThatTransaction()
 	{
 		$sprint = $this->newSprint();
-		$task = ['id' => 'fooTask'];
+		$task = $this->newTaskWithId('fooTask');
 		$transactions = [];
 		$transactions['fooTask'][] = $this->getFirstTransaction();
 		$dispatcher = $this->newDispatcher($sprint, $transactions);
@@ -80,7 +97,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	public function testGivenTwoTransactionsForTask_tasksStatusIsBasedOnTheMostRecentTransaction()
 	{
 		$sprint = $this->newSprint();
-		$task = ['id' => 'fooTask'];
+		$task = $this->newTaskWithId('fooTask');
 		$transactions = [];
 		$transactions['fooTask'][] = $this->getFirstTransaction();
 		$transactions['fooTask'][] = $this->getSecondTransaction();
@@ -92,7 +109,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	public function testGivenThreeTransactionsForTask_tasksStatusIsBasedOnTheMostRecentTransaction()
 	{
 		$sprint = $this->newSprint();
-		$task = ['id' => 'fooTask'];
+		$task = $this->newTaskWithId('fooTask');
 		$transactions = [];
 		$transactions['fooTask'][] = $this->getFirstTransaction();
 		$transactions['fooTask'][] = $this->getSecondTransaction();
@@ -105,9 +122,8 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	public function testGivenIrrelevantTransaction_tasksStatusIsBasedOnProjectsDefaultColumn()
 	{
 		$sprint = $this->newSprint();
-		$task = ['id' => 'fooTask'];
-		$transaction = $this->getFirstTransaction();
-		$transaction['newValue'][0]['boardPHID'] = 'PHID-SOME-OTHER-PROJ-PHID';
+		$task = $this->newTaskWithId('fooTask');
+		$transaction = $this->getTransactionForAnotherProject();
 		$dispatcher = $this->newDispatcher($sprint, ['fooTask' => [$transaction]]);
 		$this->assertEquals('backlog', $dispatcher->getStatus($task));
 		$this->assertFalse($dispatcher->isClosed($task));
@@ -115,41 +131,42 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 
 	private function getFirstTransaction()
 	{
-		return [
-			'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
-			'transactionType' => 'core:columns',
-			'newValue' => [[
-				'fromColumnPHIDs' => [$this->getColumnPhid('to do') => $this->getColumnPhid('to do')],
-				'columnPHID' => $this->getColumnPhid('done'),
-				'boardPHID' => 'PHID-123',
-			]]
-		];
+		return new ColumnChangeTransaction([
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'workboardPHID' => 'PHID-123',
+			'oldColumnPHID' => $this->getColumnPhid('to do'),
+			'newColumnPHID' => $this->getColumnPhid('done'),
+		]);
 	}
 
 	private function getSecondTransaction()
 	{
-		return [
-			'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
-			'transactionType' => 'core:columns',
-			'newValue' => [[
-				'fromColumnPHIDs' => [$this->getColumnPhid('done') => $this->getColumnPhid('done')],
-				'columnPHID' => $this->getColumnPhid('to do'),
-				'boardPHID' => 'PHID-123',
-			]]
-		];
+		return new ColumnChangeTransaction([
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
+			'workboardPHID' => 'PHID-123',
+			'oldColumnPHID' => $this->getColumnPhid('done'),
+			'newColumnPHID' => $this->getColumnPhid('to do'),
+		]);
 	}
 
 	private function getThirdTransaction()
 	{
-		return [
-			'dateCreated' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
-			'transactionType' => 'core:columns',
-			'newValue' => [[
-				'fromColumnPHIDs' => [$this->getColumnPhid('to do') => $this->getColumnPhid('to do')],
-				'columnPHID' => $this->getColumnPhid('done'),
-				'boardPHID' => 'PHID-123',
-			]]
-		];
+		return new ColumnChangeTransaction([
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
+			'workboardPHID' => 'PHID-123',
+			'oldColumnPHID' => $this->getColumnPhid('to do'),
+			'newColumnPHID' => $this->getColumnPhid('done'),
+		]);
+	}
+
+	private function getTransactionForAnotherProject()
+	{
+		return new ColumnChangeTransaction([
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'workboardPHID' => 'PHID-SOME-OTHER-PROJECT-PHID',
+			'oldColumnPHID' => $this->getColumnPhid('to do'),
+			'newColumnPHID' => $this->getColumnPhid('done'),
+		]);
 	}
 
 	private function getColumnPhid($name)
