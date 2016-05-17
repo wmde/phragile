@@ -1,11 +1,13 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\ColumnChangeTransaction;
 
 /**
  * @covers Phragile\ColumnChangeTransaction
  */
-class ColumnChangeTransactionTest extends PHPUnit_Framework_TestCase {
+class ColumnChangeTransactionTest extends \PHPUnit_Framework_TestCase {
 
 	public function testConstructorSetFields()
 	{
@@ -20,7 +22,7 @@ class ColumnChangeTransactionTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('PHID-PCOL-456', $transaction->getNewColumnPHID());
 		$this->assertEquals(
 			'01.01.2016',
-			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
+			\DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
 		);
 	}
 
@@ -37,7 +39,7 @@ class ColumnChangeTransactionTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('PHID-PCOL-123', $transaction->getNewColumnPHID());
 		$this->assertEquals(
 			'01.01.2016',
-			DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
+			\DateTime::createFromFormat('U', $transaction->getTimestamp())->format('d.m.Y')
 		);
 	}
 
@@ -67,7 +69,7 @@ class ColumnChangeTransactionTest extends PHPUnit_Framework_TestCase {
 	public function testThrowsExceptionWithMissingAttributes($missingField, $incompleteAttributes)
 	{
 		$expectedExceptionMessage = 'The ' . $missingField  .' field is missing';
-		$this->setExpectedException(InvalidArgumentException::class, $expectedExceptionMessage);
+		$this->setExpectedException(\InvalidArgumentException::class, $expectedExceptionMessage);
 		new ColumnChangeTransaction($incompleteAttributes);
 	}
 

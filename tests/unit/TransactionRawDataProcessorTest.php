@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\ColumnChangeTransaction;
 use Phragile\MergeAndCloseTransaction;
 use Phragile\StatusChangeTransaction;
@@ -8,7 +10,7 @@ use Phragile\TransactionRawDataProcessor;
 /**
  * @covers Phragile\TransactionRawDataProcessor
  */
-class TransactionRawDataProcessorTest extends PHPUnit_Framework_TestCase {
+class TransactionRawDataProcessorTest extends \PHPUnit_Framework_TestCase {
 
 	public function testProcessColumnChangeTransaction()
 	{

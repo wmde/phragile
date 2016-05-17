@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\BurndownChart;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
@@ -30,7 +32,7 @@ class BurndownChartTest extends TestCase {
 		}));
 
 		return new BurndownChart(
-			new Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
+			new \Sprint(['sprint_start' => '2014-12-01', 'sprint_end' => '2014-12-14']),
 			$taskListMock,
 			$transactions,
 			$dispatcher
@@ -203,19 +205,19 @@ class BurndownChartTest extends TestCase {
 			[
 				'1' => [
 					new ColumnChangeTransaction([
-						'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 10:00:00')->format('U'),
+						'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 10:00:00')->format('U'),
 						'workboardPHID' => $this->testProjectPHID,
 						'oldColumnPHID' => 'anyNotClosed',
 						'newColumnPHID' => $this->closedColumnPHIDs[1],
 					]),
 					new ColumnChangeTransaction([
-						'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 12:00:00')->format('U'),
+						'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '08.12.2014 12:00:00')->format('U'),
 						'workboardPHID' => $this->testProjectPHID,
 						'oldColumnPHID' => $this->closedColumnPHIDs[1],
 						'newColumnPHID' => 'anyNotClosed',
 					]),
 					new ColumnChangeTransaction([
-						'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '09.12.2014 10:00:00')->format('U'),
+						'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '09.12.2014 10:00:00')->format('U'),
 						'workboardPHID' => $this->testProjectPHID,
 						'oldColumnPHID' => 'anyNotClosed',
 						'newColumnPHID' => $this->closedColumnPHIDs[1],

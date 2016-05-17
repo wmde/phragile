@@ -1,4 +1,7 @@
 <?php
+
+namespace Phragile\Tests;
+
 use App\Console\Commands\Lib\SnapshotDataConverter;
 
 class SnapshotDataConverterTest extends TestCase {

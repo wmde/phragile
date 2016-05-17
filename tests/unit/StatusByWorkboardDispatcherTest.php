@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\ColumnChangeTransaction;
 use Phragile\PhabricatorAPI;
 use Phragile\ProjectColumnRepository;
@@ -34,17 +36,17 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 
 	private function newSprint()
 	{
-		$sprint = new Sprint([
+		$sprint = new \Sprint([
 			'phid' => 'PHID-123',
 		]);
-		$sprint->project = new Project([
+		$sprint->project = new \Project([
 			'closed_statuses' => 'done',
 			'default_column' => 'backlog',
 		]);
 		return $sprint;
 	}
 
-	private function newDispatcher(Sprint $sprint, array $transactions)
+	private function newDispatcher(\Sprint $sprint, array $transactions)
 	{
 		return new StatusByWorkboardDispatcher(
 			$sprint,
@@ -116,7 +118,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	private function getFirstTransaction()
 	{
 		return new ColumnChangeTransaction([
-			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
 			'workboardPHID' => 'PHID-123',
 			'oldColumnPHID' => $this->getColumnPhid('to do'),
 			'newColumnPHID' => $this->getColumnPhid('done'),
@@ -126,7 +128,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	private function getSecondTransaction()
 	{
 		return new ColumnChangeTransaction([
-			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 12:00:00')->format('U'),
 			'workboardPHID' => 'PHID-123',
 			'oldColumnPHID' => $this->getColumnPhid('done'),
 			'newColumnPHID' => $this->getColumnPhid('to do'),
@@ -136,7 +138,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	private function getThirdTransaction()
 	{
 		return new ColumnChangeTransaction([
-			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 13:00:00')->format('U'),
 			'workboardPHID' => 'PHID-123',
 			'oldColumnPHID' => $this->getColumnPhid('to do'),
 			'newColumnPHID' => $this->getColumnPhid('done'),
@@ -146,7 +148,7 @@ class StatusByWorkboardDispatcherTest extends TestCase {
 	private function getTransactionForAnotherProject()
 	{
 		return new ColumnChangeTransaction([
-			'timestamp' => DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
+			'timestamp' => \DateTime::createFromFormat('d.m.Y H:i:s', '01.01.2016 10:00:00')->format('U'),
 			'workboardPHID' => 'PHID-SOME-OTHER-PROJECT-PHID',
 			'oldColumnPHID' => $this->getColumnPhid('to do'),
 			'newColumnPHID' => $this->getColumnPhid('done'),

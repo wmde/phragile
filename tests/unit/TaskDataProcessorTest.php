@@ -1,5 +1,7 @@
 <?php
 
+namespace Phragile\Tests;
+
 use Phragile\StatusByStatusFieldDispatcher;
 use Phragile\TaskDataProcessor;
 
