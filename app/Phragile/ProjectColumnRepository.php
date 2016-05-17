@@ -1,6 +1,9 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\Transaction;
+
 class ProjectColumnRepository {
 	/**
 	 * @var array|null maps workboard column PHIDs to a map of column data

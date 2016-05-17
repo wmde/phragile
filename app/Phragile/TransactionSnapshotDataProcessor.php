@@ -2,6 +2,11 @@
 
 namespace Phragile;
 
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\MergeAndCloseTransaction;
+use Phragile\Domain\StatusChangeTransaction;
+use Phragile\Domain\Transaction;
+
 class TransactionSnapshotDataProcessor {
 
 	public function process(array $snapshotData)

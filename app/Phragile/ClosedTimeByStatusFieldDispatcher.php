@@ -1,6 +1,10 @@
 <?php
 namespace Phragile;
 
+use Phragile\Domain\MergeAndCloseTransaction;
+use Phragile\Domain\StatusChangeTransaction;
+use Phragile\Domain\Transaction;
+
 class ClosedTimeByStatusFieldDispatcher implements ClosedTimeDispatcher {
 	// TODO: ideally these should come from a cached call to maniphest.querystatuses
 	private static $STATUS_OPEN = ['stalled', 'open'];

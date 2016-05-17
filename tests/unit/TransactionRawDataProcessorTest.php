@@ -2,9 +2,9 @@
 
 namespace Phragile\Tests;
 
-use Phragile\ColumnChangeTransaction;
-use Phragile\MergeAndCloseTransaction;
-use Phragile\StatusChangeTransaction;
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\MergeAndCloseTransaction;
+use Phragile\Domain\StatusChangeTransaction;
 use Phragile\TransactionRawDataProcessor;
 
 /**

@@ -6,19 +6,21 @@ use Phragile\PieChart;
 use Phragile\ProjectColumnRepository;
 use Phragile\PhabricatorAPI;
 use Phragile\StatusCssClassService;
-use Phragile\TaskList;
+use Phragile\Presentation\TaskList;
 use Phragile\ClosedTimeByStatusFieldDispatcher;
 use Phragile\ClosedTimeByWorkboardDispatcher;
 use Phragile\AssigneeRepository;
 use Phragile\BurndownChart;
 use Phragile\ScopeLine;
-use Phragile\TaskDataProcessor;
-use Phragile\Task;
+use Phragile\TaskPresenter;
+use Phragile\Domain\Task as DomainTask;
+use Phragile\Domain\Transaction;
+use Phragile\Presentation\Task as PresentationTask;
 
 class SprintDataFactory {
 	private $sprint = null;
 	/**
-	 * @var Transaction[]
+	 * @var \Phragile\Domain\Transaction[]
 	 */
 	private $transactions = [];
 	private $phabricatorAPI = null;
@@ -29,18 +31,25 @@ class SprintDataFactory {
 	private $cssClassService = null;
 	private $pieChart = null;
 
-	public function __construct(\Sprint $sprint, array $taskRawData, array $transactions, PhabricatorAPI $phabricatorAPI)
+	/**
+	 * SprintDataFactory constructor.
+	 * @param \Sprint $sprint
+	 * @param DomainTask[] $tasks
+	 * @param Transaction[] $transactions
+	 * @param PhabricatorAPI $phabricatorAPI
+	 */
+	public function __construct(\Sprint $sprint, array $tasks, array $transactions, PhabricatorAPI $phabricatorAPI)
 	{
 		$this->sprint = $sprint;
 		$this->transactions = $transactions;
 		$this->phabricatorAPI = $phabricatorAPI;
 
 		$this->columns = new ProjectColumnRepository($this->sprint->phid, $this->transactions, $this->phabricatorAPI);
-		$tasks = (new TaskDataProcessor(
+		$presentationTask = (new TaskPresenter(
 			(new StatusDispatcherFactory($sprint, $this->columns, $transactions))->getStatusDispatcher(),
 			['ignore_estimates' => $sprint->ignore_estimates, 'ignored_columns' => $sprint->project->getIgnoredColumns()]
-		))->process($taskRawData);
-		$this->taskList = new TaskList($tasks);
+		))->render($tasks);
+		$this->taskList = new TaskList($presentationTask);
 
 		$this->cssClassService = new StatusCssClassService($this->isWorkboardMode(), $this->getClosedColumns());
 		$this->pieChart = new PieChart($this->taskList->getTasksPerStatus(), $this->cssClassService);
@@ -75,7 +84,8 @@ class SprintDataFactory {
 	{
 		$assignees = new AssigneeRepository($this->phabricatorAPI, $this->taskList->getTasks());
 
-		return array_map(function(Task $task) use($assignees)
+		// TODO: would it make sense to move getting assignee name and css class to TaskRenderer?
+		return array_map(function(PresentationTask $task) use($assignees)
 		{
 			$task->setAssigneeName($assignees->getName($task->getAssigneePHID()) ?: '-');
 			$task->setCssClass($this->cssClassService->getCssClass($task->getStatus()));

@@ -1,6 +1,6 @@
 <?php
 
-namespace Phragile;
+namespace Phragile\Domain;
 
 abstract class Transaction {
 

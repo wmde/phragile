@@ -1,6 +1,6 @@
 <?php
 
-namespace Phragile;
+namespace Phragile\Domain;
 
 class StatusChangeTransaction extends Transaction {
 

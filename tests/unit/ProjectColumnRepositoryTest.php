@@ -3,7 +3,7 @@
 namespace Phragile\Tests;
 
 use Phragile\PhabricatorAPI;
-use Phragile\ColumnChangeTransaction;
+use Phragile\Domain\ColumnChangeTransaction;
 use Phragile\ProjectColumnRepository;
 
 /**

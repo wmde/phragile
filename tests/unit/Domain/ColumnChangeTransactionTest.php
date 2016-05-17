@@ -1,11 +1,11 @@
 <?php
 
-namespace Phragile\Tests;
+namespace Phragile\Tests\Domain;
 
-use Phragile\ColumnChangeTransaction;
+use Phragile\Domain\ColumnChangeTransaction;
 
 /**
- * @covers Phragile\ColumnChangeTransaction
+ * @covers Phragile\Domain\ColumnChangeTransaction
  */
 class ColumnChangeTransactionTest extends \PHPUnit_Framework_TestCase {
 

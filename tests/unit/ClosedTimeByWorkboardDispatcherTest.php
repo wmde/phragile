@@ -3,8 +3,8 @@
 namespace Phragile\Tests;
 
 use Phragile\ClosedTimeByWorkboardDispatcher;
-use Phragile\ColumnChangeTransaction;
-use Phragile\StatusChangeTransaction;
+use Phragile\Domain\ColumnChangeTransaction;
+use Phragile\Domain\StatusChangeTransaction;
 
 /**
  * @covers Phragile\ClosedTimeByWorkboardDispatcher

@@ -1,32 +1,33 @@
 <?php
-namespace Phragile;
+namespace Phragile\Presentation;
+
+use Phragile\Domain\Task as DomainTask;
 
 class Task {
-	private $title;
-	private $priority;
+
+	const CLOSED_TASK = true;
+	const OPEN_TASK = false;
+
+	private $domainTask;
 	private $points;
 	private $status;
 	private $closed;
-	private $id;
-	private $assigneePHID;
 	private $assigneeName;
 	private $cssClass;
 
 	/**
-	 * @param array $attributes - containing 'title', 'priority', 'points', 'status', 'closed', 'id', 'assigneePHID'
+	 * Task constructor.
+	 * @param DomainTask $domainTask
+	 * @param string $status
+	 * @param bool $closed self::CLOSED_TASK or self::OPEN_TASK
+	 * @param int $points
 	 */
-	public function __construct(array $attributes)
+	public function __construct(DomainTask $domainTask, $status, $closed, $points)
 	{
-		$fields = ['title', 'priority', 'points', 'status', 'closed', 'id', 'assigneePHID'];
-		foreach ($fields as $field)
-		{
-			if (!array_key_exists($field, $attributes))
-			{
-				throw new \InvalidArgumentException('The ' . $field . ' field is missing.');
-			}
-
-			$this->$field = $attributes[$field];
-		}
+		$this->domainTask = $domainTask;
+		$this->status = $status;
+		$this->closed = $closed;
+		$this->points = $points;
 	}
 
 	/**
@@ -34,7 +35,7 @@ class Task {
 	 */
 	public function getTitle()
 	{
-		return $this->title;
+		return $this->domainTask->getTitle();
 	}
 
 	/**
@@ -42,7 +43,7 @@ class Task {
 	 */
 	public function getPriority()
 	{
-		return $this->priority;
+		return $this->domainTask->getPriority();
 	}
 
 	/**
@@ -74,7 +75,7 @@ class Task {
 	 */
 	public function getId()
 	{
-		return $this->id;
+		return $this->domainTask->getId();
 	}
 
 	/**
@@ -82,7 +83,7 @@ class Task {
 	 */
 	public function getAssigneePHID()
 	{
-		return $this->assigneePHID;
+		return $this->domainTask->getAssigneePHID();
 	}
 
 	/**

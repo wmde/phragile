@@ -1,5 +1,6 @@
 <?php
 
+use Phragile\Domain\Task;
 use Phragile\TransactionSnapshotDataProcessor;
 use Phragile\Factory\SprintDataFactory;
 
@@ -62,9 +63,20 @@ class SprintSnapshotsController extends Controller {
 		$processor = new TransactionSnapshotDataProcessor();
 		return new SprintDataFactory(
 			$snapshot->sprint,
-			$sprintData['tasks'],
+			$this->getTasks($sprintData['tasks']),
 			$processor->process($sprintData['transactions']),
 			App::make('phabricator')
+		);
+	}
+
+	private function getTasks(array $snapshotTasks)
+	{
+		return array_map(
+			function(array $snapshotTaskData)
+			{
+				return new Task($snapshotTaskData);
+			},
+			$snapshotTasks
 		);
 	}
 
