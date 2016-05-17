@@ -113,4 +113,10 @@ class SnapshotTransactionDataConverterTest extends PHPUnit_Framework_TestCase {
 		$this->assertSame($expectedConvertedData, $converter->convert($this->getConvertedTransactions()));
 	}
 
+	public function testGivenNoTransactionForTask_convertReturnsUnchangedData()
+	{
+		$converter = new SnapshotTransactionDataConverter();
+		$this->assertSame(['11' => []], $converter->convert(['11' => []]));
+	}
+
 }
