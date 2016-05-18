@@ -13,6 +13,23 @@ class SnapshotTransactionDataConverterTest extends PHPUnit_Framework_TestCase {
 			'10' => [
 				[
 					'taskID' => '10',
+					'transactionID' => '574',
+					'transactionPHID' => 'PHID-XACT-TASK-thuitevwbsvzq3w',
+					'transactionType' => 'core:columns',
+					'oldValue' => null,
+					'newValue' => [
+						[
+							'columnPHID' => 'PHID-PCOL-4hyhg5eihidfzexjxo6l',
+							'boardPHID' => 'PHID-PROJ-we3kvpoegtfzytlzsbq5',
+							'fromColumnPHIDs' => [],
+						]
+					],
+					'comments' => null,
+					'authorPHID' => 'PHID-USER-4evwbszqu47ukghwqpyo',
+					'dateCreated' => '1461843396',
+				],
+				[
+					'taskID' => '10',
 					'transactionID' => '615',
 					'transactionPHID' => 'PHID-XACT-TASK-thuit5jaapizdv3',
 					'transactionType' => 'core:columns',
@@ -56,10 +73,85 @@ class SnapshotTransactionDataConverterTest extends PHPUnit_Framework_TestCase {
 		];
 	}
 
+	private function getPhabricatorPre2016Week15Transactions()
+	{
+		return [
+			'10' => [
+				'0' => [
+					'taskID' => '10',
+					'transactionID' => '574',
+					'transactionPHID' => 'PHID-XACT-TASK-thuitevwbsvzq3w',
+					'transactionType' => 'projectcolumn',
+					'oldValue' => [
+						'columnPHIDs' => [],
+						'projectPHID' => 'PHID-PROJ-we3kvpoegtfzytlzsbq5',
+					],
+					'newValue' => [
+						'columnPHIDs' => ['PHID-PCOL-4hyhg5eihidfzexjxo6l'],
+						'projectPHID' => 'PHID-PROJ-we3kvpoegtfzytlzsbq5',
+						'afterPHID' => null,
+						'beforePHID' => null,
+					],
+					'comments' => null,
+					'authorPHID' => 'PHID-USER-4evwbszqu47ukghwqpyo',
+					'dateCreated' => '1461843396',
+				],
+				'1' => [
+					'taskID' => '10',
+					'transactionID' => '615',
+					'transactionPHID' => 'PHID-XACT-TASK-thuit5jaapizdv3',
+					'transactionType' => 'projectcolumn',
+					'oldValue' => [
+						'columnPHIDs' => ['PHID-PCOL-4hyhg5eihidfzexjxo6l'],
+						'projectPHID' => 'PHID-PROJ-we3kvpoegtfzytlzsbq5',
+					],
+					'newValue' => [
+						'columnPHIDs' => ['PHID-PCOL-babqxkbnh75r3dyxmuys'],
+						'projectPHID' => 'PHID-PROJ-we3kvpoegtfzytlzsbq5',
+						'afterPHID' => null,
+						'beforePHID' => null,
+					],
+					'comments' => null,
+					'authorPHID' => 'PHID-USER-4evwbszqu47ukghwqpyo',
+					'dateCreated' => '1461852396',
+				],
+				'2' => [
+					'taskID' => '10',
+					'transactionID' => '85',
+					'transactionPHID' => 'PHID-XACT-TASK-fa4mch7cmvs56yp',
+					'transactionType' => 'status',
+					'oldValue' => null,
+					'newValue' => 'open',
+					'comments' => null,
+					'authorPHID' => 'PHID-USER-4evwbszqu47ukghwqpyo',
+					'dateCreated' => '1436877423',
+				],
+				'3' => [
+					'taskID' => '10',
+					'transactionID' => '87',
+					'transactionPHID' => 'PHID-XACT-TASK-gnhol6bzawe4fgi',
+					'transactionType' => 'mergedinto',
+					'oldValue' => null,
+					'newValue' => 'PHID-TASK-kbqbuddlt65redxoce6g',
+					'comments' => null,
+					'authorPHID' => 'PHID-USER-4evwbszqu47ukghwqpyo',
+					'dateCreated' => '1462366409',
+				]
+			]
+		];
+	}
+
 	private function getConvertedTransactions()
 	{
 		return [
 			'10' => [
+				[
+					'type' => 'columnChange',
+					'timestamp' => '1461843396',
+					'workboardPHID' => 'PHID-PROJ-we3kvpoegtfzytlzsbq5',
+					'oldColumnPHID' => false,
+					'newColumnPHID' => 'PHID-PCOL-4hyhg5eihidfzexjxo6l',
+				],
 				[
 					'type' => 'columnChange',
 					'timestamp' => '1461852396',
@@ -111,6 +203,19 @@ class SnapshotTransactionDataConverterTest extends PHPUnit_Framework_TestCase {
 		$expectedConvertedData = $this->getConvertedTransactions();
 		$converter = new SnapshotTransactionDataConverter();
 		$this->assertSame($expectedConvertedData, $converter->convert($this->getConvertedTransactions()));
+	}
+
+	public function testGivenPhabricatorJsonPre2016Week15Transactions_needsConversionReturnsTrue()
+	{
+		$converter = new SnapshotTransactionDataConverter();
+		$this->assertTrue($converter->needsConversion($this->getPhabricatorPre2016Week15Transactions()));
+	}
+
+	public function testGivenPhabricatorJsonPre2016Week15Transactions_convertReturnsConvertedData()
+	{
+		$expectedConvertedData = $this->getConvertedTransactions();
+		$converter = new SnapshotTransactionDataConverter();
+		$this->assertSame($expectedConvertedData, $converter->convert($this->getPhabricatorPre2016Week15Transactions()));
 	}
 
 	public function testGivenNoTransactionForTask_convertReturnsUnchangedData()
