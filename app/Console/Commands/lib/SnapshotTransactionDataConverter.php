@@ -41,7 +41,7 @@ class SnapshotTransactionDataConverter {
 	private function transactionDataIsInPhabricatorFormat(array $transactionData)
 	{
 		$taskId = array_keys($transactionData)[0];
-		if (!is_array($transactionData[$taskId]))
+		if (!is_array($transactionData[$taskId]) || empty($transactionData[$taskId]))
 		{
 			return false;
 		}
