@@ -99,14 +99,14 @@ class SnapshotTransactionDataConverterTest extends PHPUnit_Framework_TestCase {
 		$this->assertFalse($converter->needsConversion(['10' => [['foo' => 'bar']]]));
 	}
 
-	public function testFivenPhabricatorJsonTransactions_convertReturnsConvertedData()
+	public function testGivenPhabricatorJsonTransactions_convertReturnsConvertedData()
 	{
 		$expectedConvertedData = $this->getConvertedTransactions();
 		$converter = new SnapshotTransactionDataConverter();
 		$this->assertSame($expectedConvertedData, $converter->convert($this->getPhabricatorTransactions()));
 	}
 
-	public function testGivenConvertedtransactions_convertReturnsUnchangedData()
+	public function testGivenConvertedTransactions_convertReturnsUnchangedData()
 	{
 		$expectedConvertedData = $this->getConvertedTransactions();
 		$converter = new SnapshotTransactionDataConverter();
