@@ -3,11 +3,11 @@
 namespace Phragile\ActionHandler;
 
 use Phragile\PhabricatorAPI;
-use Phragile\SettingsAwareTransactionFilter;
+use Phragile\SettingsAwareTransactionRawDataFilter;
 use Phragile\TaskDataFetcher;
 use Phragile\TaskRawDataProcessor;
 use Phragile\TransactionRawDataProcessor;
-use Phragile\TransactionLoader;
+use Phragile\TransactionRawDataLoader;
 use Sprint;
 use Phragile\Factory\SprintDataFactory;
 
@@ -49,8 +49,8 @@ class SprintLiveDataActionHandler {
 		}, $tasks);
 		$taskDataProcessor = new TaskRawDataProcessor();
 		$transactionDataProcessor = new TransactionRawDataProcessor();
-		$transactionLoader = new TransactionLoader(
-			new SettingsAwareTransactionFilter($sprint->project->workboard_mode),
+		$transactionLoader = new TransactionRawDataLoader(
+			new SettingsAwareTransactionRawDataFilter($sprint->project->workboard_mode),
 			$this->phabricatorAPI
 		);
 

@@ -8,8 +8,8 @@ use Phragile\Presentation\TaskList;
 use Phragile\TaskPresenter;
 use Phragile\Domain\Transaction;
 use Phragile\TransactionRawDataProcessor;
-use Phragile\TransactionLoader;
-use Phragile\TransactionFilter;
+use Phragile\TransactionRawDataLoader;
+use Phragile\TransactionRawDataFilter;
 use Phragile\PhabricatorAPI;
 
 class Sprint extends Eloquent {
@@ -149,8 +149,8 @@ class Sprint extends Eloquent {
 		{
 			return $task['id'];
 		}, $tasks);
-		return (new TransactionLoader(
-			new TransactionFilter(),
+		return (new TransactionRawDataLoader(
+			new TransactionRawDataFilter(),
 			$phabricator
 		))->load($taskIDs);
 	}

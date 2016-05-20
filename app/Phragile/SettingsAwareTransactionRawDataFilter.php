@@ -4,7 +4,7 @@ namespace Phragile;
 /**
  * Class for filtering out all transactions but the ones relevant to the task status according to the project settings
  */
-class SettingsAwareTransactionFilter extends TransactionFilter {
+class SettingsAwareTransactionRawDataFilter extends TransactionRawDataFilter {
 	private $workboardMode;
 
 	public function __construct($workboardMode)

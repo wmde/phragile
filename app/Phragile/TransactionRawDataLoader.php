@@ -1,16 +1,15 @@
 <?php
 namespace Phragile;
 
-// TODO: rename to e.g. TransactionDataFetcher?
-class TransactionLoader {
+class TransactionRawDataLoader {
 	private $transactionFilter;
 	private $phabricatorAPI;
 
 	/**
-	 * @param TransactionFilter $transactionFilter
+	 * @param TransactionRawDataFilter $transactionFilter
 	 * @param PhabricatorAPI $phabricatorAPI
 	 */
-	public function __construct(TransactionFilter $transactionFilter, PhabricatorAPI $phabricatorAPI)
+	public function __construct(TransactionRawDataFilter $transactionFilter, PhabricatorAPI $phabricatorAPI)
 	{
 		$this->transactionFilter = $transactionFilter;
 		$this->phabricatorAPI = $phabricatorAPI;
