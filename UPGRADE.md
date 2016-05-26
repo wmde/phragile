@@ -27,7 +27,7 @@ To support newer versions of Phabricator, Phragile uses manifest.search instead 
 
 ## From 1.0 release to 1.1
 
-Phragile 1.1. starts using Conduit API Tokens instead of the deprecated Conduit API Certificate. 
+Phragile 1.1. starts using Conduit API Tokens instead of the deprecated Conduit API Certificate.
 
 * The setting for the Phragile bot user needs to be updated in the `.env` file. Use `PHRAGILE_BOT_API_TOKEN=` instead of `PHRAGILE_BOT_CERTIFICATE=`
 * When running browser tests corresponding changes have to be done in the `behat_custom.yml` file. Use `conduit_api_token:` instead of `conduit_certificate:`
