@@ -2,7 +2,7 @@
 	"name": "wmde/phragile",
 	"description": "Sprint overviews and data visualizations for Phabricator projects.",
 	"keywords": ["Phragile", "Phabricator", "Agile", "Scrum", "Sprints", "Visualization", "Burndown", "Burnup"],
-	"license": "MIT",
+	"license": "GPL-2.0",
 	"type": "project",
 	"repositories": [
   		{
